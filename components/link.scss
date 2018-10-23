@@ -1,0 +1,42 @@
+@import 'include-media/dist/_include-media.scss';
+@import '../styles/typography.scss';
+
+.Link{
+  width: 124.6px;
+  height: 26px;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  color: #ffffff;
+  display: flex;
+  vertical-align: middle;
+
+  &__text{
+    margin: 0px auto;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: all 0s;
+    &.active{
+      border-bottom: 2px solid #1890ff;
+    }
+    &:active, &:focus {
+      text-decoration: none;
+    }
+    &:hover{
+      color: #ffffff;
+      border-bottom: 2px solid #1890ff;
+    }
+  }
+
+  &--is-dark{
+    color: #273469;
+    & :hover{
+      background-color: #2b3d77;
+      color: #ffffff;
+    }
+  }
+}

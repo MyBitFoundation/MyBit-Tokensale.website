@@ -1,0 +1,100 @@
+@import '../select/mixins.scss';
+@import 'include-media/dist/_include-media.scss';
+
+$TIME_UNIT_VALUE_COLOR:  #4a4a4a;
+$TIME_UNIT_HEADER_COLOR: #1890ff;
+$COUNTDOWN_BACKGROUND: #ffffff;
+
+.form-wrapper {
+    position:relative;
+    height:300px;
+    @include media("<=375px") {
+        height: 200px;
+    }
+}
+.Timer{
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 440px;
+    margin-bottom: 19px;
+    @include media(">375px", "<desktop") {
+        margin-bottom: 25px;
+    }
+
+    &__time-unit{
+        display: flex;
+        text-align: center;
+        flex-direction: column;
+        margin-right: 5%;
+        width: 25%;
+    }
+
+    &__item:last-child{
+        margin-right: 0;
+    }
+
+    &__value{
+        font-family: 'Gilroy', sans-serif;
+        font-size: 3.12rem;
+        font-weight: 800;
+        color: $TIME_UNIT_VALUE_COLOR;
+
+        @include media("<=375px") {
+            font-size: 2rem;
+            padding-top: 16px;
+        }
+    }
+
+    &__header{
+        font-family: 'Roboto', sans-serif;
+        font-weight: 500;
+        font-size: 25px;
+        color: $TIME_UNIT_HEADER_COLOR;
+        @include media("<=480px") {
+            font-size: 20px;
+        }
+        @include media("<=375px") {
+            font-size: 0.75rem;
+        }
+    }
+}
+
+.Countdown{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 1140px;
+    border-radius: 4px;
+    background-color: $COUNTDOWN_BACKGROUND;
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.2);
+    margin: 0 auto;
+    padding: 25px 10px 30px;
+    height:100%;
+    &__title{
+        @include headerDesctop();
+        display: flex;
+        text-align: center;
+
+        font-family: 'Gilroy', sans-serif;
+        font-weight: 800;
+        color: #4a4a4a;
+        margin: 0 auto 22px;
+        @include media("<=560px") {
+            font-size: 25px;
+        }
+        @include media("<=375px") {
+            font-size: 14px;
+        }
+    }
+
+    &__input-form{
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        max-width: 469px;
+        margin: 0 auto;
+    }
+}

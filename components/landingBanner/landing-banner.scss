@@ -1,0 +1,96 @@
+@import '../select/mixins.scss';
+@import 'include-media/dist/_include-media.scss';
+.container {
+  padding: 0 10%;
+  max-width: 1440px;
+  margin: 0 auto;
+  @include media("<=375px") {
+    padding: 0 5%;
+  }
+  & .Header__header-content {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+.landing-banner {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding-bottom: 254px;
+  @include media( "<=1260px") {
+    padding-bottom: 270px;
+  }
+  @include media("<=375px") {
+    padding-bottom: 160px;
+  }
+
+  .ant-card {
+    background: transparent;
+  }
+  .ant-card-body {
+    height:100%;
+    padding:0;
+  }
+  .ant-card {
+    height:100%;
+  }
+  img {
+    position: absolute;
+    left: 50%;
+    top:-20px;
+    padding-left: 30px;
+    transform: translate(-50%, 0);
+  }
+  .textCard {
+    color: #fff;
+    &-contentWrapper {
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    &-header {
+      @include headerDesctop();
+      font-family: 'Gilroy', sans-serif;
+      font-weight: 800;
+      line-height: 1.1;
+      color: inherit;
+      @media(max-width: 1140px){
+        font-size: 40px;
+      }
+      @include media("<=375px"){
+        @include headerMobile();
+        line-height: 1.16;
+        font-weight: 800;
+      }
+    }
+    &-content {
+      font-family: Roboto;
+      font-size: 18px;
+      line-height: 1.56;
+      p {
+        margin-bottom:30px;
+      }
+      @include media("<=375px"){
+        font-size: 12px;
+        line-height: 1.42;
+      }
+    }
+
+    &-btn {
+      &.ant-btn {
+        padding:0;
+      }
+      &.ant-btn-primary {
+        width: 204px;
+        height: 52px;
+        font-family: 'Roboto', sans-serif;
+        @include buttonDefault();
+        line-height: 52px;
+        @include media("<=375px"){
+          width: 100px;
+          height: 24px;
+          font-size: 12px;
+          line-height: 1.83;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+@import 'include-media/dist/_include-media.scss';
+@import './dropdown.scss';
+@import 'include-media/dist/_include-media.scss';
+
+.Locale{
+  width: 70px;
+  padding-left: 8.9px;
+  padding-right: 41.5px;
+
+  &__item{
+    background-color:transparent;
+    display: flex;
+    justify-content: flex-start;
+   
+  }
+
+  &__icon{
+    width: 25px;
+    height: 25px;
+    filter: invert(1) contrast(200%) brightness(250%);
+    color: white;
+  }
+
+  &__content{
+    max-width: 80px;
+    .ant-menu .ant-menu-item {
+      margin: 0;
+    }
+ }
+
+  &__link{
+    margin-left: 0;
+    padding: 5px;
+    text-align: left;
+  }
+
+  &__btn{
+    padding: 0;
+    width: 35px;
+  }
+
+  @include media("<desktop") {
+    display: none;
+  }
+}

@@ -1,0 +1,106 @@
+@import '../select/mixins.scss';
+@import 'include-media/dist/_include-media.scss';
+
+.ant-form-inline .ant-form-item{
+    margin-right: 0;
+}
+
+.ant-form-item-control-wrapper,
+.ant-form-item-control{
+    width: 100%;
+    line-height: normal;
+}
+
+.ant-input{
+    width: 300px;
+}
+
+.light {
+    color: #fff;
+}
+
+.Signup{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+
+    &__email-container{
+        display: flex;
+        width: 100%;
+        margin-right: 3%;
+    }
+
+    &__btn-container{
+        display: flex;
+        min-width: 31.8%;;
+        max-width: 149px;
+        margin-left: 7px;
+
+    }
+
+    &__email-container Input{
+        width: 100%;
+        height: 52px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+        border: solid 1px #1890ff;
+
+        @include media("<=375px") {
+            height: 24px;
+        }
+
+        @include media(">375px", "<desktop") {
+            height: 43px;
+        }
+
+        @include media(">=desktop"){
+            height: 52px;
+        }
+    }
+
+    &__btn-container Button{
+        @include buttonDefault();
+        width: 100%;
+        height: 52px;
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.25rem;
+        font-weight: 500;
+        padding: 0;
+
+        @include media("<=375px") {
+            height: 24px;
+            font-size: 0.75rem;
+        }
+
+        @include media(">375px", "<desktop") {
+            height: 43px;
+            font-size: 1rem;
+        }
+
+        @include media(">=desktop"){
+            height: 52px;
+            font-size: 1.25rem;
+        }
+    }
+
+    &__confirmation {
+      position: absolute;
+      top: 55px;
+      left: 0;
+
+      @include media ("<=375px") {
+        top: 30px;
+      }
+    }
+
+    &__display-none {
+      display: none;
+    }
+}
+
+.InputForm{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}

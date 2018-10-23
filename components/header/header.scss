@@ -1,0 +1,63 @@
+@import 'include-media/dist/_include-media.scss';
+
+$HEADER_PADDING_RESPONSIVE: 2%;
+$LOGO_WIDTH: 102.6px;
+$LOGO_HEIGHT: 104.5px;
+$HEADER_HEIGHT: $LOGO_HEIGHT;
+
+.Header {
+  display: flex;
+  max-width: 1140px;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  box-sizing: border-box;
+  z-index: 10;
+  background-color: transparent;
+  .Link {
+    height: 32px;
+  }
+  &--is-dark {
+    background-image: linear-gradient(to top, #001358, #125ac4);
+  }
+
+  &__header-content{
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    @include media("<980px") {
+      margin-right: 1.9%;
+      margin-left: 4.3%;
+    }
+  }
+
+  &__logo-container{
+      padding-top: 36px;
+      padding-bottom: 36.5px;
+
+      @include media("<980px") {
+        padding-top: 5%;
+        padding-bottom: 2.9%;
+        padding-right: 1.9%;
+      }
+  }
+
+  &__logo {
+    width: $LOGO_WIDTH;
+    height: $LOGO_HEIGHT;
+    cursor: pointer;
+
+    @include media("<980px") {
+      width: 40px;
+      height: 35px;
+    }
+
+    &--is-video-open{
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+  }
+}

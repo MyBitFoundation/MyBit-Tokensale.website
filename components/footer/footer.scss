@@ -1,0 +1,169 @@
+@import 'include-media/dist/_include-media.scss';
+.Footer {
+  font-family: 'Roboto';
+  font-size: 16px;
+  color: #fff;
+  padding: 40px 40px 30px;
+  background-image: linear-gradient(114deg, #001358, #125ac4);
+  &__contentWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    max-width: 1140px;
+    margin: 0 auto 30px;
+    @include media('<tablet') {
+      flex-direction: column;
+    }
+  }
+  &__logo {
+    width: 90px;
+    height: 65px;
+    margin-bottom: 10px;
+    @include media('<tablet') {
+      display: none;
+    }
+  }
+  &__socialsList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 10%;
+    padding:0;
+    li {
+      margin-bottom: 10px;
+      svg:hover path { 
+        fill: #1890ff;
+      }
+    }
+    @include media('>tablet', '<=1000px') {
+      display: none;
+    }
+    @include media('<tablet') {
+      flex-direction: row;
+      justify-content: space-around;
+      max-width: 280px;
+      width: 100%;
+      margin: 0 auto 25px;
+    }
+    .telegram {
+      height: 30px;
+      width: 30px;
+      display: block;
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+    .medium {
+      height: 30px;
+      width: 30px;
+      display: block;
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+    .facebook {
+      height: 30px;
+      width: 30px;
+      display: block;
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+    .reddit {
+      height: 30px;
+      width: 30px;
+      display: block;
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+    .twitter {
+      height: 30px;
+      width: 30px;
+      display: block;
+    }
+  }
+  &__section {
+    @include media('<tablet') {
+      display: none;
+    }
+    flex-grow: 1;
+    flex-basis: 0;
+    padding-right: 50px;
+    padding-left: 50px;
+
+    @include media('>phone'){
+      padding:0px 0px;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.75;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+    }
+  }
+
+  &__title {
+    font-family: 'Roboto';
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.56;
+    color: #fff;
+    margin: 0;
+  }
+
+  &__list {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  &__link {
+    text-decoration: none;
+    line-height: 2.15;
+    color: rgba(255, 255, 255, 0.8);
+    &:hover {
+      color: rgb(24, 144, 255);
+    }
+    &--is-inactive {
+      color: #aaa;
+    }
+
+    &--is-underlined{
+      text-decoration: underline;
+    }
+  }
+  &__companyInfo {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+      text-align: right;
+      color: rgba(255, 255, 255, 0.9);
+      p {
+        margin-bottom: 0;
+      }
+      @include media('<tablet'){
+        text-align: center;
+      }
+    }
+
+  &__copyright {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+
+  &__section-newsletter{
+    padding: 0px 0px;
+
+    .Footer__title{
+      padding: 0px 50px;
+    }
+
+    @include media('>phone'){
+
+      .Footer__title{
+        padding: 0px 0px;
+      }
+    }
+  }
+}
