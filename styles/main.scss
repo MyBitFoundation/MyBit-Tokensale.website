@@ -16,6 +16,7 @@
 @import 'antd/lib/menu/style/index.css';
 @import 'antd/lib/card/style/index.css';
 @import 'antd/lib/button/style/index.css';
+@import 'antd/lib/table/style/index.css';
 
 
 *, *:after, *:before {
@@ -63,7 +64,7 @@ a:hover {
 
 .mainContainer {
   padding: 0 2%;
-  max-width: 1440px;
+  max-width: 1140;
   margin: 0 auto;
 }
 .headerWrapper {
@@ -215,4 +216,9 @@ a:hover {
     &--is-statement{
       margin-top: 0px;
     }
+}
+
+.contentWrapper {
+  margin: 0px auto;
+  max-width: 1120px;
 }

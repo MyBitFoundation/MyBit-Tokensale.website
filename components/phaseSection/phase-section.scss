@@ -1,0 +1,100 @@
+
+.current-phase-account-full-container {
+    height: 100%;
+    background: linear-gradient(90deg, #001358 50%, rgba(216, 216, 216, 0.2) 50%);
+    margin-bottom: 35px;
+  }
+  
+  .phaseData_bg {
+    background: linear-gradient(90deg, #001358, #125ac4);
+  }
+  
+  .accountData {
+    margin-left: 157px;
+  }
+  
+  .phaseData__title, .accountData__title {
+    font-family: Gilroy;
+    font-size: 40px;
+    font-weight: 800;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    margin: 62px 0px 15px 0px;
+  }
+  
+  .phaseData__title {
+    color: white;
+  }
+  
+  .phaseData__stats {
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.56;
+    letter-spacing: normal;
+    color: white;
+  }
+  
+  .phaseData_button {
+    width: 186px;
+    height: 52px;
+    padding: 10px 0px;
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.1;
+    letter-spacing: normal;
+    text-align: center;
+    color: white;
+    margin: 35px 0px;
+    background: #00f281;
+    border-radius: 4px;
+    border: none;
+  }
+  
+  .accountData__title {
+    color: #4a4a4a;
+  }
+  
+  .accountData__entry {
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.56;
+    letter-spacing: normal;
+    color: #4a4a4a;
+    margin-bottom: 10px;
+  }
+  
+  .accountData__entry-bold {
+    font-weight: bold;
+    display: block;
+  }
+  
+  .accountData_button {
+    width: 186px;
+    height: 52px;
+    padding: 10px 0px;
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.1;
+    letter-spacing: normal;
+    text-align: center;
+    color: #1890ff;
+    margin: 17px 0px;
+    background: transparent;
+    border-radius: 4px;
+    border: 3px solid #1890ff;
+  }
+  

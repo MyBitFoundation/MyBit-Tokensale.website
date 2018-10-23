@@ -3,8 +3,12 @@ import stylesheet from '../styles/main.scss'
 import { default as Layout } from '../components/layout/layout'
 import { Header } from '../components/header/header'
 import { MyBitFooter } from '../components/footer/footer'
+import MybContractInfo from '../components/mybContractInfo/contract-info'
+import PhaseSection from '../components/phaseSection/phase-section'
+import CalculateContribution from '../components/calculateContribution/calculate-contribution'
+import PhaseTable from '../components/phaseTable/phase-table'
 
-class Fund extends Component {
+class Dashboard extends Component {
   render() {
     return (
       <Layout>
@@ -14,18 +18,16 @@ class Fund extends Component {
             <Header isDark={false} />
           </div>
         </div>
-        <div className="mainContainer">
-          <h1 style={{ textAlign: 'center', margin: '100px' }}>
-            DASHBOARD PAGE SOON
-          </h1>
-          <a href="/">Index</a>
-          <a href="/terms">Terms</a>
-          <a href="/dashboard">Dashboard</a>
-        </div>
+
+        <MybContractInfo />
+        <PhaseSection />
+        <CalculateContribution />
+        <PhaseTable />
+
         <MyBitFooter />
       </Layout>
     )
   }
 }
 
-export default Fund
+export default Dashboard

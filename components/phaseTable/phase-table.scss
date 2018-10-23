@@ -1,0 +1,45 @@
+.phaseTable {
+    margin-bottom: 65px;
+}
+
+.phaseTable__closed-row {
+    color: rgba(0, 0, 0, 0.45);
+}
+
+.phaseTable__acive-row {
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.phaseTable__active-phase {
+    background: rgba(255, 163, 158, 0.2);
+}
+
+.phaseTable__active-phase-button {
+    width: 94px;
+    height: 24px;
+    border-radius: 4px;
+    background: #24f281;
+    border: none;
+    color: white;
+    line-height: 1;
+}
+
+.phaseTable__closed-row-button {
+    width: 94px;
+    height: 24px;
+    border-radius: 4px;
+    background: transparent;
+    border: 2px solid #1890ff;
+    color: #1890ff;
+    line-height: 1;
+}
+
+.phaseTable__active-row-button {
+    width: 94px;
+    height: 24px;
+    border-radius: 4px;
+    background: #1890ff;
+    border: none;
+    color: white;
+    line-height: 1;
+}
