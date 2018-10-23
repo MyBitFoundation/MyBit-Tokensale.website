@@ -78,8 +78,8 @@ export default [
     phaseActive: false
 },
 {
-    key: 3,
-    period: 3,
+    key: 7,
+    period: 7,
     myb_distributed: 10000,
     total_eth: 8.75,
     deadline: "3 days ago",

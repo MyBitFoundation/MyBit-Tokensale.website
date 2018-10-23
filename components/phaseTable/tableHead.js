@@ -65,13 +65,13 @@ export default [{
     title: 'Contribute',
     dataIndex: 'contribute',
     key: 'contribute',
-    render: (text, record) => {
+    render: (value, record) => {
         if(record.phaseActive) {
             return (<button className="phaseTable__active-phase-button">Contribute</button>)
         } else {
             return record.closed ?
-            (<button className="phaseTable__closed-row-button">Claim</button>) :
-            (<button className="phaseTable__active-row-button">Contribute</button>)
+            (<button onClick={() => {console.log(`Phase ${record.period} button clicked!`)}} className="phaseTable__closed-row-button">Claim</button>) :
+            (<button onClick={() => {console.log(`Phase ${record.period} button clicked!`)}} className="phaseTable__active-row-button">Contribute</button>)
         }
     }
 }];
