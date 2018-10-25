@@ -1,5 +1,13 @@
-.phaseTable {
+.phaseTableWrapper {
+    margin: 0px auto;
     margin-bottom: 65px;
+    max-width: 1120px;
+    overflow: auto;
+    width: 100%;
+}
+
+.phaseTable {
+    min-width: 936px;
 }
 
 .phaseTable__closed-row {

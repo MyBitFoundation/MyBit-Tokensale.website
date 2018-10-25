@@ -7,7 +7,7 @@ import dummyData from './dummyData'
 const PhaseTable = (props) => (
     <Fragment>
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
-        <div className="contentWrapper">
+        <div className="phaseTableWrapper">
           <Table 
             className="phaseTable"
             dataSource={dummyData} 
