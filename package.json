@@ -7,7 +7,6 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "animated-scroll-to": "^1.2.1",
     "antd": "^3.9.2",
     "autoprefixer": "^7.1.6",
     "axios": "^0.18.0",

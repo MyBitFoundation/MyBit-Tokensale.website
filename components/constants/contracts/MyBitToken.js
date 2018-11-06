@@ -1,332 +1,332 @@
-export const ADDRESS = '0x5eb2098e0dd142651886e7fc5179498423dcd5cd';
+export const ADDRESS = '0x841e92ebe60e6a461b615207db3b1b85ec422a3c';
 export const ABI = [
   {
-    constant: true,
-    inputs: [],
-    name: 'name',
-    outputs: [
+    "constant": true,
+    "inputs": [],
+    "name": "name",
+    "outputs": [
       {
-        name: '',
-        type: 'string',
-      },
+        "name": "",
+        "type": "string"
+      }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    constant: false,
-    inputs: [
+    "constant": true,
+    "inputs": [],
+    "name": "decimals",
+    "outputs": [
       {
-        name: '_spender',
-        type: 'address',
-      },
-      {
-        name: '_amount',
-        type: 'uint256',
-      },
+        "name": "",
+        "type": "uint8"
+      }
     ],
-    name: 'approve',
-    outputs: [
-      {
-        name: 'success',
-        type: 'bool',
-      },
-    ],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    constant: true,
-    inputs: [],
-    name: 'totalSupply',
-    outputs: [
+    "constant": true,
+    "inputs": [],
+    "name": "symbol",
+    "outputs": [
       {
-        name: 'tokenSupply',
-        type: 'uint256',
-      },
+        "name": "",
+        "type": "string"
+      }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    constant: false,
-    inputs: [
+    "inputs": [
       {
-        name: '_from',
-        type: 'address',
+        "name": "_initialAmount",
+        "type": "uint256"
       },
       {
-        name: '_to',
-        type: 'address',
+        "name": "_tokenName",
+        "type": "string"
       },
       {
-        name: '_amount',
-        type: 'uint256',
+        "name": "_decimalUnits",
+        "type": "uint8"
       },
+      {
+        "name": "_tokenSymbol",
+        "type": "string"
+      }
     ],
-    name: 'transferFrom',
-    outputs: [
-      {
-        name: 'success',
-        type: 'bool',
-      },
-    ],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
   },
   {
-    constant: true,
-    inputs: [],
-    name: 'decimals',
-    outputs: [
-      {
-        name: '',
-        type: 'uint8',
-      },
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "fallback"
   },
   {
-    constant: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        name: '_amount',
-        type: 'uint256',
+        "indexed": true,
+        "name": "_burner",
+        "type": "address"
       },
-    ],
-    name: 'burn',
-    outputs: [
       {
-        name: 'success',
-        type: 'bool',
-      },
+        "indexed": true,
+        "name": "_amountBurned",
+        "type": "uint256"
+      }
     ],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
+    "name": "LogBurn",
+    "type": "event"
   },
   {
-    constant: true,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        name: '_tokenHolder',
-        type: 'address',
+        "indexed": true,
+        "name": "from",
+        "type": "address"
       },
-    ],
-    name: 'balanceOf',
-    outputs: [
       {
-        name: 'balance',
-        type: 'uint256',
+        "indexed": true,
+        "name": "to",
+        "type": "address"
       },
+      {
+        "indexed": false,
+        "name": "tokens",
+        "type": "uint256"
+      }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
+    "name": "Transfer",
+    "type": "event"
   },
   {
-    constant: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        name: '_from',
-        type: 'address',
+        "indexed": true,
+        "name": "tokenOwner",
+        "type": "address"
       },
       {
-        name: '_amount',
-        type: 'uint256',
+        "indexed": true,
+        "name": "spender",
+        "type": "address"
       },
+      {
+        "indexed": false,
+        "name": "tokens",
+        "type": "uint256"
+      }
     ],
-    name: 'burnFrom',
-    outputs: [
-      {
-        name: 'success',
-        type: 'bool',
-      },
-    ],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
+    "name": "Approval",
+    "type": "event"
   },
   {
-    constant: true,
-    inputs: [],
-    name: 'symbol',
-    outputs: [
+    "constant": false,
+    "inputs": [
       {
-        name: '',
-        type: 'string',
+        "name": "_to",
+        "type": "address"
       },
+      {
+        "name": "_amount",
+        "type": "uint256"
+      }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
+    "name": "transfer",
+    "outputs": [
+      {
+        "name": "success",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    constant: false,
-    inputs: [
+    "constant": false,
+    "inputs": [
       {
-        name: '_to',
-        type: 'address',
+        "name": "_from",
+        "type": "address"
       },
       {
-        name: '_amount',
-        type: 'uint256',
+        "name": "_to",
+        "type": "address"
       },
+      {
+        "name": "_amount",
+        "type": "uint256"
+      }
     ],
-    name: 'transfer',
-    outputs: [
+    "name": "transferFrom",
+    "outputs": [
       {
-        name: 'success',
-        type: 'bool',
-      },
+        "name": "success",
+        "type": "bool"
+      }
     ],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    constant: false,
-    inputs: [
+    "constant": false,
+    "inputs": [
       {
-        name: '_spender',
-        type: 'address',
+        "name": "_spender",
+        "type": "address"
       },
       {
-        name: '_amount',
-        type: 'uint256',
-      },
-      {
-        name: '_data',
-        type: 'bytes',
-      },
+        "name": "_amount",
+        "type": "uint256"
+      }
     ],
-    name: 'approveAndCall',
-    outputs: [
+    "name": "approve",
+    "outputs": [
       {
-        name: 'success',
-        type: 'bool',
-      },
+        "name": "success",
+        "type": "bool"
+      }
     ],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    constant: true,
-    inputs: [
+    "constant": false,
+    "inputs": [
       {
-        name: '_tokenHolder',
-        type: 'address',
+        "name": "_spender",
+        "type": "address"
       },
       {
-        name: '_spender',
-        type: 'address',
+        "name": "_amount",
+        "type": "uint256"
       },
+      {
+        "name": "_data",
+        "type": "bytes"
+      }
     ],
-    name: 'allowance',
-    outputs: [
+    "name": "approveAndCall",
+    "outputs": [
       {
-        name: 'remaining',
-        type: 'uint256',
-      },
+        "name": "success",
+        "type": "bool"
+      }
     ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    inputs: [
+    "constant": false,
+    "inputs": [
       {
-        name: '_initialAmount',
-        type: 'uint256',
-      },
-      {
-        name: '_tokenName',
-        type: 'string',
-      },
-      {
-        name: '_decimalUnits',
-        type: 'uint8',
-      },
-      {
-        name: '_tokenSymbol',
-        type: 'string',
-      },
+        "name": "_amount",
+        "type": "uint256"
+      }
     ],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'constructor',
+    "name": "burn",
+    "outputs": [
+      {
+        "name": "success",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    payable: true,
-    stateMutability: 'payable',
-    type: 'fallback',
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_from",
+        "type": "address"
+      },
+      {
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "burnFrom",
+    "outputs": [
+      {
+        "name": "success",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    anonymous: false,
-    inputs: [
+    "constant": true,
+    "inputs": [],
+    "name": "totalSupply",
+    "outputs": [
       {
-        indexed: true,
-        name: '_burner',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        name: '_amountBurned',
-        type: 'uint256',
-      },
+        "name": "tokenSupply",
+        "type": "uint256"
+      }
     ],
-    name: 'LogBurn',
-    type: 'event',
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    anonymous: false,
-    inputs: [
+    "constant": true,
+    "inputs": [
       {
-        indexed: true,
-        name: 'from',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        name: 'to',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        name: 'tokens',
-        type: 'uint256',
-      },
+        "name": "_tokenHolder",
+        "type": "address"
+      }
     ],
-    name: 'Transfer',
-    type: 'event',
+    "name": "balanceOf",
+    "outputs": [
+      {
+        "name": "balance",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    anonymous: false,
-    inputs: [
+    "constant": true,
+    "inputs": [
       {
-        indexed: true,
-        name: 'tokenOwner',
-        type: 'address',
+        "name": "_tokenHolder",
+        "type": "address"
       },
       {
-        indexed: true,
-        name: 'spender',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        name: 'tokens',
-        type: 'uint256',
-      },
+        "name": "_spender",
+        "type": "address"
+      }
     ],
-    name: 'Approval',
-    type: 'event',
-  },
+    "name": "allowance",
+    "outputs": [
+      {
+        "name": "remaining",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  }
 ];

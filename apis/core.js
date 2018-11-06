@@ -25,18 +25,10 @@ export const loadMetamaskUserDetails = async () =>
     try {
       const accounts = await window.web3js.eth.getAccounts();
       const balance = await window.web3js.eth.getBalance(accounts[0]);
-      const myBitTokenContract = new window.web3js.eth.Contract(
-        MyBitToken.ABI,
-        MyBitToken.ADDRESS,
-      );
-      const myBitBalance = await myBitTokenContract.methods
-        .balanceOf(accounts[0])
-        .call();
 
       const details = {
         userName: accounts[0],
         ethBalance: window.web3js.utils.fromWei(balance, 'ether'),
-        myBitBalance: window.web3js.utils.fromWei(myBitBalance, 'ether'),
       };
       resolve(details);
     } catch (error) {
@@ -52,6 +44,8 @@ export const fund = async (user, amount, day) =>
         TokenSale.ABI,
         TokenSale.ADDRESS,
       );
+      console.log(tokenSaleContract)
+      console.log(user.userName)
       const weiAmount = window.web3js.utils.toWei(amount.toString(), 'ether');
 
       const response = await tokenSaleContract.methods
@@ -99,10 +93,8 @@ export const getAllContributionsPerDay = async () =>
         const contributed = Number(window.web3js.utils.fromWei(contribution.returnValues._amount.toString(), 'ether'))
         const day = contribution.returnValues._day;
         const weiPerToken = contribution.returnValues.weiPerToken;
-        const weiContributed = contribution.returnValues.weiContributed;
 
-        console.log(weiContributed)
-        console.log(contributed)
+        console.log("contributed: ", contributed)
 
         let dayContributions = contributionsToReturn[day];
         // check if day has been initialized
@@ -153,14 +145,17 @@ export const getAllContributionsPerDay = async () =>
         );
 
         const amount = await tokenSaleContract.methods
-        .getUnclaimedAmount(contributor, day)
+        .getTokensOwed(contributor, day)
         .call();
 
-        console.log("amount", amount)
-        resolve(amount);
+        console.log(amount)
+
+        resolve(Number(window.web3js.utils.fromWei(amount, 'ether')));
       } catch (err) {
         console.log(err)
         resolve(false);
       }
     });
 
+
+//setTimeout(() => getUnclaimedAmountOnDay('0xBB64ac045539bC0e9FFfd04399347a8459e8282A', 10), 2000);

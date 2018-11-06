@@ -1,11 +1,12 @@
 import AppInfoContext from './AppInfoContext';
 import Web3 from 'web3';
 import * as Core from '../../apis/core';
-import { MYBIT_TICKER_COINMARKETCAP } from '../constants/';
+import { MYBIT_TICKER_COINMARKETCAP, debug } from '../constants/';
 class AppInfo extends React.Component {
   constructor(props){
     super(props);
     this.handleClickMobileMenu = this.handleClickMobileMenu.bind(this);
+    this.loadMetamaskUserDetails = this.loadMetamaskUserDetails.bind(this);
     this.state = {
       mobileMenu: false,
       handleClickMobileMenu: this.handleClickMobileMenu,
@@ -24,7 +25,7 @@ class AppInfo extends React.Component {
       // User denied account access...
       }
     } else if (window.web3) {
-      window.web3js = new Web3(window.web3.currentProvider);
+      window.web3js = new Web3(new Web3.providers.WebsocketProvider(window.web3.currentProvider));
     }
 
     if (window.web3js) {
@@ -33,7 +34,7 @@ class AppInfo extends React.Component {
       });
       await this.loadMetamaskUserDetails();
       await this.loadPrices();
-      //await this.fund();
+      //await this.fund(this.state.user.username, '0.1', 3);
       await this.getAllContributionsPerDay();
     }
   }
@@ -77,7 +78,7 @@ class AppInfo extends React.Component {
   }
 
   async fund(){
-    await Core.fund(this.state.user, 0.2, 1)
+    await Core.fund(this.state.user, 4, 10)
       .then((response) => {
         console.log(response);
       })

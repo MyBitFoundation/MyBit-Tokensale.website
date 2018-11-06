@@ -2,6 +2,8 @@ import { links } from './links'
 
 export const MYBIT_TICKER_COINMARKETCAP = 1902;
 
+export const debug = (message) => console.log(message);
+
 export const countdownInfo = {
   finalDate: new Date("Jul 30 2019 12:00:00 GMT-0"),
   title: 'Index page with phase information (bday example)',
