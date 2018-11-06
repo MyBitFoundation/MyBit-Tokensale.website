@@ -48,7 +48,7 @@ class AppInfo extends React.Component {
         });
       })
       .catch((err) => {
-        debug(err);
+        //debug(err);
         if (this.state.userIsLoggedIn) {
           setTimeout(this.loadMetamaskUserDetails, 5000);
         }

@@ -1,0 +1,101 @@
+.tokensaleGrid__container {
+    padding: 0;
+    margin: 0px auto;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    max-width: 1160px;
+}
+
+.tokensaleGrid__item {
+    border-radius: 4px;
+    background: #ffffff;
+    padding: 5px;
+    width: 267px;
+    height: 300px;
+    margin-top: 10px;
+    font-size: 3em;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 1px 5px 20px 2px rgba(0,0,0,0.4);
+    position: relative;
+}
+
+.tokensaleClock {
+    margin-top: 38px;
+    margin-bottom: 10px;
+}
+
+.tokensaleCoins {
+    margin-top: 49px;
+    margin-bottom: 21px;
+}
+
+.tokensaleMetamask {
+    margin-top: 45px;
+    margin-bottom: 32px;
+}
+
+.tokensaleMyb {
+    margin-top: 49px;
+    margin-bottom: 30px;
+}
+
+.tokensaleTooltip {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+}
+
+.tokensaleGrid__item-main {
+    font-size: 16px;
+    color: #4a4a4a;
+    margin-top: 10px;
+    margin-bottom: 6px;
+}
+
+.tokensaleGrid__item-bold {
+    font-weight: bold;
+    font-size: 22px;
+    color: #4a4a4a;
+    margin-bottom: 10px;
+}
+
+.tokensaleGrid__blue-span {
+    color: #1890FF;
+}
+
+.tokensaleGrid__button {
+    border-radius: 4px;
+    border: none;
+    width: 129px;
+    height: 36px;
+    font-size: 16px;
+    &.green { 
+        background-color: #24F281;
+    }
+    &.blue {
+        background-color: #1890FF;
+    }
+}
+
+.tokensaleGrid__item-address {
+    width: 215px;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    padding: 10px;
+    color: #4a4a4a;
+    border-radius: 4px;
+    margin: 0px auto;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+}
+
+.tokensaleGrid__item-eth {
+    font-weight: bold;
+    font-size: 18px;
+    color: #4a4a4a;
+}

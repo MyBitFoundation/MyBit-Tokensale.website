@@ -1,5 +1,23 @@
-.phaseTable {
+.phaseTableWrapper {
+    margin: 0px auto;
     margin-bottom: 65px;
+    margin-top: 20px;
+    max-width: 1120px;
+    overflow: auto;
+    width: 100%;
+    border-radius: 4px;
+    box-shadow: 1px 5px 20px 2px rgba(0,0,0,0.2);
+    padding: 10px;
+}
+.phaseTable__main-heading {
+    margin-top: 30px;
+    color: #4A4A4A;
+    font-weight: bold;
+    text-align: center;
+}
+
+.phaseTable {
+    min-width: 936px;
 }
 
 .phaseTable__closed-row {
