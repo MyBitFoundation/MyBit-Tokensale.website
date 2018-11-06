@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import stylesheet from './tokensaleGrid.scss'
 import { Tooltip } from 'antd'
-import ContributeModal from './contributeModal'
 
 const tokensaleClock = '../../static/tokensale/tokensale_clock.svg';
 const tokensaleCoins = '../../static/tokensale/tokensale_coins.svg';
@@ -9,7 +8,7 @@ const tokensaleMetamask = '../../static/tokensale/metamask.svg';
 const tokensaleMyb = '../../static/tokensale/tokensale_myb.svg';
 const tokensaleTooltip = '../../static/tokensale/tokensale_questionIcon.svg';
 
-const TokensaleGrid = (props) => (
+const TokensaleGrid = ({onShowContributeModal, onShowCalculateModal }) => (
     <Fragment>
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
         <div className="tokensaleGrid__container">
@@ -20,7 +19,7 @@ const TokensaleGrid = (props) => (
                 <img src={tokensaleClock} alt="Tokensale Clock" className="tokensaleClock"></img>
                 <div className="tokensaleGrid__item-main">Phase <span className="tokensaleGrid__blue-span">#6</span> ends in:</div>
                 <div className="tokensaleGrid__item-bold">00:11:34:56</div>
-                <button className="tokensaleGrid__button green" onClick={props.onShowModal}>Get MYB</button>
+                <button className="tokensaleGrid__button green" onClick={onShowContributeModal}>Get MYB</button>
             </div>
             <div className="tokensaleGrid__item">
                 <Tooltip title="tooltip for box2">
@@ -29,7 +28,7 @@ const TokensaleGrid = (props) => (
                 <img src={tokensaleCoins} alt="Tokensale Clock" className="tokensaleCoins"></img>
                 <div className="tokensaleGrid__item-main">MYB Effective Price</div>
                 <div className="tokensaleGrid__item-bold">$0.008</div>
-                <button className="tokensaleGrid__button blue">Calculate</button>
+                <button className="tokensaleGrid__button blue" onClick={onShowCalculateModal}>Calculate</button>
             </div>
             <div className="tokensaleGrid__item">
                 <Tooltip title="tooltip for box3">

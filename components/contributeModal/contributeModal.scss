@@ -1,0 +1,46 @@
+.contributeModal__wrapper {
+    position: relative;
+    .ant-modal-header {
+        background-color: #1890FF;
+        text-align: center;
+        .ant-modal-title {
+            color: #ffffff;
+        }
+    }
+    .ant-modal-close {
+        color: #ffffff;
+    }
+}
+
+.contributeModal__content {
+    width: 313px;
+    margin: 0px auto;
+    .ant-input-number {
+        width: 313px;
+        margin-bottom: 5px;
+    }
+    .ant-select-selection--single {
+        width: 313px;
+        margin-bottom: 5px;
+    }
+    .contributeModal__label {
+        color: #4A4A4A;
+        margin-bottom: 2px;
+    }
+    .contributeModal__confirm {
+        width: 313px;
+        height: 44px;
+        background-color: #24F281;
+        border: none;
+        margin-top: 5px;
+        border-radius: 4px;
+        text-align: center;
+        color: white;
+        font-weight: 500;
+        margin-bottom: 30px;
+        & > img {
+            float: right;
+            padding-right: 3px;
+        }
+    }
+}
