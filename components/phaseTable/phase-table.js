@@ -7,6 +7,7 @@ import dummyData from './dummyData'
 const PhaseTable = (props) => (
     <Fragment>
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
+        <h1 className="phaseTable__main-heading">Token Distribution Dashboard</h1>
         <div className="phaseTableWrapper">
           <Table 
             className="phaseTable"
