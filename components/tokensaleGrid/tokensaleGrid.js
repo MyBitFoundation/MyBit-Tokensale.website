@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import stylesheet from './tokensaleGrid.scss'
 import { Tooltip } from 'antd'
+import ContributeModal from './contributeModal'
 
 const tokensaleClock = '../../static/tokensale/tokensale_clock.svg';
 const tokensaleCoins = '../../static/tokensale/tokensale_coins.svg';
@@ -19,7 +20,7 @@ const TokensaleGrid = (props) => (
                 <img src={tokensaleClock} alt="Tokensale Clock" className="tokensaleClock"></img>
                 <div className="tokensaleGrid__item-main">Phase <span className="tokensaleGrid__blue-span">#6</span> ends in:</div>
                 <div className="tokensaleGrid__item-bold">00:11:34:56</div>
-                <button className="tokensaleGrid__button green">Get MYB</button>
+                <button className="tokensaleGrid__button green" onClick={props.onShowModal}>Get MYB</button>
             </div>
             <div className="tokensaleGrid__item">
                 <Tooltip title="tooltip for box2">
