@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import stylesheet from './tokensaleGrid.scss'
-import { Tooltip } from 'antd'
+import { Tooltip, Button } from 'antd'
 
 const tokensaleClock = '../../static/tokensale/tokensale_clock.svg';
 const tokensaleCoins = '../../static/tokensale/tokensale_coins.svg';
@@ -13,26 +13,26 @@ const TokensaleGrid = ({onShowContributeModal, onShowCalculateModal }) => (
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
         <div className="tokensaleGrid__container">
             <div className="tokensaleGrid__item">
-                <Tooltip title="tooltip for box1" placement="bottom">
+                <Tooltip title="tooltip for box1" className="tokensaleGrid_tooltip" overlayClassName="tokensaleGrid_tooltip-inner">
                     <img src={tokensaleTooltip} alt="Tokensale Clock" className="tokensaleTooltip"></img>
                 </Tooltip>
                 <img src={tokensaleClock} alt="Tokensale Clock" className="tokensaleClock"></img>
                 <div className="tokensaleGrid__item-main">Phase <span className="tokensaleGrid__blue-span">#6</span> ends in:</div>
                 <div className="tokensaleGrid__item-bold">00:11:34:56</div>
-                <button className="tokensaleGrid__button green" onClick={onShowContributeModal}>Get MYB</button>
+                <Button className="tokensaleGrid__button green" onClick={onShowContributeModal}>Get MYB</Button>
             </div>
             <div className="tokensaleGrid__item">
-                <Tooltip title="tooltip for box2">
-                    <img src={tokensaleTooltip} alt="Tokensale Clock" className="tokensaleTooltip"></img>
+                <Tooltip title="tooltip for box2" className="tokensaleGrid_tooltip" overlayClassName="tokensaleGrid_tooltip-inner">
+                    <img src={tokensaleTooltip} alt="Tokensale Coins" className="tokensaleTooltip"></img>
                 </Tooltip>
                 <img src={tokensaleCoins} alt="Tokensale Clock" className="tokensaleCoins"></img>
                 <div className="tokensaleGrid__item-main">MYB Effective Price</div>
                 <div className="tokensaleGrid__item-bold">$0.008</div>
-                <button className="tokensaleGrid__button blue" onClick={onShowCalculateModal}>Calculate</button>
+                <Button className="tokensaleGrid__button blue" onClick={onShowCalculateModal}>Calculate</Button>
             </div>
             <div className="tokensaleGrid__item">
-                <Tooltip title="tooltip for box3">
-                    <img src={tokensaleTooltip} alt="Tokensale Clock" className="tokensaleTooltip"></img>
+                <Tooltip title="tooltip for box3" className="tokensaleGrid_tooltip" overlayClassName="tokensaleGrid_tooltip-inner">
+                    <img src={tokensaleTooltip} alt="Tokensale Metamask Logo" className="tokensaleTooltip"></img>
                 </Tooltip>
                 <img src={tokensaleMetamask} alt="Tokensale Clock" className="tokensaleMetamask"></img>
                 <div className="tokensaleGrid__item-main">Connected account:</div>
@@ -41,13 +41,14 @@ const TokensaleGrid = ({onShowContributeModal, onShowCalculateModal }) => (
                 <div className="tokensaleGrid__item-eth">5 ETH</div>
             </div>
             <div className="tokensaleGrid__item">
-                <Tooltip title="tooltip for box4">
-                    <img src={tokensaleTooltip} alt="Tokensale Clock" className="tokensaleTooltip"></img>
+                <Tooltip title="Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done." className="tokensaleGrid_tooltip" overlayClassName="tokensaleGrid_tooltip-inner">
+                    <img src={tokensaleTooltip} alt="Tokensale MYB Token Logo" className="tokensaleTooltip"></img>
                 </Tooltip>
                 <img src={tokensaleMyb} alt="Tokensale Clock" className="tokensaleMyb"></img>
                 <div className="tokensaleGrid__item-main">MYB Ready to Claim</div>
                 <div className="tokensaleGrid__item-bold">115,000 MYB</div>
-                <button className="tokensaleGrid__button blue">Claim</button>
+                <Button className="tokensaleGrid__button blue">Claim</Button>
             </div>
         </div>
     </Fragment>

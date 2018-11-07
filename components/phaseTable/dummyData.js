@@ -24,7 +24,7 @@ export default [
     total_eth: 8.75,
     deadline: "Jan 2, 2019",
     price: 0.023,
-    your_contribution: 15,
+    your_contribution: 0,
     myb_received: 2000,
     closed: true,
     phaseActive: false

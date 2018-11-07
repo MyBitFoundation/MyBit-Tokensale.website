@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import stylesheet from './phase-table.scss'
-import { Table } from 'antd'
+import { Table, Button } from 'antd'
 import dummyData from './dummyData'
 
 const PhaseTable = ({onShowContributeModal}) => {
@@ -77,8 +77,13 @@ const PhaseTable = ({onShowContributeModal}) => {
         return (<button onClick={onShowContributeModal} className="phaseTable__active-phase-button">Contribute</button>)
       } else {
         return record.closed ?
-          (<button onClick={() => { console.log(`Phase ${record.period} button clicked to claim!`) }} className="phaseTable__closed-row-button">Claim</button>) :
-          (<button onClick={onShowContributeModal} className="phaseTable__active-row-button">Contribute</button>)
+          (<Button 
+              onClick={() => { console.log(`Phase ${record.period} button clicked to claim!`) }} 
+              className="phaseTable__closed-row-button"
+              disabled={record.your_contribution === 0}>
+              Claim
+            </Button>) :
+          (<Button onClick={onShowContributeModal} className="phaseTable__active-row-button">Contribute</Button>)
       }
     }
   }];
