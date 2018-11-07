@@ -18,6 +18,7 @@ const PhaseTable = ({onShowContributeModal}) => {
     title: 'MYB Distributed',
     dataIndex: 'myb_distributed',
     key: 'myb_distributed',
+    className: "phaseTable__xs-hide",
     render: (value, record) => {
       return record.closed ?
         (<div className="phaseTable__closed-row">{`${value.toLocaleString()} MYB`}</div>) :
@@ -42,7 +43,7 @@ const PhaseTable = ({onShowContributeModal}) => {
         (<div className="phaseTable__active-row">{`$${value.toLocaleString()}`}</div>)
     }
   }, {
-    title: 'Period closed',
+    title: 'Period ends',
     dataIndex: 'deadline',
     key: 'deadline',
     render: (value, record) => {
@@ -54,6 +55,7 @@ const PhaseTable = ({onShowContributeModal}) => {
     title: 'Your contribution',
     dataIndex: 'your_contribution',
     key: 'your_contribution',
+    className: "phaseTable__xs-hide",
     render: (value, record) => {
       return record.closed ?
         (<div className="phaseTable__closed-row">{`${value.toLocaleString()} ETH`}</div>) :
@@ -63,6 +65,7 @@ const PhaseTable = ({onShowContributeModal}) => {
     title: 'MYB received',
     dataIndex: 'myb_received',
     key: 'myb_received',
+    className: "phaseTable__xs-hide",
     render: (value, record) => {
       return record.closed ?
         (<div className="phaseTable__closed-row">{`${value.toLocaleString()} MYB`}</div>) :
@@ -72,6 +75,7 @@ const PhaseTable = ({onShowContributeModal}) => {
     title: 'Contribute',
     dataIndex: 'contribute',
     key: 'contribute',
+    className: "phaseTable__xs-hide",
     render: (value, record) => {
       if (record.phaseActive) {
         return (<button onClick={onShowContributeModal} className="phaseTable__active-phase-button">Contribute</button>)

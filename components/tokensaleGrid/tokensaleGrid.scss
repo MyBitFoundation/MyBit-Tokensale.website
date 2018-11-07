@@ -30,6 +30,10 @@
     }
 }
 
+.tokensaleGrid__mobile {
+    display: none;
+}
+
 .tokensaleClock {
     margin-top: 38px;
     margin-bottom: 10px;
@@ -129,4 +133,22 @@
     .ant-tooltip-arrow {
         border-top-color: #ffffff;
     }
+}
+
+@media only screen and (max-width: 768px) {
+    .tokensaleGrid__container {
+        display: none;
+    }
+    .tokensaleGrid__mobile {
+        margin: 0px auto;
+        display: flex;
+        .tokensaleGrid__item {
+            margin: 0px auto;
+            width: 90%;
+            height: 150px;
+            text-align: center;
+            margin-bottom: 200px;
+        }
+    }
+    
 }
