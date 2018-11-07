@@ -32,7 +32,6 @@
         margin-bottom: 2px;
     }
     .calculateModal__confirm {
-        width: 313px;
         height: 44px;
         background-color: #24F281;
         border: none;
@@ -45,6 +44,11 @@
         & > img {
             float: right;
             padding-right: 3px;
+        }
+        &:hover {
+            background-color: #1890FF;
+            transition: 0.3s all ease;
+            color: white;
         }
     }
     .ant-input-affix-wrapper {

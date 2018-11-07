@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import stylesheet from './calculateModal.scss'
-import { Modal, Select, InputNumber, Icon, Input } from 'antd'
+import { Modal, Select, InputNumber, Icon, Input, Button } from 'antd'
 
 const Option = Select.Option;
 const tokensaleMetamask = '../../static/tokensale/metamask.svg';
@@ -40,10 +40,10 @@ const CalculateModal = ({ visible, handleCancel, handleConfirm, onSelectChange, 
                 Effective price per MYB:
             </div>
             <Input placeholder="1 MYB = $0.22" suffix={(<img src={mybIcon} alt="MYB Token Icon" className="mybIcon"></img>)} />
-            <button className="calculateModal__confirm" onClick={handleConfirm}>
+            <Button block className="calculateModal__confirm" onClick={handleConfirm}>
               Confirm Contribution
               <img src={tokensaleMetamask} alt="Metamask Logo" width="26px"></img>
-            </button>
+            </Button>
           </div>
         </Modal>
     </Fragment>

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import stylesheet from './contributeModal.scss'
-import { Modal, Select, InputNumber } from 'antd'
+import { Modal, Select, InputNumber, Button } from 'antd'
 
 const Option = Select.Option;
 const tokensaleMetamask = '../../static/tokensale/metamask.svg';
@@ -30,10 +30,10 @@ const ContributeModal = ({ visible, handleCancel, handleConfirm, onSelectChange,
               How much do you want to contribute?
             </div>
             <InputNumber onChange={onContributeChange} placeholder="Contribution in ETH" />
-            <button className="contributeModal__confirm" onClick={handleConfirm}>
+            <Button block className="contributeModal__confirm" onClick={handleConfirm}>
               Confirm Contribution
               <img src={tokensaleMetamask} alt="Metamask Logo" width="26px"></img>
-            </button>
+            </Button>
           </div>
         </Modal>
     </Fragment>

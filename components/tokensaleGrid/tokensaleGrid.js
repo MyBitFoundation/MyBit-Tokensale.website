@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import stylesheet from './tokensaleGrid.scss'
-import { Tooltip } from 'antd'
+import { Tooltip, Button } from 'antd'
 
 const tokensaleClock = '../../static/tokensale/tokensale_clock.svg';
 const tokensaleCoins = '../../static/tokensale/tokensale_coins.svg';
@@ -19,7 +19,7 @@ const TokensaleGrid = ({onShowContributeModal, onShowCalculateModal }) => (
                 <img src={tokensaleClock} alt="Tokensale Clock" className="tokensaleClock"></img>
                 <div className="tokensaleGrid__item-main">Phase <span className="tokensaleGrid__blue-span">#6</span> ends in:</div>
                 <div className="tokensaleGrid__item-bold">00:11:34:56</div>
-                <button className="tokensaleGrid__button green" onClick={onShowContributeModal}>Get MYB</button>
+                <Button className="tokensaleGrid__button green" onClick={onShowContributeModal}>Get MYB</Button>
             </div>
             <div className="tokensaleGrid__item">
                 <Tooltip title="tooltip for box2">
@@ -28,7 +28,7 @@ const TokensaleGrid = ({onShowContributeModal, onShowCalculateModal }) => (
                 <img src={tokensaleCoins} alt="Tokensale Clock" className="tokensaleCoins"></img>
                 <div className="tokensaleGrid__item-main">MYB Effective Price</div>
                 <div className="tokensaleGrid__item-bold">$0.008</div>
-                <button className="tokensaleGrid__button blue" onClick={onShowCalculateModal}>Calculate</button>
+                <Button className="tokensaleGrid__button blue" onClick={onShowCalculateModal}>Calculate</Button>
             </div>
             <div className="tokensaleGrid__item">
                 <Tooltip title="tooltip for box3">
@@ -47,7 +47,7 @@ const TokensaleGrid = ({onShowContributeModal, onShowCalculateModal }) => (
                 <img src={tokensaleMyb} alt="Tokensale Clock" className="tokensaleMyb"></img>
                 <div className="tokensaleGrid__item-main">MYB Ready to Claim</div>
                 <div className="tokensaleGrid__item-bold">115,000 MYB</div>
-                <button className="tokensaleGrid__button blue">Claim</button>
+                <Button className="tokensaleGrid__button blue">Claim</Button>
             </div>
         </div>
     </Fragment>
