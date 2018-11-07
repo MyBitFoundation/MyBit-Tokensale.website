@@ -22,3 +22,16 @@
     height: 36px;
     color: white;
 }
+
+.dashboardHeader__mobile {
+    display: none;
+    max-width: 1160px;
+}
+
+@media only screen and (max-width: 768px) {
+    .dashboardHeader__mobile {
+        width: 90%;
+        margin: 10px auto;
+        display: block;
+    }
+}

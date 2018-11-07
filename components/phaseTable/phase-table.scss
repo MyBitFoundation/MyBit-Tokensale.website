@@ -5,6 +5,7 @@
     max-width: 1120px;
     overflow: auto;
     width: 100%;
+    background-color: white;
     border-radius: 4px;
     box-shadow: 1px 5px 20px 2px rgba(0,0,0,0.2);
     padding: 10px;
@@ -60,4 +61,40 @@
     border: none;
     color: white;
     line-height: 1;
+}
+
+@media only screen and (max-width: 768px) {
+    .phaseTable__main-heading {
+        display: none;
+    }
+    .phaseTableWrapper {
+        transform: translateY(-150px);
+        width: 90%;
+        margin: 0 auto;
+        margin-bottom: -100px;
+        padding: 0;
+        .ant-table {
+            font-size: 12px;
+            .ant-table-thead {
+                tr {
+                    th {
+                        padding: 16px 12px;
+                    }
+                }
+            }
+            .ant-table-tbody {
+                tr {
+                    td {
+                        padding: 16px 12px;
+                    }
+                }
+            }
+        }
+    }
+    .phaseTable__xs-hide {
+        display: none;
+    }
+    .phaseTable {
+        min-width: 300px;
+    }
 }

@@ -51,6 +51,14 @@ Counting objects: 100% (9/9), done." className="tokensaleGrid_tooltip" overlayCl
                 <Button className="tokensaleGrid__button blue">Claim</Button>
             </div>
         </div>
+        <div className="tokensaleGrid__mobile">
+            <div className="tokensaleGrid__item">
+                <div className="tokensaleGrid__item-main">Phase <span className="tokensaleGrid__blue-span">#6</span> ends in:</div>
+                <div className="tokensaleGrid__item-bold">00:11:34:56</div>
+                <div className="tokensaleGrid__item-main">ETH Contributed:</div>
+                <div className="tokensaleGrid__item-eth">5 ETH</div>
+            </div>
+        </div>
     </Fragment>
 )
 
