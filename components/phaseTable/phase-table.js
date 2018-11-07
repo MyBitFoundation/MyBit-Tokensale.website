@@ -77,7 +77,12 @@ const PhaseTable = ({onShowContributeModal}) => {
         return (<button onClick={onShowContributeModal} className="phaseTable__active-phase-button">Contribute</button>)
       } else {
         return record.closed ?
-          (<Button onClick={() => { console.log(`Phase ${record.period} button clicked to claim!`) }} className="phaseTable__closed-row-button">Claim</Button>) :
+          (<Button 
+              onClick={() => { console.log(`Phase ${record.period} button clicked to claim!`) }} 
+              className="phaseTable__closed-row-button"
+              disabled={record.your_contribution === 0}>
+              Claim
+            </Button>) :
           (<Button onClick={onShowContributeModal} className="phaseTable__active-row-button">Contribute</Button>)
       }
     }

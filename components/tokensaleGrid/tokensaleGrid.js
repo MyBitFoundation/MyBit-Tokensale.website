@@ -13,7 +13,7 @@ const TokensaleGrid = ({onShowContributeModal, onShowCalculateModal }) => (
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
         <div className="tokensaleGrid__container">
             <div className="tokensaleGrid__item">
-                <Tooltip title="tooltip for box1" placement="bottom">
+                <Tooltip title="tooltip for box1" className="tokensaleGrid_tooltip" overlayClassName="tokensaleGrid_tooltip-inner">
                     <img src={tokensaleTooltip} alt="Tokensale Clock" className="tokensaleTooltip"></img>
                 </Tooltip>
                 <img src={tokensaleClock} alt="Tokensale Clock" className="tokensaleClock"></img>
@@ -22,8 +22,8 @@ const TokensaleGrid = ({onShowContributeModal, onShowCalculateModal }) => (
                 <Button className="tokensaleGrid__button green" onClick={onShowContributeModal}>Get MYB</Button>
             </div>
             <div className="tokensaleGrid__item">
-                <Tooltip title="tooltip for box2">
-                    <img src={tokensaleTooltip} alt="Tokensale Clock" className="tokensaleTooltip"></img>
+                <Tooltip title="tooltip for box2" className="tokensaleGrid_tooltip" overlayClassName="tokensaleGrid_tooltip-inner">
+                    <img src={tokensaleTooltip} alt="Tokensale Coins" className="tokensaleTooltip"></img>
                 </Tooltip>
                 <img src={tokensaleCoins} alt="Tokensale Clock" className="tokensaleCoins"></img>
                 <div className="tokensaleGrid__item-main">MYB Effective Price</div>
@@ -31,8 +31,8 @@ const TokensaleGrid = ({onShowContributeModal, onShowCalculateModal }) => (
                 <Button className="tokensaleGrid__button blue" onClick={onShowCalculateModal}>Calculate</Button>
             </div>
             <div className="tokensaleGrid__item">
-                <Tooltip title="tooltip for box3">
-                    <img src={tokensaleTooltip} alt="Tokensale Clock" className="tokensaleTooltip"></img>
+                <Tooltip title="tooltip for box3" className="tokensaleGrid_tooltip" overlayClassName="tokensaleGrid_tooltip-inner">
+                    <img src={tokensaleTooltip} alt="Tokensale Metamask Logo" className="tokensaleTooltip"></img>
                 </Tooltip>
                 <img src={tokensaleMetamask} alt="Tokensale Clock" className="tokensaleMetamask"></img>
                 <div className="tokensaleGrid__item-main">Connected account:</div>
@@ -41,8 +41,9 @@ const TokensaleGrid = ({onShowContributeModal, onShowCalculateModal }) => (
                 <div className="tokensaleGrid__item-eth">5 ETH</div>
             </div>
             <div className="tokensaleGrid__item">
-                <Tooltip title="tooltip for box4">
-                    <img src={tokensaleTooltip} alt="Tokensale Clock" className="tokensaleTooltip"></img>
+                <Tooltip title="Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done." className="tokensaleGrid_tooltip" overlayClassName="tokensaleGrid_tooltip-inner">
+                    <img src={tokensaleTooltip} alt="Tokensale MYB Token Logo" className="tokensaleTooltip"></img>
                 </Tooltip>
                 <img src={tokensaleMyb} alt="Tokensale Clock" className="tokensaleMyb"></img>
                 <div className="tokensaleGrid__item-main">MYB Ready to Claim</div>
