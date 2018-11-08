@@ -21,6 +21,10 @@
     width: 129px;
     height: 36px;
     color: white;
+    &:focus {
+        color: #ffffff;
+        background-color: #24F281;
+    }
 }
 
 .dashboardHeader__mobile {
