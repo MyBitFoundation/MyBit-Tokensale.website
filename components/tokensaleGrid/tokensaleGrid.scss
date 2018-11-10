@@ -92,10 +92,18 @@
         &:hover {
             color: white;
         }
+        &:focus {
+            background-color: #24F281;
+            color: white;
+        }
     }
     &.blue {
         background-color: #1890FF;
         &:hover {
+            color: white;
+        }
+        &:focus {
+            background-color: #1890FF;
             color: white;
         }
     }

@@ -39,8 +39,12 @@
     border-radius: 4px;
     background: #24f281;
     border: none;
-    color: white;
+    color: #ffffff;
     line-height: 1;
+    &:focus {
+        background: #24f281;
+        color: #ffffff;
+    }
 }
 
 .phaseTable__closed-row-button {
@@ -51,6 +55,11 @@
     border: 2px solid #1890ff;
     color: #1890ff;
     line-height: 1;
+    &:focus {
+        color: #1890ff;
+        background: transparent;
+        border: 2px solid #1890ff;
+    }
 }
 
 .phaseTable__active-row-button {
@@ -59,8 +68,12 @@
     border-radius: 4px;
     background: #1890ff;
     border: none;
-    color: white;
+    color: #ffffff;
     line-height: 1;
+    &:focus {
+        background: #1890ff;
+        color: #ffffff;
+    }
 }
 
 @media only screen and (max-width: 768px) {
