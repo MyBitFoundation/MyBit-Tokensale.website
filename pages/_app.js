@@ -6,12 +6,12 @@ import AppInfo from '../components/context/AppInfo'
 import MainWrapper from '../components/mainWrapper'
 import AppInfoContext from '../components/context/AppInfoContext'
 import Head from '../components/head'
+import MetamaskChecker from '../components/MetamaskChecker'
 
 export default class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props
     const { i18n, initialI18nStore, initialLanguage } = pageProps || {}
-
     return (
       <Container>
         <I18nextProvider
@@ -21,15 +21,17 @@ export default class MyApp extends App {
         >
           <React.Fragment>
             <Head />
-            <AppInfo>
-              <AppInfoContext.Consumer>
-                {({ mobileMenu, handleClickMobileMenu }) => (
-                  <MainWrapper mobileMenu={mobileMenu}>
-                    <Component {...pageProps} />
-                  </MainWrapper>
-                )}
-              </AppInfoContext.Consumer>
-            </AppInfo>
+            <MetamaskChecker>
+              <AppInfo>
+                <AppInfoContext.Consumer>
+                  {props => (
+                    <MainWrapper mobileMenu={props.mobileMenu}>
+                      <Component {...pageProps} {...props} />
+                    </MainWrapper>
+                  )}
+                </AppInfoContext.Consumer>
+              </AppInfo>
+            </MetamaskChecker>
           </React.Fragment>
         </I18nextProvider>
       </Container>

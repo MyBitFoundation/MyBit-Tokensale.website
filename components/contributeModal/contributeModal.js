@@ -5,7 +5,14 @@ import { Modal, Select, InputNumber, Button } from 'antd'
 const Option = Select.Option;
 const tokensaleMetamask = '../../static/tokensale/metamask.svg';
 
-const ContributeModal = ({ visible, handleCancel, handleConfirm, onSelectChange, onContributeChange}) => (
+const ContributeModal = ({ visible, handleCancel, handleConfirm, onSelectChange, onContributeChange, currentDay, selectedDay, contribution, isLoggedIn}) => {
+  const periodsLeft = [];
+  for(let i = currentDay; i <= 365; i++){
+    periodsLeft.push(
+      <Option key={i} value={i}>{`Distribution Period #${i}`}</Option>
+    )
+  }
+  return (
     <Fragment>
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
         <Modal
@@ -21,22 +28,20 @@ const ContributeModal = ({ visible, handleCancel, handleConfirm, onSelectChange,
             <div className="contributeModal__label">
               Select distribution period
             </div>
-            <Select defaultValue="phase6" onChange={onSelectChange}>
-              <Option value="phase6">Distribution Period #6</Option>
-              <Option value="phase7">Distribution Period #7</Option>
-              <Option value="phase8">Distribution Period #8</Option>
+            <Select key={new Date().getTime()} defaultValue={selectedDay && selectedDay > 0 ? selectedDay : currentDay} onChange={onSelectChange}>
+              {periodsLeft}
             </Select>
             <div className="contributeModal__label">
               How much do you want to contribute?
             </div>
-            <InputNumber onChange={onContributeChange} placeholder="Contribution in ETH" />
-            <Button block className="contributeModal__confirm" onClick={handleConfirm}>
+            <InputNumber value={contribution} onChange={onContributeChange} placeholder="Contribution in ETH" />
+            <Button disabled={!contribution || contribution === 0 || !isLoggedIn} block className="contributeModal__confirm" onClick={handleConfirm}>
               Confirm Contribution
               <img src={tokensaleMetamask} alt="Metamask Logo" width="26px"></img>
             </Button>
           </div>
         </Modal>
     </Fragment>
-)
+)}
 
 export default ContributeModal

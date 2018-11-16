@@ -1,103 +1,181 @@
 import AppInfoContext from './AppInfoContext';
 import Web3 from 'web3';
 import * as Core from '../../apis/core';
-import { MYBIT_TICKER_COINMARKETCAP, debug } from '../constants/';
+import { ETHEREUM_TICKER_COINMARKETCAP, debug, dayInSeconds, tokensPerDay } from '../constants/';
 class AppInfo extends React.Component {
   constructor(props){
     super(props);
     this.handleClickMobileMenu = this.handleClickMobileMenu.bind(this);
-    this.loadMetamaskUserDetails = this.loadMetamaskUserDetails.bind(this);
+    this.fund = this.fund.bind(this);
+    this.withdraw = this.withdraw.bind(this);
+    this.batchWithdrawal = this.batchWithdrawal.bind(this);
+    this.updateNotification = this.updateNotification.bind(this);
+    this.removeNotification = this.removeNotification.bind(this);
+    this.getCurrentDayAndSetupTimer = this.getCurrentDayAndSetupTimer.bind(this);
+    this.setEffectivePrice = this.setEffectivePrice.bind(this);
+    this.loadPrices = this.loadPrices.bind(this);
+
     this.state = {
       mobileMenu: false,
       handleClickMobileMenu: this.handleClickMobileMenu,
+      removeNotification: this.removeNotification,
+      currentDay: 0,
+      fund: this.fund,
+      withdraw: this.withdraw,
+      batchWithdrawal: this.batchWithdrawal,
+      notifications: {},
+      user: this.props.user,
+      isLoggedIn: this.props.isLoggedIn,
+      enabled: this.props.enabled,
     };
   }
 
   async componentDidMount() {
-    // Modern dapp browsers...
-    if (window.ethereum) {
-      const { ethereum } = window;
-      window.web3js = new Web3(ethereum);
-
-      try {
-        await ethereum.enable();
-      } catch (error) {
-      // User denied account access...
+     try{
+      if (this.props.isMetamaskInstalled) {
+        await Promise.all([
+          await this.getCurrentDayAndSetupTimer(),
+          await this.loadPrices(),
+        ]);
+        //await this.fund(this.state.user.username, '0.1', 3);
+        this.getAllContributionsPerDay(this.state.currentDay);
       }
-    } else if (window.web3) {
-      window.web3js = new Web3(new Web3.providers.WebsocketProvider(window.web3.currentProvider));
+    }catch(err){
+      console.log(err)
     }
+  }
 
-    if (window.web3js) {
+  componentWillReceiveProps(nextProps){
+    // case where account changes
+    if(nextProps.user.userName && (this.state.user.userName !== nextProps.user.userName)){
       this.setState({
-        hasWeb3: true,
+        user: nextProps.user,
+      }, () => this.getAllContributionsPerDay(this.state.currentDay));
+    }
+    //case where user logs in/out
+    else if(this.state.isLoggedIn !== nextProps.isLoggedIn){
+      this.setState({
+        isLoggedIn: nextProps.isLoggedIn,
+      }, () => this.getAllContributionsPerDay(this.state.currentDay));
+    }
+    //case where user enables us to access accounts
+    if(!this.state.enabled && nextProps.enabled){
+      this.setState({
+        enabled: true,
       });
-      await this.loadMetamaskUserDetails();
-      await this.loadPrices();
-      //await this.fund(this.state.user.username, '0.1', 3);
-      await this.getAllContributionsPerDay();
     }
   }
 
-  async loadMetamaskUserDetails() {
-    await Core.loadMetamaskUserDetails()
-      .then((response) => {
-        this.setState({
-          user: response,
-          loading: { ...this.state.loading, user: false },
-        });
-      })
-      .catch((err) => {
-        //debug(err);
-        if (this.state.userIsLoggedIn) {
-          setTimeout(this.loadMetamaskUserDetails, 5000);
-        }
-      });
-  }
-
-  async loadPrices(){
-    await Core.fetchPriceFromCoinmarketcap(MYBIT_TICKER_COINMARKETCAP)
-      .then((priceInfo) => {
-        this.setState({
-          prices: {
-            ...this.state.prices,
-            mybit: {
-              price: priceInfo.price,
-            },
-          },
-          loading: {
-            ...this.state.loading,
-            priceMybit: false,
-          },
-        });
+  async loadPrices() {
+    await Core.fetchPriceFromCoinmarketcap(ETHEREUM_TICKER_COINMARKETCAP)
+      .then((price) => {
+        this.setState({ethPrice: price});
       })
       .catch((err) => {
         debug(err);
-        error = true;
       });
   }
 
-  async fund(){
-    await Core.fund(this.state.user, 4, 10)
+  async getCurrentDayAndSetupTimer(){
+    try{
+      const timestampStartTokenSale = await Core.getStartTimestamp();
+      const currentDay = ((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / dayInSeconds) + 1;
+      const currentDayInt = Math.floor(currentDay);
+
+      this.setState({currentDay: currentDayInt, timestampStartTokenSale});
+      this.setupTimerForCurrentDay(currentDay % 1);
+    }catch(err){
+      debug(err);
+    }
+  }
+
+  setupTimerForCurrentDay(past){
+    const currentTime = new Date().getTime();
+    const milisecondsUntilNextDay = ((1 - past) * dayInSeconds * 1000).toFixed(0);
+
+    // increments day at the next midnight
+    setTimeout(() => {
+      const updateCurrentDay = () => {
+        debug("updating currentDay...", this.state.currentDay)
+        this.setState({currentDay: this.state.currentDay + 1})
+      }
+      updateCurrentDay();
+      //timeout to update currentDay every 24 hours
+      setInterval(() => updateCurrentDay(), 86400000)
+    }, milisecondsUntilNextDay);
+  }
+
+  async fund(amount, day){
+    await Core.fund(this.state.user, amount, day, this.updateNotification)
       .then((response) => {
-        console.log(response);
+        debug(response);
       })
       .catch((err) => {
         debug(err);
-        error = true;
       });
+  }
+
+  async withdraw(day){
+    await Core.withdraw(this.state.user, day, this.updateNotification)
+      .then((response) => {
+        debug(response);
+      })
+      .catch((err) => {
+        debug(err);
+      });
+  }
+
+  async batchWithdrawal(days){
+    await Core.batchWithdrawal(this.state.user, days, this.updateNotification)
+      .then((response) => {
+        debug(response);
+      })
+      .catch((err) => {
+        debug(err);
+      });
+  }
+
+  updateNotification(transactionHash, details, status, amountReceived){
+    const notifications = Object.assign({}, this.state.notifications);
+    if(details) {
+      notifications[transactionHash] = details;
+    }
+    else{
+      notifications[transactionHash].status = status;
+      if(amountReceived){
+        notifications[transactionHash].amount = amountReceived;
+      }
+    }
+
+    this.setState({notifications});
+  }
+
+  removeNotification(transactionHash){
+    const notifications = Object.assign({}, this.state.notifications);
+    delete notifications[transactionHash];
+    this.setState({notifications});
+  }
+
+  setEffectivePrice(contributions){
+    const { currentDay } = this.state;
+    const totalEthContributed = contributions[currentDay - 1].total_eth;
+
+    const effectivePrice = totalEthContributed > 0 ? (this.state.ethPrice * totalEthContributed) / tokensPerDay : 0;
+    this.setState({effectivePrice});
   }
 
   async getAllContributionsPerDay(){
-    await Core.getAllContributionsPerDay()
-      .then((contributions) => {
+    await Core.getAllContributionsPerDay(this.state.user.userName, this.state.currentDay)
+      .then(({contributions, daysOwed, totalOwed}) => {
+        this.setEffectivePrice(contributions);
         this.setState({
           contributions,
+          daysOwed,
+          totalOwed,
         });
       })
       .catch((err) => {
         debug(err);
-        error = true;
       });
   }
 
@@ -106,10 +184,7 @@ class AppInfo extends React.Component {
   }
 
   render(){
-    if(this.state.hasWeb3 === undefined){
-      return null;
-    }
-
+    if(!this.state.contributions) return null;
     return(
       <AppInfoContext.Provider value={this.state}>
         {this.props.children}

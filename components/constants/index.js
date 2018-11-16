@@ -1,8 +1,74 @@
 import { links } from './links'
 
-export const MYBIT_TICKER_COINMARKETCAP = 1902;
+export const ETHEREUM_TICKER_COINMARKETCAP = 1027;
 
 export const debug = (message) => console.log(message);
+
+export const tokensPerDay = 100000;
+
+export const dayInSeconds = 86400;
+
+export const getSecondsUntilNextPeriod = (timestampStartTokenSale) => {
+  const currentDay = ((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / dayInSeconds) + 1;
+  const past = currentDay % 1;
+  const secondsUntilNextPeriod = ((1 - past) * dayInSeconds).toFixed(0);
+
+  return secondsUntilNextPeriod;
+}
+
+
+export const shortenAddress = (address, leftSide=15, rightSide=8) => {
+  const size = address.length;
+  let splitAddress = [address.slice(0, leftSide), address.slice(size - rightSide, size)]
+  return splitAddress[0] + "..." + splitAddress[1];
+}
+
+export const getContentForNotification = (type, amount, period, actionType) => {
+  if(actionType == 'claim'){
+    switch (type) {
+      case 'success':
+        return {
+          title: `#${period} - Received ${amount} MYB successfuly!`,
+          message: 'Thank you for participating in the token sale.',
+        }
+        break;
+      case 'info':
+        return {
+          title: `#${period} - Processing your withdrawal`,
+          message: 'This action can take several minutes. This message will update as soon as the transaction is processed.',
+        }
+        break;
+      case 'error':
+        return {
+          title: `#${period} - Failed to withdraw`,
+          message: 'Unfortunately your transaction failed.',
+        }
+        break;
+    }
+  }
+  else {
+    switch (type) {
+      case 'success':
+        return {
+          title: `#${period} - Contributed with ${amount} ETH successfuly!`,
+          message: 'You will be able to claim your MYB tokens as soon as the current period is over.',
+        }
+        break;
+      case 'info':
+        return {
+          title: `#${period} - Processing your contribution of ${amount} ETH`,
+          message: 'This action can take several minutes. This message will update as soon as the transaction is processed.',
+        }
+        break;
+      case 'error':
+        return {
+          title: `#${period} - Failed to contribute with ${amount} ETH`,
+          message: 'Unfortunately your transaction failed.',
+        }
+        break;
+    }
+  }
+}
 
 export const countdownInfo = {
   finalDate: new Date("Jul 30 2019 12:00:00 GMT-0"),

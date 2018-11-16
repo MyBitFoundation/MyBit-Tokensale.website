@@ -19,6 +19,11 @@
 
 .phaseTable {
     min-width: 936px;
+
+    & button{
+      width: 94px;
+      height: 24px;
+    }
 }
 
 .phaseTable__closed-row {
@@ -34,9 +39,6 @@
 }
 
 .phaseTable__active-phase-button {
-    width: 94px;
-    height: 24px;
-    border-radius: 4px;
     background: #24f281;
     border: none;
     color: #ffffff;
@@ -48,9 +50,6 @@
 }
 
 .phaseTable__closed-row-button {
-    width: 94px;
-    height: 24px;
-    border-radius: 4px;
     background: transparent;
     border: 2px solid #1890ff;
     color: #1890ff;
@@ -63,9 +62,6 @@
 }
 
 .phaseTable__active-row-button {
-    width: 94px;
-    height: 24px;
-    border-radius: 4px;
     background: #1890ff;
     border: none;
     color: #ffffff;

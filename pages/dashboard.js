@@ -8,36 +8,48 @@ import DashboardPageHeader from '../components/dashboardPageHeader/dashboardPage
 import TokensaleGrid from '../components/tokensaleGrid/tokensaleGrid'
 import ContributeModal from '../components/contributeModal/contributeModal'
 import CalculateModal from '../components/calculateModal/calculateModal'
+import AppInfoContext from '../components/context/AppInfoContext'
+import { Pagination, Alert } from 'antd'
+import Notifications from '../components/notifications'
+import { getSecondsUntilNextPeriod } from '../components/constants'
 
 class Dashboard extends Component {
   state = {
     showContributeModal: false,
-    showCalculateModal: false
+    showCalculateModal: false,
+    periodsPerPage: 20,
+    currentPage: 0,
+    selectedDay: this.props.currentDay,
+    selectedAmount: undefined,
+    type: 'info'
   }
 
   /* CONTRIBUTE MODAL FUNCTIONS */
-  showContributeModal = () => {
+  showContributeModal = selectedDay => {
     this.setState({
-      showContributeModal: true
+      showContributeModal: true,
+      selectedDay
     })
   }
 
   handleContributeConfirm = e => {
-    this.setState({ showContributeModal: false })
-    console.log('Contribute Modal Confirmed!')
+    this.setState({
+      showContributeModal: false,
+      showCalculateModal: false,
+      selectedAmount: undefined
+    })
+    this.props.fund(this.state.selectedAmount, this.state.selectedDay)
   }
 
   handleContributeCancel = e => {
-    this.setState({ showContributeModal: false })
-    console.log('Contribute Modal Canceled!')
+    this.setState({
+      showContributeModal: false,
+      selectedDay: this.props.currentDay
+    })
   }
 
-  onContributeChange = value => {
-    console.log('Amount to Contribute Changed! ', value)
-  }
-
-  onSelectChange = value => {
-    console.log('Phase Select Changed! ', value)
+  onContributeChange = contribution => {
+    this.setState({ contribution })
   }
 
   /* CALCULATE MODAL FUNCTIONS */
@@ -48,62 +60,109 @@ class Dashboard extends Component {
     })
   }
 
-  handleCalculateConfirm = e => {
-    e.preventDefault()
-    this.setState({ showCalculateModal: false })
-    console.log('Calculate Modal Confirmed!')
-  }
-
   handleCalculateCancel = e => {
     e.preventDefault()
-    this.setState({ showCalculateModal: false })
-    console.log('Calculate Modal Canceled!')
+    this.setState({
+      showCalculateModal: false,
+      selectedDay: this.props.currentDay,
+      selectedAmount: undefined
+    })
   }
 
-  onContributeChange = value => {
-    console.log('Amount to Calculate Changed! ', value)
+  onContributeChange = selectedAmount => {
+    this.setState({ selectedAmount })
   }
 
-  onSelectChange = value => {
-    console.log('Phase Select Changed! ', value)
+  onSelectChange = selectedDay => {
+    this.setState({ selectedDay })
   }
 
   render() {
+    const { timestampStartTokenSale } = this.props
+    const secondsUntilNextPeriod = getSecondsUntilNextPeriod(
+      timestampStartTokenSale
+    )
     return (
-      <div>
-        <ContributeModal
-          visible={this.state.showContributeModal}
-          handleCancel={this.handleContributeCancel}
-          handleConfirm={this.handleContributeConfirm}
-          onSelectChange={this.onSelectChange}
-          onContributeChange={this.onContributeChange}
-        />
-        <CalculateModal
-          visible={this.state.showCalculateModal}
-          handleCancel={this.handleCalculateCancel}
-          handleConfirm={this.handleCalculateConfirm}
-          onSelectChange={this.onSelectChange}
-          onContributeChange={this.onContributeChange}
-        />
-        <Layout>
-          <div className="LandingPage">
-            <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
-            <div className="headerWrapper">
-              <div className="mainContainer">
-                <Header isDark={false} />
-                <DashboardPageHeader />
-                <TokensaleGrid
-                  onShowContributeModal={this.showContributeModal}
-                  onShowCalculateModal={this.showCalculateModal}
-                />
-              </div>
-            </div>
+      <AppInfoContext.Consumer>
+        {props => (
+          <div>
+            <ContributeModal
+              visible={this.state.showContributeModal}
+              handleCancel={this.handleContributeCancel}
+              handleConfirm={this.handleContributeConfirm}
+              onSelectChange={this.onSelectChange}
+              onContributeChange={this.onContributeChange}
+              currentDay={props.currentDay}
+              selectedDay={this.state.selectedDay}
+              contribution={this.state.selectedAmount}
+              isLoggedIn={props.isLoggedIn}
+            />
+            <CalculateModal
+              visible={this.state.showCalculateModal}
+              handleCancel={this.handleCalculateCancel}
+              handleConfirm={this.handleContributeConfirm}
+              onSelectChange={this.onSelectChange}
+              onContributeChange={this.onContributeChange}
+              currentDay={props.currentDay}
+              selectedDay={this.state.selectedDay}
+              contributions={props.contributions}
+              ethPrice={props.ethPrice}
+              contribution={this.state.selectedAmount}
+              isLoggedIn={props.isLoggedIn}
+            />
+            <Layout>
+              <div className="LandingPage">
+                <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
+                <div className="headerWrapper">
+                  <div className="mainContainer">
+                    <Header isDark={false} />
+                    <DashboardPageHeader />
+                    <TokensaleGrid
+                      onShowContributeModal={() =>
+                        this.showContributeModal(props.currentDay)
+                      }
+                      onShowCalculateModal={this.showCalculateModal}
+                      currentPeriod={props.currentDay}
+                      secondsToGo={secondsUntilNextPeriod}
+                      daysOwed={props.daysOwed}
+                      totalOwed={props.totalOwed}
+                      batchWithdrawal={props.batchWithdrawal}
+                      effectivePrice={props.effectivePrice}
+                      userName={props.user.userName}
+                      balance={props.user.balance}
+                      isLoggedIn={props.isLoggedIn}
+                      enabled={props.enabled}
+                    />
+                  </div>
+                </div>
 
-            <PhaseTable onShowContributeModal={this.showContributeModal} />
-            <MyBitFooter />
+                <PhaseTable
+                  onShowContributeModal={this.showContributeModal}
+                  data={props.contributions}
+                  currentPage={this.state.currentPage}
+                  timestampStartTokenSale={props.timestampStartTokenSale}
+                  withdraw={props.withdraw}
+                  ethPrice={props.ethPrice}
+                />
+                <Pagination
+                  onChange={currentPage =>
+                    this.setState({ currentPage: currentPage - 1 })
+                  }
+                  total={365}
+                  current={this.state.currentPage + 1}
+                  pageSize={25}
+                  defaultCurrent={1}
+                />
+                <Notifications
+                  data={props.notifications}
+                  removeNotification={props.removeNotification}
+                />
+                <MyBitFooter />
+              </div>
+            </Layout>
           </div>
-        </Layout>
-      </div>
+        )}
+      </AppInfoContext.Consumer>
     )
   }
 }

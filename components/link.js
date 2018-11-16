@@ -32,12 +32,15 @@ export const Link = ({isInHomePage, isLight, name, path, external, className}) =
   )
 }
 
+Link.defaultProps = {
+  external: false,
+}
 
 Link.propTypes = {
   name: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   isInHomePage: PropTypes.bool,
   isLight: PropTypes.bool.isRequired,
-  external: PropTypes.bool.isRequired,
+  external: PropTypes.bool,
   className: PropTypes.string.isRequired,
 }

@@ -22,6 +22,7 @@
 @import 'antd/lib/select/style/index.css';
 @import 'antd/lib/input-number/style/index.css';
 @import 'antd/lib/alert/style/index.css';
+@import 'antd/lib/pagination/style/index.css';
 
 
 *, *:after, *:before {
@@ -29,17 +30,18 @@
 }
 
 html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    transform: translate3d(0,0,0);
-    -webkit-font-smoothing: subpixel-antialiased;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  transform: translate3d(0,0,0);
+  -webkit-font-smoothing: subpixel-antialiased;
+  height: auto;
+  transform: none;
+  font-family: 'Roboto';
 }
 
 
 html {
-  font-family: $base-font-family;
-  font-size: $base-font-size;
   overflow-x: hidden;
 }
 
@@ -225,4 +227,17 @@ a:hover {
 .contentWrapper {
   margin: 0px auto;
   max-width: 1120px;
+}
+
+.ant-pagination{
+  width: max-content;
+  margin: 20px auto 65px;
+}
+
+.ant-alert{
+  position: fixed;
+  z-index: 100000;
+  //top: 125px;
+  right: 20px;
+  max-width: 500px;
 }

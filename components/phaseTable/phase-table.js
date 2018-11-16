@@ -1,9 +1,15 @@
 import React, { Fragment } from 'react'
 import stylesheet from './phase-table.scss'
 import { Table, Button } from 'antd'
-import dummyData from './dummyData'
+import { tokensPerDay, dayInSeconds } from '../constants';
+import Dayjs from 'dayjs';
+import CountdownHours from '../countdownHours';
 
-const PhaseTable = ({onShowContributeModal}) => {
+
+const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTokenSale, withdraw, ethPrice }) => {
+  const currentDay = ((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / dayInSeconds) + 1;
+  const past = currentDay % 1;
+  const secondsUntilNextPeriod = ((1 - past) * dayInSeconds).toFixed(0);
 
   const tableColumns = [{
     title: 'Period',
@@ -21,8 +27,8 @@ const PhaseTable = ({onShowContributeModal}) => {
     className: "phaseTable__xs-hide",
     render: (value, record) => {
       return record.closed ?
-        (<div className="phaseTable__closed-row">{`${value.toLocaleString()} MYB`}</div>) :
-        (<div className="phaseTable__active-row">{`${value.toLocaleString()} MYB`}</div>)
+        (<div className="phaseTable__closed-row">{`${tokensPerDay.toLocaleString()} MYB`}</div>) :
+        (<div className="phaseTable__active-row">{`${tokensPerDay.toLocaleString()} MYB`}</div>)
     }
   }, {
     title: 'Total ETH',
@@ -38,18 +44,24 @@ const PhaseTable = ({onShowContributeModal}) => {
     dataIndex: 'price',
     key: 'price',
     render: (value, record) => {
+      const contributedEth = record.total_eth;
+      const effectivePrice = record.total_eth > 0 ? (ethPrice * contributedEth) / tokensPerDay : 0;
       return record.closed ?
-        (<div className="phaseTable__closed-row">{`$${value.toLocaleString()}`}</div>) :
-        (<div className="phaseTable__active-row">{`$${value.toLocaleString()}`}</div>)
+        (<div className="phaseTable__closed-row">{`$${effectivePrice.toLocaleString()}`}</div>) :
+        (<div className="phaseTable__active-row">{`$${effectivePrice.toLocaleString()}`}</div>)
     }
   }, {
     title: 'Period ends',
     dataIndex: 'deadline',
     key: 'deadline',
     render: (value, record) => {
-      return record.closed ?
-        (<div className="phaseTable__closed-row">{value}</div>) :
-        (<div className="phaseTable__active-row">{value}</div>)
+      return record.closed
+        ? (<div className="phaseTable__closed-row">{record.date}</div>)
+        : record.phaseActive
+          ? <CountdownHours
+             time={secondsUntilNextPeriod}
+            />
+          : (<div className="phaseTable__active-row">{record.date}</div>)
     }
   }, {
     title: 'Your contribution',
@@ -77,20 +89,34 @@ const PhaseTable = ({onShowContributeModal}) => {
     key: 'contribute',
     className: "phaseTable__xs-hide",
     render: (value, record) => {
-      if (record.phaseActive) {
-        return (<button onClick={onShowContributeModal} className="phaseTable__active-phase-button">Contribute</button>)
+    if (!record.closed) {
+        return (
+          <Button
+            onClick={() => onShowContributeModal(record.period)}
+            className={record.phaseActive ? 'phaseTable__active-phase-button' : undefined}
+            type="primary"
+            size="small"
+          >
+            Get MYB
+          </Button>
+        )
       } else {
-        return record.closed ?
-          (<Button 
-              onClick={() => { console.log(`Phase ${record.period} button clicked to claim!`) }} 
-              className="phaseTable__closed-row-button"
-              disabled={record.your_contribution === 0}>
-              Claim
-            </Button>) :
-          (<Button onClick={onShowContributeModal} className="phaseTable__active-row-button">Contribute</Button>)
+        return record.closed && record.owed > 0 ? (
+          <Button
+            onClick={() => withdraw(record.period)}
+            className="phaseTable__closed-row-button"
+          >
+            Claim
+          </Button>)
+        : null;
       }
     }
   }];
+
+  //slice results for pagination
+  const startIndex = currentPage * 25;
+  let endIndex = (currentPage + 1) * 25;
+  const periodsToRender = data.slice(startIndex, endIndex)
 
   return (
     <Fragment>
@@ -99,7 +125,7 @@ const PhaseTable = ({onShowContributeModal}) => {
       <div className="phaseTableWrapper">
         <Table
           className="phaseTable"
-          dataSource={dummyData}
+          dataSource={periodsToRender}
           columns={tableColumns}
           pagination={false}
           rowClassName={(record) => record.phaseActive ? 'phaseTable__active-phase' : ''}
