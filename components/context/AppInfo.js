@@ -1,8 +1,11 @@
 import AppInfoContext from './AppInfoContext';
-import Web3 from 'web3';
-import * as Core from '../../apis/core';
 import { ETHEREUM_TICKER_COINMARKETCAP, debug, dayInSeconds, tokensPerDay } from '../constants/';
+import * as Core from '../../apis/core';
+import * as TokenSale from '../constants/contracts/TokenSale';
+import { events } from '../../utils/EventEmitter';
+
 class AppInfo extends React.Component {
+
   constructor(props){
     super(props);
     this.handleClickMobileMenu = this.handleClickMobileMenu.bind(this);
@@ -14,6 +17,7 @@ class AppInfo extends React.Component {
     this.getCurrentDayAndSetupTimer = this.getCurrentDayAndSetupTimer.bind(this);
     this.setEffectivePrice = this.setEffectivePrice.bind(this);
     this.loadPrices = this.loadPrices.bind(this);
+    this.pullContributionsServer = this.pullContributionsServer.bind(this);
 
     this.state = {
       mobileMenu: false,
@@ -27,22 +31,74 @@ class AppInfo extends React.Component {
       user: this.props.user,
       isLoggedIn: this.props.isLoggedIn,
       enabled: this.props.enabled,
+      daysOwed: [],
+      totalOwed: 0,
+      isMetamaskInstalled: this.props.isMetamaskInstalled,
+      extensionUrl: this.props.extensionUrl,
+      isBraveBrowser: this.props.isBraveBrowser,
+      network: this.props.network,
     };
+
+    this.subscribedToEvents = false;
   }
 
-  async componentDidMount() {
+  componentDidMount() {
      try{
-      if (this.props.isMetamaskInstalled) {
-        await Promise.all([
-          await this.getCurrentDayAndSetupTimer(),
-          await this.loadPrices(),
-        ]);
-        //await this.fund(this.state.user.username, '0.1', 3);
-        this.getAllContributionsPerDay(this.state.currentDay);
+
+      if ((this.props.isMetamaskInstalled && this.props.network === 'ropsten') || !this.props.isMetamaskInstalled) {
+        this.userHasMetamask();
       }
+
+      events.on('fund', (data) => this.handleFundEvent(data));
+      events.on('claim', (data) => this.handleClaimEvent(data));
+
+      this.pricesInterval = setInterval(() => this.loadPrices(), 120000);
     }catch(err){
       console.log(err)
     }
+  }
+
+  handleClaimEvent({amount, day, contributor, transactionHash}){
+    const contributions = this.state.contributions.slice();
+    let totalOwed = this.state.totalOwed;
+    let flag = false;
+    if(this.state.isMetamaskInstalled && (!this.contributor === this.state.user.userName.toLowerCase())){
+      contributions[day].myb_received = amount;
+      contributions[day].owed = 0;
+      totalOwed -= amount;
+      flag = true;
+      updateNotification(transactionHash, undefined, 1, amount);
+    }
+    if(flag){
+      this.setState({
+        contributions,
+        totalOwed
+      });
+    }
+  }
+
+  handleFundEvent({amount, day, contributor, transactionHash}){
+    const contributions = this.state.contributions.slice();
+    contributions[day].total_eth = contributions[day].total_eth + amount;
+    // user himself funded
+    if(this.state.isMetamaskInstalled && (contributor === this.state.user.userName.toLowerCase())){
+      contributions[day].your_contribution = contributions[day].your_contribution + amount;
+      this.updateNotification(transactionHash, undefined, 1);
+      const updatedInfo = Core.calculateOwedAmounts(contributions, this.state.currentDay);
+      this.setState({
+        ...updatedInfo,
+      })
+      return;
+    }
+    this.setState({contributions});
+  }
+
+  async userHasMetamask(){
+    await Promise.all([
+      await this.getCurrentDayAndSetupTimer(),
+      await this.loadPrices(),
+    ]);
+    this.getAllContributionsPerDay(this.state.currentDay);
   }
 
   componentWillReceiveProps(nextProps){
@@ -58,11 +114,33 @@ class AppInfo extends React.Component {
         isLoggedIn: nextProps.isLoggedIn,
       }, () => this.getAllContributionsPerDay(this.state.currentDay));
     }
+    else if(nextProps.user.balance && (this.state.user.balance !== nextProps.user.balance)){
+      this.setState({
+        user: {
+          ...this.state.user,
+          balance: nextProps.user.balance,
+        },
+      })
+    }
     //case where user enables us to access accounts
     if(!this.state.enabled && nextProps.enabled){
       this.setState({
         enabled: true,
       });
+    }
+  }
+
+  async pullContributionsServer(){
+    const { timestampStartTokenSale, contributions, currentDay } = await Core.fetchContributionsServer();
+    console.log("pulled from server...")
+    if(!this.state.contributions){
+      this.getCurrentDayAndSetupTimer(timestampStartTokenSale);
+      this.setEffectivePrice(contributions, currentDay);
+      this.setState({
+        contributions,
+        totalOwed: 0,
+        currentDay,
+      })
     }
   }
 
@@ -76,9 +154,24 @@ class AppInfo extends React.Component {
       });
   }
 
-  async getCurrentDayAndSetupTimer(){
+  async getCurrentDayAndSetupTimer(timestamp){
     try{
-      const timestampStartTokenSale = await Core.getStartTimestamp();
+      let timestampStartTokenSale = timestamp ? timestamp : await Core.getStartTimestamp();
+
+      // tests that updating the currentDay works and that
+      // the UI updates everything successfuly
+      // currentDay updates after 10 seconds of page loading
+      /*
+      const x = new Date();
+      x.setHours(18);
+      x.setMinutes(25);
+      x.setSeconds(10);
+      console.log(timestampStartTokenSale)
+      const difference = Math.floor((x - new Date()) / 1000);
+      console.log(difference)
+      timestampStartTokenSale -= difference;
+      */
+
       const currentDay = ((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / dayInSeconds) + 1;
       const currentDayInt = Math.floor(currentDay);
 
@@ -92,12 +185,16 @@ class AppInfo extends React.Component {
   setupTimerForCurrentDay(past){
     const currentTime = new Date().getTime();
     const milisecondsUntilNextDay = ((1 - past) * dayInSeconds * 1000).toFixed(0);
-
+    console.log(milisecondsUntilNextDay)
     // increments day at the next midnight
     setTimeout(() => {
       const updateCurrentDay = () => {
         debug("updating currentDay...", this.state.currentDay)
-        this.setState({currentDay: this.state.currentDay + 1})
+        const updatedInfo = Core.calculateOwedAmounts(this.state.contributions, this.state.currentDay + 1);
+        this.setState({
+          currentDay: this.state.currentDay + 1,
+          ...updatedInfo,
+        })
       }
       updateCurrentDay();
       //timeout to update currentDay every 24 hours
@@ -140,7 +237,7 @@ class AppInfo extends React.Component {
     if(details) {
       notifications[transactionHash] = details;
     }
-    else{
+    else if(notifications[transactionHash]) {
       notifications[transactionHash].status = status;
       if(amountReceived){
         notifications[transactionHash].amount = amountReceived;
@@ -156,10 +253,9 @@ class AppInfo extends React.Component {
     this.setState({notifications});
   }
 
-  setEffectivePrice(contributions){
-    const { currentDay } = this.state;
+  setEffectivePrice(contributions, currentDay){
+    currentDay = currentDay ? currentDay : this.state.currentDay;
     const totalEthContributed = contributions[currentDay - 1].total_eth;
-
     const effectivePrice = totalEthContributed > 0 ? (this.state.ethPrice * totalEthContributed) / tokensPerDay : 0;
     this.setState({effectivePrice});
   }
@@ -184,7 +280,7 @@ class AppInfo extends React.Component {
   }
 
   render(){
-    if(!this.state.contributions) return null;
+    //if(!this.state.contributions) return null;
     return(
       <AppInfoContext.Provider value={this.state}>
         {this.props.children}

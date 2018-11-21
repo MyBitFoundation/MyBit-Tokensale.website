@@ -8,6 +8,11 @@ export const tokensPerDay = 100000;
 
 export const dayInSeconds = 86400;
 
+export const tokenSaleEvents = {
+  fund: '0xd498819977fb9763f29bab6e4eee516c4cf59053922eb6a9fe59370a7bc28b3d',
+  claim: '0x33a4ae6c0627280fcb7aaf7e07deb59bbce49aa4808ee5457f8622f77ab5d28c',
+};
+
 export const getSecondsUntilNextPeriod = (timestampStartTokenSale) => {
   const currentDay = ((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / dayInSeconds) + 1;
   const past = currentDay % 1;
@@ -28,7 +33,7 @@ export const getContentForNotification = (type, amount, period, actionType) => {
     switch (type) {
       case 'success':
         return {
-          title: `#${period} - Received ${amount} MYB successfuly!`,
+          title: `#${period} - Received ${amount.toLocaleString()} MYB successfully!`,
           message: 'Thank you for participating in the token sale.',
         }
         break;
@@ -50,19 +55,19 @@ export const getContentForNotification = (type, amount, period, actionType) => {
     switch (type) {
       case 'success':
         return {
-          title: `#${period} - Contributed with ${amount} ETH successfuly!`,
+          title: `#${period} - Contributed with ${amount.toLocaleString()} ETH successfully!`,
           message: 'You will be able to claim your MYB tokens as soon as the current period is over.',
         }
         break;
       case 'info':
         return {
-          title: `#${period} - Processing your contribution of ${amount} ETH`,
+          title: `#${period} - Processing your contribution of ${amount.toLocaleString()} ETH`,
           message: 'This action can take several minutes. This message will update as soon as the transaction is processed.',
         }
         break;
       case 'error':
         return {
-          title: `#${period} - Failed to contribute with ${amount} ETH`,
+          title: `#${period} - Failed to contribute with ${amount.toLocaleString()} ETH`,
           message: 'Unfortunately your transaction failed.',
         }
         break;

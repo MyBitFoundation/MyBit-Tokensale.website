@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
+import dynamic from 'next/dynamic'
 
 import {
   METAMASK_FIREFOX,
@@ -28,35 +29,43 @@ class MetamaskChecker extends Component {
   }
 
   async componentDidMount() {
-    // fix for server side rendering
-    this.detect = require('detect-browser');
+    try{
+      if(typeof window !== 'undefined') {
+        this.detect = require('detect-browser');
+      }
+      // Modern dapp browsers...
+      if (window.ethereum) {
+        const { ethereum } = window;
+        window.web3js = new Web3(ethereum);
+        const accessToAccounts = await this.haveAccessToAccounts();
+        await this.userHasMetamask(accessToAccounts);
 
-    // Modern dapp browsers...
-    if (window.ethereum) {
-      const { ethereum } = window;
-      window.web3js = new Web3(ethereum);
-      const accessToAccounts = await this.haveAccessToAccounts();
-      await this.userHasMetamask(accessToAccounts);
-
-    } else if (window.web3) {
-      window.web3js = new Web3(window.web3.currentProvider);
-      await this.userHasMetamask();
-    } else {
-      this.isBrowserSupported();
+      } else if (window.web3) {
+        window.web3js = new Web3(window.web3.currentProvider);
+        await this.userHasMetamask(false);
+      } else {
+        window.web3js = new Web3('https://ropsten.infura.io/metamask');
+        this.isBrowserSupported();
+      }
+    } catch(err){
+      console.log(err);
     }
   }
 
   async getAccount(){
     const accounts = await window.web3js.eth.getAccounts();
     if(accounts && accounts.length > 0){
-      const balance = await window.web3js.eth.getBalance(accounts[0]);
-      if((this.state.user && this.state.user.userName !== accounts[0]) || !this.state.user || !this.state.enabled){
+      let balance = await window.web3js.eth.getBalance(accounts[0]);
+      balance = window.web3js.utils.fromWei(balance, 'ether');
+      if((this.state.user && this.state.user.userName !== accounts[0]) || (this.state.user.balance !== balance) || !this.state.user || !this.state.enabled){
         this.setState({
           user: {
             userName: accounts[0],
-            balance: window.web3js.utils.fromWei(balance, 'ether'),
+            balance,
           },
           enabled: true,
+          isLoggedIn: true,
+          isInstalled: true,
         })
       }
     }
@@ -70,6 +79,7 @@ class MetamaskChecker extends Component {
     await this.checkNetwork();
     const isLoggedIn = await this.checkIfLoggedIn()
     window.web3js.currentProvider.publicConfigStore.on('update', ({selectedAddress}) => this.handleAddressChanged(selectedAddress));
+
     if(isLoggedIn){
       await this.getAccount();
     }
@@ -138,7 +148,7 @@ class MetamaskChecker extends Component {
   }
 
   isBrowserSupported() {
-    const browser = this.detect();
+    const browser = this.detect.detect();
     if (this.isBraveBrowserBeingUsed()) {
       this.isBraveBrowser = true;
     }

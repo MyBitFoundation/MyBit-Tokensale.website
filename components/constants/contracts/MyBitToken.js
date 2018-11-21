@@ -1,5 +1,6 @@
-export const ADDRESS = '0x841e92ebe60e6a461b615207db3b1b85ec422a3c';
-export const ABI = [
+module.exports = {
+  ADDRESS: '0x841e92ebe60e6a461b615207db3b1b85ec422a3c',
+  ABI: [
   {
     "constant": true,
     "inputs": [],
@@ -329,4 +330,5 @@ export const ABI = [
     "stateMutability": "view",
     "type": "function"
   }
-];
+]};
+

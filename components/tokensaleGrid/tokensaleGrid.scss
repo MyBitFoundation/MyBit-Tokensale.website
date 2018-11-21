@@ -67,6 +67,13 @@
     color: #4a4a4a;
     margin-top: 10px;
     margin-bottom: 6px;
+
+    &-metamaskRequired{
+      margin-top: 20px;
+      padding: 0px 11px;
+      margin-bottom: 0px;
+    }
+
 }
 
 .tokensaleGrid__item-bold {
@@ -113,6 +120,11 @@
       margin: 0 auto;
       width: 170px;
       margin-top: 89px;
+
+      &-install{
+        margin: 0px auto;
+        margin-top: 30px;
+      }
     }
 }
 
@@ -139,6 +151,12 @@
   font-size: 17px;
   color: #4a4a4a;
   padding: 40px;
+}
+
+.tokensaleGrid__item-ropsten{
+  font-size: 17px;
+  color: #4a4a4a;
+  padding: 29px;
 }
 
 .tokensaleGrid_tooltip-inner {

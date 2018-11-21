@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import fetch from 'isomorphic-unfetch'
 import stylesheet from '../styles/main.scss'
 import { default as Layout } from '../components/layout/layout'
 import { Header } from '../components/header/header'
@@ -11,9 +12,33 @@ import CalculateModal from '../components/calculateModal/calculateModal'
 import AppInfoContext from '../components/context/AppInfoContext'
 import { Pagination, Alert } from 'antd'
 import Notifications from '../components/notifications'
-import { getSecondsUntilNextPeriod } from '../components/constants'
+import {
+  getSecondsUntilNextPeriod,
+  tokensPerDay
+} from '../components/constants'
 
 class Dashboard extends Component {
+  static async getInitialProps({ req }) {
+    if (req) {
+      const response = await fetch(`http://localhost:8080/api/contributions`)
+      const jsonResponse = await response.json()
+      const { contributions, currentDay, ethPrice } = jsonResponse
+      const totalEthContributed = contributions[currentDay - 1].total_eth
+      const effectivePrice =
+        totalEthContributed > 0
+          ? (ethPrice * totalEthContributed) / tokensPerDay
+          : 0
+
+      return {
+        ...jsonResponse,
+        currentDayServer: currentDay,
+        effectivePrice
+      }
+    }
+
+    return null
+  }
+
   state = {
     showContributeModal: false,
     showCalculateModal: false,
@@ -78,91 +103,122 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { timestampStartTokenSale } = this.props
+    const {
+      contributions,
+      timestampStartTokenSale,
+      currentDay,
+      ethPrice,
+      effectivePrice,
+      currentDayServer,
+      isLoggedIn,
+      daysOwed,
+      totalOwed,
+      batchWithdrawal,
+      user,
+      enabled,
+      withdraw,
+      notifications,
+      removeNotification,
+      isMetamaskInstalled,
+      extensionUrl,
+      isBraveBrowser,
+      network
+    } = this.props
+
     const secondsUntilNextPeriod = getSecondsUntilNextPeriod(
       timestampStartTokenSale
     )
-    return (
-      <AppInfoContext.Consumer>
-        {props => (
-          <div>
-            <ContributeModal
-              visible={this.state.showContributeModal}
-              handleCancel={this.handleContributeCancel}
-              handleConfirm={this.handleContributeConfirm}
-              onSelectChange={this.onSelectChange}
-              onContributeChange={this.onContributeChange}
-              currentDay={props.currentDay}
-              selectedDay={this.state.selectedDay}
-              contribution={this.state.selectedAmount}
-              isLoggedIn={props.isLoggedIn}
-            />
-            <CalculateModal
-              visible={this.state.showCalculateModal}
-              handleCancel={this.handleCalculateCancel}
-              handleConfirm={this.handleContributeConfirm}
-              onSelectChange={this.onSelectChange}
-              onContributeChange={this.onContributeChange}
-              currentDay={props.currentDay}
-              selectedDay={this.state.selectedDay}
-              contributions={props.contributions}
-              ethPrice={props.ethPrice}
-              contribution={this.state.selectedAmount}
-              isLoggedIn={props.isLoggedIn}
-            />
-            <Layout>
-              <div className="LandingPage">
-                <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
-                <div className="headerWrapper">
-                  <div className="mainContainer">
-                    <Header isDark={false} />
-                    <DashboardPageHeader />
-                    <TokensaleGrid
-                      onShowContributeModal={() =>
-                        this.showContributeModal(props.currentDay)
-                      }
-                      onShowCalculateModal={this.showCalculateModal}
-                      currentPeriod={props.currentDay}
-                      secondsToGo={secondsUntilNextPeriod}
-                      daysOwed={props.daysOwed}
-                      totalOwed={props.totalOwed}
-                      batchWithdrawal={props.batchWithdrawal}
-                      effectivePrice={props.effectivePrice}
-                      userName={props.user.userName}
-                      balance={props.user.balance}
-                      isLoggedIn={props.isLoggedIn}
-                      enabled={props.enabled}
-                    />
-                  </div>
-                </div>
 
-                <PhaseTable
-                  onShowContributeModal={this.showContributeModal}
-                  data={props.contributions}
-                  currentPage={this.state.currentPage}
-                  timestampStartTokenSale={props.timestampStartTokenSale}
-                  withdraw={props.withdraw}
-                  ethPrice={props.ethPrice}
-                />
-                <Pagination
-                  onChange={currentPage =>
-                    this.setState({ currentPage: currentPage - 1 })
+    console.log(secondsUntilNextPeriod)
+
+    return (
+      <div>
+        <ContributeModal
+          visible={this.state.showContributeModal}
+          handleCancel={this.handleContributeCancel}
+          handleConfirm={this.handleContributeConfirm}
+          onSelectChange={this.onSelectChange}
+          onContributeChange={this.onContributeChange}
+          currentDay={currentDay ? currentDay : currentDayServer}
+          selectedDay={this.state.selectedDay}
+          contribution={this.state.selectedAmount}
+          isLoggedIn={isLoggedIn}
+          isMetamaskInstalled={isMetamaskInstalled}
+          network={network}
+        />
+        <CalculateModal
+          visible={this.state.showCalculateModal}
+          handleCancel={this.handleCalculateCancel}
+          handleConfirm={this.handleContributeConfirm}
+          onSelectChange={this.onSelectChange}
+          onContributeChange={this.onContributeChange}
+          currentDay={currentDay ? currentDay : currentDayServer}
+          selectedDay={this.state.selectedDay}
+          contributions={contributions}
+          ethPrice={ethPrice}
+          contribution={this.state.selectedAmount}
+          isLoggedIn={isLoggedIn}
+          isMetamaskInstalled={isMetamaskInstalled}
+          network={network}
+        />
+        <Layout>
+          <div className="LandingPage">
+            <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
+            <div className="headerWrapper">
+              <div className="mainContainer">
+                <Header isDark={false} />
+                <DashboardPageHeader />
+                <TokensaleGrid
+                  onShowContributeModal={() =>
+                    this.showContributeModal(
+                      currentDay ? currentDay : currentDayServer
+                    )
                   }
-                  total={365}
-                  current={this.state.currentPage + 1}
-                  pageSize={25}
-                  defaultCurrent={1}
+                  onShowCalculateModal={this.showCalculateModal}
+                  currentPeriod={currentDay ? currentDay : currentDayServer}
+                  secondsToGo={secondsUntilNextPeriod}
+                  daysOwed={daysOwed}
+                  totalOwed={totalOwed}
+                  batchWithdrawal={batchWithdrawal}
+                  effectivePrice={effectivePrice}
+                  userName={user.userName}
+                  balance={user.balance}
+                  isLoggedIn={isLoggedIn}
+                  enabled={enabled}
+                  isMetamaskInstalled={isMetamaskInstalled}
+                  extensionUrl={extensionUrl}
+                  isBraveBrowser={isBraveBrowser}
+                  network={network}
+                  timestampStartTokenSale={timestampStartTokenSale}
                 />
-                <Notifications
-                  data={props.notifications}
-                  removeNotification={props.removeNotification}
-                />
-                <MyBitFooter />
               </div>
-            </Layout>
+            </div>
+
+            <PhaseTable
+              onShowContributeModal={this.showContributeModal}
+              data={contributions}
+              currentPage={this.state.currentPage}
+              timestampStartTokenSale={timestampStartTokenSale}
+              withdraw={withdraw}
+              ethPrice={ethPrice}
+            />
+            <Pagination
+              onChange={currentPage =>
+                this.setState({ currentPage: currentPage - 1 })
+              }
+              total={365}
+              current={this.state.currentPage + 1}
+              pageSize={25}
+              defaultCurrent={1}
+            />
+            <Notifications
+              data={notifications}
+              removeNotification={removeNotification}
+            />
+            <MyBitFooter />
           </div>
-        )}
-      </AppInfoContext.Consumer>
+        </Layout>
+      </div>
     )
   }
 }

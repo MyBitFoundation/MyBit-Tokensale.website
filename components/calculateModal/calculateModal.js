@@ -6,7 +6,21 @@ import { tokensPerDay } from '../constants';
 const Option = Select.Option;
 const tokensaleMetamask = '../../static/tokensale/metamask.svg';
 const mybIcon = '../../static/tokensale/MYB-icon.svg';
-const CalculateModal = ({ visible, handleCancel, handleConfirm, onSelectChange, onContributeChange, currentDay, selectedDay, contributions, ethPrice, contribution, isLoggedIn}) => {
+const CalculateModal = ({
+  visible,
+  handleCancel,
+  handleConfirm,
+  onSelectChange,
+  onContributeChange,
+  currentDay,
+  selectedDay,
+  contributions,
+  ethPrice,
+  contribution,
+  isLoggedIn,
+  isMetamaskInstalled,
+  network
+}) => {
   const periodsLeft = [];
   for(let i = currentDay; i <= 365; i++){
     periodsLeft.push(
@@ -53,7 +67,7 @@ const CalculateModal = ({ visible, handleCancel, handleConfirm, onSelectChange, 
           <div className="calculateModal__label">
             How much do you want to contribute?
           </div>
-          <InputNumber value={contribution} onChange={onContributeChange} placeholder="Contribution in ETH" />
+          <InputNumber autoFocus value={contribution} onChange={onContributeChange} placeholder="Contribution in ETH" />
           <Icon type="arrow-down" theme="outlined" style={{color: "#1890FF"}} />
           <div className="calculateModal__label">
               Estimated MYB you will receive:
@@ -64,7 +78,7 @@ const CalculateModal = ({ visible, handleCancel, handleConfirm, onSelectChange, 
           </div>
           <Input disabled value={effectivePrice} placeholder="1 MYB = $0.22" suffix={(<img src={mybIcon} alt="MYB Token Icon" className="mybIcon"></img>)} />
           <Button disabled={!contribution || contribution === 0 || !isLoggedIn} block className="calculateModal__confirm" onClick={handleConfirm}>
-            Confirm Contribution
+            {!isMetamaskInstalled ?  'Install Metamask' : network !== 'ropsten' ? 'Switch to the Ropsten test network' :  'Confirm Contribution'}
             <img src={tokensaleMetamask} alt="Metamask Logo" width="26px"></img>
           </Button>
         </div>

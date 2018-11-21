@@ -5,7 +5,19 @@ import { Modal, Select, InputNumber, Button } from 'antd'
 const Option = Select.Option;
 const tokensaleMetamask = '../../static/tokensale/metamask.svg';
 
-const ContributeModal = ({ visible, handleCancel, handleConfirm, onSelectChange, onContributeChange, currentDay, selectedDay, contribution, isLoggedIn}) => {
+const ContributeModal = ({
+  visible,
+  handleCancel,
+  handleConfirm,
+  onSelectChange,
+  onContributeChange,
+  currentDay,
+  selectedDay,
+  contribution,
+  isLoggedIn,
+  isMetamaskInstalled,
+  network
+}) => {
   const periodsLeft = [];
   for(let i = currentDay; i <= 365; i++){
     periodsLeft.push(
@@ -34,9 +46,9 @@ const ContributeModal = ({ visible, handleCancel, handleConfirm, onSelectChange,
             <div className="contributeModal__label">
               How much do you want to contribute?
             </div>
-            <InputNumber value={contribution} onChange={onContributeChange} placeholder="Contribution in ETH" />
+            <InputNumber autoFocus value={contribution} onChange={onContributeChange} placeholder="Contribution in ETH" />
             <Button disabled={!contribution || contribution === 0 || !isLoggedIn} block className="contributeModal__confirm" onClick={handleConfirm}>
-              Confirm Contribution
+              {!isMetamaskInstalled ?  'Install Metamask' : network !== 'ropsten' ? 'Switch to the Ropsten test network' :  'Confirm Contribution'}
               <img src={tokensaleMetamask} alt="Metamask Logo" width="26px"></img>
             </Button>
           </div>

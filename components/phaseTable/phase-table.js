@@ -8,6 +8,7 @@ import CountdownHours from '../countdownHours';
 
 const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTokenSale, withdraw, ethPrice }) => {
   const currentDay = ((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / dayInSeconds) + 1;
+  const currentDayInt = Math.floor(currentDay);
   const past = currentDay % 1;
   const secondsUntilNextPeriod = ((1 - past) * dayInSeconds).toFixed(0);
 
@@ -79,9 +80,15 @@ const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTo
     key: 'myb_received',
     className: "phaseTable__xs-hide",
     render: (value, record) => {
+      let toRender = `${value.toLocaleString()} MYB`;
+      if(record.your_contribution > 0 && record.period >= currentDayInt) {
+        toRender = 'Pending';
+      } else if (record.owed > 0) {
+        toRender = `${record.owed.toLocaleString()} MYB`;
+      }
       return record.closed ?
-        (<div className="phaseTable__closed-row">{`${value.toLocaleString()} MYB`}</div>) :
-        (<div className="phaseTable__active-row">{`${value.toLocaleString()} MYB`}</div>)
+        (<div className="phaseTable__closed-row">{`${toRender}`}</div>) :
+        (<div className="phaseTable__active-row">{`${toRender}`}</div>)
     }
   }, {
     title: 'Contribute',
@@ -101,7 +108,7 @@ const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTo
           </Button>
         )
       } else {
-        return record.closed && record.owed > 0 ? (
+        return record.closed && record.myb_received === 0 && record.owed > 0 ? (
           <Button
             onClick={() => withdraw(record.period)}
             className="phaseTable__closed-row-button"
