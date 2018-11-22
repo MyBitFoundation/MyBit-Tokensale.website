@@ -5,6 +5,9 @@ const fetch = require('isomorphic-unfetch');
 
 const dev = process.env.NODE_ENV !== 'production'
 const Web3 = require('web3');
+const ipRegex = require('ip-regex');
+const geoip = require('geoip-lite');
+const requestIp = require('request-ip');
 
 const web3 = new Web3();
 web3.setProvider(new web3.providers.WebsocketProvider(`wss://enormously-singular-mustang.quiknode.io/f8ae3871-b3fb-4e7d-ba45-b6c9d220757f/snN_gx_F-oK6Ij27ihhzRw==/`));
@@ -23,6 +26,35 @@ const i18nextMiddleware = require('i18next-express-middleware')
 const Backend = require('i18next-node-fs-backend')
 const i18n = require('./i18n')
 const core = require('./fetchContributionsServer');
+const ips = {};
+
+
+var geoBlocker = function (req, res, next) {
+  const isDashBoard = req.originalUrl.indexOf('/dashboard') !== -1 && req.originalUrl.indexOf('?allowed=false') === -1;
+
+  if(ips[req.ip] === true){
+    next();
+  } else if(isDashBoard) {
+    app.render(req, res, '/dashboard', {
+      allowed: false,
+    })
+  } else if(isDashBoard) {
+      const details = geoip.lookup(req.ip);
+      console.log(details)
+      if(details && details.region && details.country === 'US'){
+        ips[req.ip] = false
+        app.render(req, res, '/dashboard', {
+          allowed: false,
+        })
+      } else {
+        ips[req.ip] = true;
+        next();
+      }
+  } else {
+    next();
+  }
+}
+
 
 // init i18next with serverside settings
 // using i18next-express-middleware
@@ -43,9 +75,10 @@ i18n
       .then(() => {
         const server = express()
 
+        server.enable('trust proxy')
+        server.use(geoBlocker)
         // enable middleware for i18next
         server.use(i18nextMiddleware.handle(i18n))
-
         // serve locales for client
         server.use('/locales', express.static(path.join(__dirname, '/locales')))
 
@@ -53,6 +86,7 @@ i18n
         server.post('/locales/add/:lng/:ns', i18nextMiddleware.missingKeyHandler(i18n))
 
         server.get('/api/contributions', (req, res) => {
+
           res.send({
             timestampStartTokenSale,
             contributions,
@@ -69,7 +103,9 @@ i18n
         })
 
         // use next.js
-        server.get('*', (req, res) => handle(req, res))
+        server.get('*', (req, res) => {
+          handle(req, res)
+        });
 
         server.listen(8080, (err) => {
           if (err) throw err

@@ -21,6 +21,7 @@ const CalculateModal = ({
   isMetamaskInstalled,
   network,
   enabled,
+  allowed,
 }) => {
   const periodsLeft = [];
   for(let i = currentDay; i <= 365; i++){
@@ -79,8 +80,8 @@ const CalculateModal = ({
               Effective price per MYB:
           </div>
           <Input disabled value={effectivePrice} placeholder="1 MYB = $0.22" suffix={(<img src={mybIcon} alt="MYB Token Icon" className="mybIcon"></img>)} />
-          <Button disabled={!contribution || contribution === 0 || !isLoggedIn || enabled === false} block className="calculateModal__confirm" onClick={handleConfirm}>
-            {!isMetamaskInstalled ?  'Install Metamask' : network !== 'ropsten' ? 'Switch to the Ropsten test network' : !isLoggedIn ? 'Login to Metamask' : enabled === false ? 'Connect Metamask' : 'Confirm Contribution'}
+          <Button disabled={!contribution || contribution === 0 || !isLoggedIn || enabled === false  || allowed === false} block className="calculateModal__confirm" onClick={handleConfirm}>
+            {!isMetamaskInstalled ?  'Install Metamask' : network !== 'ropsten' ? 'Switch to the Ropsten test network' : !isLoggedIn ? 'Login to Metamask' : enabled === false ? 'Connect Metamask' : allowed === false ? 'Not allowed to participate' : 'Confirm Contribution'}
             <img src={tokensaleMetamask} alt="Metamask Logo" width="26px"></img>
           </Button>
         </div>

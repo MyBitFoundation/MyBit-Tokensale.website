@@ -30,7 +30,8 @@ const TokensaleGrid = ({
   isBraveBrowser,
   network,
   timestampStartTokenSale,
-  batchWithdrawing
+  batchWithdrawing,
+  allowed
 }) => {
   let metamaskToRender = undefined;
   if(enabled && isLoggedIn && userName && network === 'ropsten'){
@@ -152,7 +153,7 @@ Counting objects: 100% (9/9), done." className="tokensaleGrid_tooltip" overlayCl
                 <Button
                   className="tokensaleGrid__button"
                   onClick={() => batchWithdrawal(daysOwed)}
-                  disabled={daysOwed.length === 0 || !isLoggedIn || batchWithdrawing}
+                  disabled={daysOwed.length === 0 || !isLoggedIn || batchWithdrawing || allowed === false}
                   type="primary"
                 >
                   Claim

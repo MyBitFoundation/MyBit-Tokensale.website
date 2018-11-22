@@ -18,6 +18,7 @@ const ContributeModal = ({
   isMetamaskInstalled,
   network,
   enabled,
+  allowed,
 }) => {
   const periodsLeft = [];
   for(let i = currentDay; i <= 365; i++){
@@ -63,7 +64,7 @@ const ContributeModal = ({
               />
             </div>
             <Button
-              disabled={!contribution || contribution === 0 || !isLoggedIn || enabled === false}
+              disabled={!contribution || contribution === 0 || !isLoggedIn || enabled === false || allowed === false}
               block
               className="contributeModal__confirm"
               onClick={handleConfirm}
@@ -76,6 +77,8 @@ const ContributeModal = ({
                 ? 'Login to Metamask'
                 : enabled === false
                 ? 'Connect Metamask'
+                : allowed === false
+                ? 'Not allowed to participate'
                 : 'Confirm Contribution'
               }
               <img src={tokensaleMetamask} alt="Metamask Logo" width="26px"></img>

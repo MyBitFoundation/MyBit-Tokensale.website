@@ -18,7 +18,7 @@ import {
 } from '../components/constants'
 
 class Dashboard extends Component {
-  static async getInitialProps({ req }) {
+  static async getInitialProps({ req, query }) {
     if (req) {
       const response = await fetch(`http://localhost:8080/api/contributions`)
       const jsonResponse = await response.json()
@@ -32,7 +32,8 @@ class Dashboard extends Component {
       return {
         ...jsonResponse,
         currentDayServer: currentDay,
-        effectivePrice
+        effectivePrice,
+        query
       }
     }
 
@@ -123,12 +124,22 @@ class Dashboard extends Component {
       extensionUrl,
       isBraveBrowser,
       network,
-      batchWithdrawing
+      batchWithdrawing,
+      query
     } = this.props
 
     const secondsUntilNextPeriod = getSecondsUntilNextPeriod(
       timestampStartTokenSale
     )
+
+    const { allowed } = query
+    let warningMessageCountry =
+      allowed === false ? (
+        <div className="CountryBanned">
+          People located in the USA are not allowed to participate in the Token
+          Distribution.
+        </div>
+      ) : null
 
     return (
       <div>
@@ -145,6 +156,7 @@ class Dashboard extends Component {
           isMetamaskInstalled={isMetamaskInstalled}
           network={network}
           enabled={enabled}
+          allowed={allowed}
         />
         <CalculateModal
           visible={this.state.showCalculateModal}
@@ -161,10 +173,12 @@ class Dashboard extends Component {
           isMetamaskInstalled={isMetamaskInstalled}
           network={network}
           enabled={enabled}
+          allowed={allowed}
         />
         <Layout>
           <div className="LandingPage">
             <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
+            {warningMessageCountry}
             <div className="headerWrapper">
               <div className="mainContainer">
                 <Header isDark={false} />
@@ -192,6 +206,7 @@ class Dashboard extends Component {
                   network={network}
                   timestampStartTokenSale={timestampStartTokenSale}
                   batchWithdrawing={batchWithdrawing}
+                  allowed={allowed}
                 />
               </div>
             </div>
