@@ -11,7 +11,7 @@ const Notifications = ({ data, removeNotification }) => {
     const hash = notification[0];
     const { period, status, amount, actionType } = notification[1];
     const type = status === 0 ? 'info' : status === 1 ? 'success' : 'error';
-    const { title, message } =  getContentForNotification(type, amount, period, actionType);
+    const { title, message } =  getContentForNotification(type, Number(amount).toLocaleString(), period, actionType);
 
     return(
       <a

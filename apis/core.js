@@ -7,17 +7,18 @@ import * as MyBitToken from '../components/constants/contracts/MyBitToken';
 import dayjs from 'dayjs';
 import Web3 from 'web3';
 const abiDecoder = require('abi-decoder');
-import { tokenSaleEvents, tokensPerDay } from '../components/constants';
+import { tokenSaleEvents, tokensPerDay, debug } from '../components/constants';
 import { events } from '../utils/EventEmitter';
 
 const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://enormously-singular-mustang.quiknode.io/f8ae3871-b3fb-4e7d-ba45-b6c9d220757f/snN_gx_F-oK6Ij27ihhzRw==/'));
 let subscriptionClaim = undefined;
 let subscriptionFund = undefined;
+let gasPrice = 1;
 
 export const fetchContributionsServer = async ticker =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await fetch(`/api/contributions`);
+      const response = await fetch(`${window.origin}/api/contributions`);
       const jsonResponse = await response.json();
       const { timestampStartTokenSale, contributions, currentDay } = jsonResponse;
       resolve({
@@ -29,6 +30,21 @@ export const fetchContributionsServer = async ticker =>
       reject(error);
     }
   });
+
+const fetchGasPriceFromServer = async () => {
+  try {
+    const response = await fetch(`${window.origin}/api/gasprice`);
+    const jsonResponse = await response.json();
+    const gasPriceServer = jsonResponse.gasPrice;
+    if(gasPriceServer && gasPriceServer > 0){
+      gasPrice = gasPriceServer * 1000000000;
+    }
+    console.log(gasPriceServer);
+    setTimeout(() => fetchGasPriceFromServer(), 60000);
+  } catch (error) {
+    debug(error);
+  }
+}
 
 export const fetchPriceFromCoinmarketcap = async ticker =>
   new Promise(async (resolve, reject) => {
@@ -53,14 +69,15 @@ export const loadMetamaskUserDetails = async () =>
         ethBalance: window.web3js.utils.fromWei(balance, 'ether'),
       };
 
+      debug("Account details: ", details)
+
       resolve(details);
     } catch (error) {
-      console.log(error)
+      debug(error)
       reject(error);
     }
   });
 
-// topic: 0x4dc83213fabf100be6b05af2cfc8d6bb893ebf89314fc647d8aa37e528c99245
 export const fund = async (user, amount, day, updateNotification) =>
   new Promise(async (resolve, reject) => {
     try {
@@ -71,11 +88,20 @@ export const fund = async (user, amount, day, updateNotification) =>
 
       const weiAmount = window.web3js.utils.toWei(amount.toString(), 'ether');
 
+      const estimatedGas = await tokenSaleContract.methods
+        .fund(day - 1)
+        .estimateGas({
+          value: weiAmount,
+          from: user.userName,
+        });
+
       const response = await tokenSaleContract.methods
         .fund(day - 1)
         .send({
           value: weiAmount,
           from: user.userName,
+          gas: estimatedGas,
+          gasPrice: gasPrice,
         })
         .on('transactionHash', (transactionHash) => {
           updateNotification(transactionHash, {
@@ -89,6 +115,7 @@ export const fund = async (user, amount, day, updateNotification) =>
           resolve(false);
         })
         .then((receipt) => {
+          debug(receipt)
           if(receipt.status){
             updateNotification(receipt.transactionHash, undefined, 1);
           } else {
@@ -111,14 +138,22 @@ export const batchWithdrawal = async (user, days, updateNotification) =>
         TokenSale.ADDRESS,
       );
 
+      const estimatedGas = await tokenSaleContract.methods
+        .batchWithdraw(days)
+        .estimateGas({
+          from: user.userName,
+        });
+
       const response = await tokenSaleContract.methods
         .batchWithdraw(days)
         .send({
           from: user.userName,
+          gas: estimatedGas,
+          gasPrice: gasPrice,
         })
         .on('transactionHash', (transactionHash) => {
           updateNotification(transactionHash, {
-            period: days[0],
+            period: days[0] + 1,
             status: 0,
             actionType: 'claim',
           });
@@ -127,8 +162,8 @@ export const batchWithdrawal = async (user, days, updateNotification) =>
           resolve(false);
         })
         .then((receipt) => {
-          console.log(receipt)
           if(receipt.status){
+            debug(receipt)
             const amountReceivedInWei = receipt.events['LogTokensCollected'].returnValues._amount;
             const amountReceived = window.web3js.utils.fromWei(amountReceivedInWei, 'ether');
             updateNotification(receipt.transactionHash, undefined, 1, amountReceived);
@@ -151,10 +186,18 @@ export const withdraw = async (user, day, updateNotification) =>
         TokenSale.ADDRESS,
       );
 
+      const estimatedGas = await tokenSaleContract.methods
+        .withdraw(day - 1)
+        .estimateGas({
+          from: user.userName,
+        });
+
       const response = await tokenSaleContract.methods
         .withdraw(day - 1)
         .send({
           from: user.userName,
+          gas: estimatedGas,
+          gasPrice: gasPrice,
         })
         .on('transactionHash', (transactionHash) => {
           updateNotification(transactionHash, {
@@ -167,6 +210,7 @@ export const withdraw = async (user, day, updateNotification) =>
           resolve(false);
         })
         .then((receipt) => {
+          debug(receipt)
           if(receipt.status){
             const amountReceivedInWei = receipt.events['LogTokensCollected'].returnValues._amount;
             const amountReceived = window.web3js.utils.fromWei(amountReceivedInWei, 'ether');
@@ -196,7 +240,7 @@ export const getStartTimestamp = async () =>
 
       resolve(Number(start));
     } catch (err) {
-      console.log(err)
+      debug(err)
       resolve(false);
     }
   });
@@ -205,10 +249,11 @@ export const getStartTimestamp = async () =>
 export const getAllContributionsPerDay = async (userAddress, currentDay) =>
   new Promise(async (resolve, reject) => {
     if(subscriptionFund){
-      console.log("clearing events")
+      debug("clearing events")
       await clearEvents();
     }
     try {
+      debug("fetching all contributions with web3")
       const tokenSaleContract = new window.web3js.eth.Contract(
         TokenSale.ABI,
         TokenSale.ADDRESS,
@@ -230,16 +275,14 @@ export const getAllContributionsPerDay = async (userAddress, currentDay) =>
       //contributions = result.contributions;
       contributions = createDataForInactiveDays(contributions, currentDay, withdrawalsByDay, userAddress);
       const result = calculateOwedAmounts(contributions, currentDay);
-      console.log("pulled from web3...")
+      debug("pulled from web3...")
       subscribeToEvents();
 
       resolve({
-        contributions: result.contributions,
-        daysOwed: result.daysOwed,
-        totalOwed: result.totalOwed,
+        ...result,
       });
     } catch (err) {
-      console.log(err)
+      debug(err)
       resolve(false);
     }
   });
@@ -280,190 +323,213 @@ export const getAllContributionsPerDay = async (userAddress, currentDay) =>
     }
   }
 
-  const createDataForInactiveDays = (contributions, currentDay) => {
-    contributions = contributions.map((contribution, index) => {
-      if(contribution) {
-        return contribution;
-      }
-
-      const date = dayjs(new Date()).add(index - currentDay + 1, 'day').format('MMM, DD YYYY')
-
-      return {
-        key: index,
-        period: index + 1,
-        total_eth: 0,
-        myb_received: 0,
-        your_contribution: 0,
-        closed: index + 1 < currentDay,
-        phaseActive: index + 1 === currentDay,
-        owed: 0,
-        date,
-      };
-    })
-
-    return contributions;
-  }
-
-  const processOwedAmounts = async (contributions, currentDay, userAddress) =>
-    new Promise(async (resolve, reject) => {
-      let totalOwed = 0;
-      const daysOwed = [];
-
-      contributions = await Promise.all(contributions.map(async (dayInfo) => {
-        if(dayInfo && dayInfo.your_contribution > 0){
-          let owed = undefined;
-          do{
-            try{
-              owed = await getUnclaimedAmountOnDay(userAddress, dayInfo.key);
-            }catch(err){
-              console.log(err);
-            }
-          }while(owed === 'undefined');
-          dayInfo.owed = owed;
-          if(dayInfo.key < currentDay - 1) {
-            if(owed > 0) {
-              daysOwed.push(dayInfo.key);
-            }
-            totalOwed += owed;
-          }
-          return dayInfo;
-        }
-        return dayInfo;
-      }))
-
-      resolve({
-        contributions,
-        totalOwed,
-        daysOwed,
-      });
-   });
-
-
-  const processContributions = (log, withdrawalsByDay, userAddress, currentDay) => {
-    const contributions = Array(365).fill();
-    for (const contribution of log) {
-      const contributor = contribution.returnValues._contributor;
-      const contributed = Number(window.web3js.utils.fromWei(contribution.returnValues._amount.toString(), 'ether'))
-      const day = Number(contribution.returnValues._day);
-      const isUserContribution = contributor === userAddress;
-      let withdrawal = 0;
-      if(withdrawalsByDay[day] && withdrawalsByDay[day][userAddress]){
-        withdrawal = withdrawalsByDay[day][userAddress];
-      }
-
-      if(day >= 0 && day < 365){
-        // check if day has been initialized
-        if (contributions[day]) {
-          const thisDay = contributions[day];
-          thisDay.total_eth = thisDay.total_eth + contributed;
-          thisDay.owed = 0;
-          thisDay.your_contribution = isUserContribution
-            ? thisDay.your_contribution + contributed
-            : thisDay.your_contribution;
-          thisDay.myb_received = withdrawal ? withdrawal : 0;
-        } else {
-            const date = dayjs(new Date())
-              .add(day - currentDay + 1, 'day').format('MMM, DD YYYY')
-
-            contributions[day] = {
-              key: day,
-              period: day + 1,
-              total_eth: contributed,
-              myb_received: withdrawal ? withdrawal : 0,
-              your_contribution: isUserContribution ? contributed : 0,
-              closed: day + 1 < currentDay,
-              phaseActive: day + 1 === currentDay,
-              date,
-              owed: 0,
-            };
-          }
-      }
+const createDataForInactiveDays = (contributions, currentDay) => {
+  contributions = contributions.map((contribution, index) => {
+    if(contribution) {
+      return contribution;
     }
 
-    return contributions;
-  }
+    const date = dayjs(new Date()).add(index - currentDay + 1, 'day').format('MMM, DD YYYY')
 
-  const processWithdrawals = (log) => {
-    const withdrawalsByDay = {};
-    log.forEach((withdrawal) => {
-      const day = withdrawal.returnValues._day;
-      const amount = withdrawal.returnValues._amount;
-      const contributor = withdrawal.returnValues._contributor;
-      const amountNumber = Number(window.web3js.utils.fromWei(amount, 'ether'));
+    return {
+      key: index,
+      period: index + 1,
+      total_eth: 0,
+      myb_received: 0,
+      your_contribution: 0,
+      closed: index + 1 < currentDay,
+      phaseActive: index + 1 === currentDay,
+      owed: 0,
+      date,
+    };
+  })
 
-      if(withdrawalsByDay[day]){
-        withdrawalsByDay[day][contributor] = amountNumber;
-      } else {
-        withdrawalsByDay[day] = {
-          [contributor]: amountNumber,
-        };
+  return contributions;
+}
+
+const processOwedAmounts = async (contributions, currentDay, userAddress) =>
+  new Promise(async (resolve, reject) => {
+    let totalOwed = 0;
+    const daysOwed = [];
+
+    contributions = await Promise.all(contributions.map(async (dayInfo) => {
+      if(dayInfo && dayInfo.your_contribution > 0){
+        let owed = undefined;
+        do{
+          try{
+            owed = await getUnclaimedAmountOnDay(userAddress, dayInfo.key);
+          }catch(err){
+            console.log(err);
+          }
+        }while(owed === 'undefined');
+        dayInfo.owed = owed;
+        if(dayInfo.key < currentDay - 1) {
+          if(owed > 0) {
+            daysOwed.push(dayInfo.key);
+          }
+          totalOwed += owed;
+        }
+        return dayInfo;
       }
-    })
-    return withdrawalsByDay;
-  }
+      return dayInfo;
+    }))
 
-  const getUnclaimedAmountOnDay = async (contributor, day) =>
-    new Promise(async (resolve, reject) => {
-      try {
-        const tokenSaleContract = new window.web3js.eth.Contract(
-          TokenSale.ABI,
-          TokenSale.ADDRESS,
-        );
-
-        const amount = await tokenSaleContract.methods
-        .getTokensOwed(contributor, day)
-        .call();
-
-        resolve(Number(window.web3js.utils.fromWei(amount, 'ether')));
-      } catch (err) {
-        console.log(err)
-        resolve(false);
-      }
+    resolve({
+      contributions,
+      totalOwed,
+      daysOwed,
     });
+ });
 
-  const clearEvents = () => {
-    return Promise.all([
-      subscriptionFund.unsubscribe(), subscriptionClaim.unsubscribe()
-    ]);
+
+const processContributions = (log, withdrawalsByDay, userAddress, currentDay) => {
+  const contributions = Array(365).fill();
+  for (const contribution of log) {
+    const contributor = contribution.returnValues._contributor;
+    const contributed = Number(window.web3js.utils.fromWei(contribution.returnValues._amount, 'ether'))
+    const day = Number(contribution.returnValues._day);
+    const isUserContribution = contributor === userAddress;
+    let withdrawal = 0;
+    if(withdrawalsByDay[day] && withdrawalsByDay[day][userAddress]){
+      withdrawal = withdrawalsByDay[day][userAddress];
+    }
+
+    if(day >= 0 && day < 365){
+      // check if day has been initialized
+      if (contributions[day]) {
+        const thisDay = contributions[day];
+        thisDay.total_eth = thisDay.total_eth + contributed;
+        thisDay.owed = 0;
+        thisDay.your_contribution = isUserContribution
+          ? thisDay.your_contribution + contributed
+          : thisDay.your_contribution;
+        thisDay.myb_received = withdrawal ? withdrawal : 0;
+      } else {
+          const date = dayjs(new Date())
+            .add(day - currentDay + 1, 'day').format('MMM, DD YYYY')
+
+          contributions[day] = {
+            key: day,
+            period: day + 1,
+            total_eth: contributed,
+            myb_received: withdrawal ? withdrawal : 0,
+            your_contribution: isUserContribution ? contributed : 0,
+            closed: day + 1 < currentDay,
+            phaseActive: day + 1 === currentDay,
+            date,
+            owed: 0,
+          };
+        }
+    }
   }
 
-  const subscribeToEvents = () => {
-    console.log("subscribing to events")
-    abiDecoder.addABI(TokenSale.ABI);
+  return contributions;
+}
 
-    subscriptionFund = web3.eth.subscribe('logs', {
-      address: '0xf4f2da8d23bf5d412d172e25b3a6f16619c371e2',
-      topics: [tokenSaleEvents.fund],
-    }, (error, result) => {
-      if(error) console.log(error);
-    }).on('data', async (trxData) => {
-      const receipt = await web3.eth.getTransactionReceipt(trxData.transactionHash);
-      const decodeData = abiDecoder.decodeLogs(receipt.logs);
-      const details = {
-        amount: Number(web3.utils.fromWei(decodeData[0].events[1].value, 'ether')),
-        day: decodeData[0].events[2].value.c[0],
-        contributor: decodeData[0].events[0].value,
-        transactionHash: trxData.transactionHash,
-      };
-      events.emit('fund', details);
-    })
+const processWithdrawals = (log) => {
+  const withdrawalsByDay = {};
+  log.forEach((withdrawal) => {
+    const day = withdrawal.returnValues._day;
+    const amount = withdrawal.returnValues._amount;
+    const contributor = withdrawal.returnValues._contributor;
+    const amountNumber = Number(window.web3js.utils.fromWei(amount, 'ether'));
 
-    subscriptionClaim = web3.eth.subscribe('logs', {
-      address: '0xf4f2da8d23bf5d412d172e25b3a6f16619c371e2',
-      topics: [tokenSaleEvents.claim],
-    }, (error, result) => {
-      if(error) console.log(error);
-    }).on('data', async (trxData) => {
-      const receipt = await web3.eth.getTransactionReceipt(trxData.transactionHash);
-      console.log(receipt)
-      const decodeData = abiDecoder.decodeLogs(receipt.logs);
-      console.log(decodeData);
-      const details = {
-        amount: Number(web3.utils.fromWei(decodeData[0].events[1].value, 'ether')),
-        day: decodeData[0].events[2].value.c[0],
-        contributor: decodeData[0].events[0].value,
-        transactionHash: trxData.transactionHash,
+    if(withdrawalsByDay[day]){
+      withdrawalsByDay[day][contributor] = amountNumber;
+    } else {
+      withdrawalsByDay[day] = {
+        [contributor]: amountNumber,
       };
-      events.emit('claim', details);
-    })
+    }
+  })
+  return withdrawalsByDay;
+}
+
+const getUnclaimedAmountOnDay = async (contributor, day) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const tokenSaleContract = new window.web3js.eth.Contract(
+        TokenSale.ABI,
+        TokenSale.ADDRESS,
+      );
+
+      const amount = await tokenSaleContract.methods
+      .getTokensOwed(contributor, day)
+      .call();
+
+      resolve(Number(window.web3js.utils.fromWei(amount, 'ether')));
+    } catch (err) {
+      debug(err)
+      resolve(false);
+    }
+  });
+
+const clearEvents = () => {
+  return Promise.all([
+    subscriptionFund.unsubscribe(), subscriptionClaim.unsubscribe()
+  ]);
+}
+
+const resetSocket = async () => {
+  debug("reseting socket")
+  try{
+    await clearEvents()
+
+    subscriptionClaim = undefined;
+    subscriptionFund = undefined;
+
+    subscribeToEvents();
+    debug("reset socket")
+  }catch(err){
+    debug(err);
   }
+}
+
+const subscribeToEvents = () => {
+  debug("subscribing to events")
+  abiDecoder.addABI(TokenSale.ABI);
+
+  subscriptionFund = web3.eth.subscribe('logs', {
+    address: '0xf4f2da8d23bf5d412d172e25b3a6f16619c371e2',
+    topics: [tokenSaleEvents.fund],
+  }, (error, result) => {
+    if(error){
+      resetSocket();
+    }
+  }).on('data', async (trxData) => {
+    const receipt = await web3.eth.getTransactionReceipt(trxData.transactionHash);
+    const decodeData = abiDecoder.decodeLogs(receipt.logs);
+    const details = {
+      amount: Number(web3.utils.fromWei(decodeData[0].events[1].value, 'ether')),
+      day: decodeData[0].events[2].value.c[0],
+      contributor: decodeData[0].events[0].value,
+      transactionHash: trxData.transactionHash,
+    };
+    events.emit('fund', details);
+  })
+
+  subscriptionClaim = web3.eth.subscribe('logs', {
+    address: '0xf4f2da8d23bf5d412d172e25b3a6f16619c371e2',
+    topics: [tokenSaleEvents.claim],
+  }, (error, result) => {
+    if(error) {
+      resetSocket();
+    }
+  }).on('data', async (trxData) => {
+    const receipt = await web3.eth.getTransactionReceipt(trxData.transactionHash);
+    const decodeData = abiDecoder.decodeLogs(receipt.logs);
+    const indexOfEvent = decodeData[0] ? 0 : 1;
+    const details = {
+      amount: Number(web3.utils.fromWei(decodeData[indexOfEvent].events[1].value, 'ether')),
+      day: decodeData[indexOfEvent].events[2].value.c[0],
+      contributor: decodeData[indexOfEvent].events[0].value,
+      transactionHash: trxData.transactionHash,
+    };
+    events.emit('claim', details);
+  })
+}
+
+
+if(typeof window !== 'undefined'){
+  fetchGasPriceFromServer();
+}

@@ -41,10 +41,11 @@
             float: right;
             padding-right: 3px;
         }
-        &:hover {
-            background-color: #1890FF;
-            transition: 0.3s all ease;
-            color: white;
+        &:focus,
+        &:hover{
+          background-color: rgb(85, 234, 165);
+          color: white;
+          border-color: rgb(85, 234, 165);
         }
     }
 }

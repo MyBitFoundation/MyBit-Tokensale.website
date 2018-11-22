@@ -122,14 +122,13 @@ class Dashboard extends Component {
       isMetamaskInstalled,
       extensionUrl,
       isBraveBrowser,
-      network
+      network,
+      batchWithdrawing
     } = this.props
 
     const secondsUntilNextPeriod = getSecondsUntilNextPeriod(
       timestampStartTokenSale
     )
-
-    console.log(secondsUntilNextPeriod)
 
     return (
       <div>
@@ -145,6 +144,7 @@ class Dashboard extends Component {
           isLoggedIn={isLoggedIn}
           isMetamaskInstalled={isMetamaskInstalled}
           network={network}
+          enabled={enabled}
         />
         <CalculateModal
           visible={this.state.showCalculateModal}
@@ -160,6 +160,7 @@ class Dashboard extends Component {
           isLoggedIn={isLoggedIn}
           isMetamaskInstalled={isMetamaskInstalled}
           network={network}
+          enabled={enabled}
         />
         <Layout>
           <div className="LandingPage">
@@ -190,6 +191,7 @@ class Dashboard extends Component {
                   isBraveBrowser={isBraveBrowser}
                   network={network}
                   timestampStartTokenSale={timestampStartTokenSale}
+                  batchWithdrawing={batchWithdrawing}
                 />
               </div>
             </div>

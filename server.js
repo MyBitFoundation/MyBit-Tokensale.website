@@ -14,6 +14,7 @@ let timestampStartTokenSale = 0;
 let loaded = false;
 let currentDay = 0;
 let ethPrice = 0;
+let gasPrice = 0;
 
 const app = next({ dev })
 const handle = app.getRequestHandler()
@@ -57,9 +58,15 @@ i18n
             contributions,
             loaded,
             currentDay,
-            ethPrice
+            ethPrice,
           });
         });
+
+        server.get('/api/gasprice', (req, res) => {
+          res.send({
+            gasPrice,
+          })
+        })
 
         // use next.js
         server.get('*', (req, res) => handle(req, res))
@@ -85,19 +92,32 @@ async function PullContributions(){
 
 async function GetPrice(){
   try {
-    const response = await fetch(`https://api.coinmarketcap.com/v2/ticker/1027/`);
+    const response = await fetch('https://api.coinmarketcap.com/v2/ticker/1027/');
     const jsonResponse = await response.json();
     const { price } = jsonResponse.data.quotes.USD;
     ethPrice = price;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function GetGasPrice(){
+  try {
+    const response = await fetch('https://ethgasstation.info/json/ethgasAPI.json');
+    const jsonResponse = await response.json();
+    const { average } = jsonResponse;
+    gasPrice = Number((average / 10).toFixed(2));
   } catch (error) {
       console.log(error);
   }
 }
 
+GetGasPrice();
 GetPrice();
 PullContributions();
 
 setInterval(() => {
+  GetGasPrice();
   GetPrice();
   PullContributions();
-}, 10000);
+}, 60000);

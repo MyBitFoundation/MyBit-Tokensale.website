@@ -29,7 +29,7 @@ export const mobileMenu = [{
     ]
   },
   ,{
-    name: "Contribute",
+    name: "Go to DDF",
     button: true,
     path: { url: links.ddf, external: true }
     }
@@ -102,7 +102,7 @@ export const headerMenuLanguage = {
 
 export const headerMenuButton =
   {
-    name: "Contribute",
+    name: "Go to DDF",
     url: "https://ddf.mybit.io",
     external: true
   }

@@ -43,9 +43,11 @@
     border: none;
     color: #ffffff;
     line-height: 1;
-    &:focus {
-        background: #24f281;
-        color: #ffffff;
+    &:focus,
+    &:hover{
+      background-color: rgb(85, 234, 165);
+      color: white;
+      border-color: rgb(85, 234, 165);
     }
 }
 

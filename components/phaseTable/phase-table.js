@@ -107,15 +107,27 @@ const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTo
             Get MYB
           </Button>
         )
-      } else {
-        return record.closed && record.myb_received === 0 && record.owed > 0 ? (
+      } else if(record.closed && record.myb_received === 0 && record.owed > 0) {
+        return (
           <Button
             onClick={() => withdraw(record.period)}
             className="phaseTable__closed-row-button"
           >
             Claim
-          </Button>)
-        : null;
+          </Button>
+        )
+      } else if(record.closed && record.myb_received > 0 ){
+        return (
+          <Button
+            onClick={() => {}}
+            className="phaseTable__closed-row-button"
+            disabled
+          >
+            Claimed
+          </Button>
+        )
+      } else {
+        return null;
       }
     }
   }];

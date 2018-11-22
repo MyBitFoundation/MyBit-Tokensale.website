@@ -16,7 +16,8 @@ const ContributeModal = ({
   contribution,
   isLoggedIn,
   isMetamaskInstalled,
-  network
+  network,
+  enabled,
 }) => {
   const periodsLeft = [];
   for(let i = currentDay; i <= 365; i++){
@@ -35,20 +36,48 @@ const ContributeModal = ({
           footer={null}
           width={499}
           wrapClassName="contributeModal__wrapper"
+          destroyOnClose
         >
-          <div className="contributeModal__content">
+          <div className="contributeModal__content" >
             <div className="contributeModal__label">
               Select distribution period
             </div>
-            <Select key={new Date().getTime()} defaultValue={selectedDay && selectedDay > 0 ? selectedDay : currentDay} onChange={onSelectChange}>
+            <Select key="contribute_select" defaultValue={selectedDay && selectedDay > 0 ? selectedDay : currentDay} onChange={onSelectChange}>
               {periodsLeft}
             </Select>
             <div className="contributeModal__label">
               How much do you want to contribute?
             </div>
-            <InputNumber autoFocus value={contribution} onChange={onContributeChange} placeholder="Contribution in ETH" />
-            <Button disabled={!contribution || contribution === 0 || !isLoggedIn} block className="contributeModal__confirm" onClick={handleConfirm}>
-              {!isMetamaskInstalled ?  'Install Metamask' : network !== 'ropsten' ? 'Switch to the Ropsten test network' :  'Confirm Contribution'}
+            <div
+             onKeyPress={(e) => {
+                if(e.key === 'Enter' && contribution && !isNaN(contribution) && contribution > 0){
+                  handleConfirm()
+                }
+              }}
+            >
+              <InputNumber
+                autoFocus={true}
+                value={contribution}
+                onChange={onContributeChange}
+                placeholder="Contribution in ETH"
+              />
+            </div>
+            <Button
+              disabled={!contribution || contribution === 0 || !isLoggedIn || enabled === false}
+              block
+              className="contributeModal__confirm"
+              onClick={handleConfirm}
+            >
+              {!isMetamaskInstalled
+                ?  'Install Metamask'
+                : network !== 'ropsten'
+                ? 'Switch to the Ropsten test network'
+                : !isLoggedIn
+                ? 'Login to Metamask'
+                : enabled === false
+                ? 'Connect Metamask'
+                : 'Confirm Contribution'
+              }
               <img src={tokensaleMetamask} alt="Metamask Logo" width="26px"></img>
             </Button>
           </div>

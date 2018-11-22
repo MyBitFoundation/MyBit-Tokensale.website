@@ -79,7 +79,6 @@ class MetamaskChecker extends Component {
     await this.checkNetwork();
     const isLoggedIn = await this.checkIfLoggedIn()
     window.web3js.currentProvider.publicConfigStore.on('update', ({selectedAddress}) => this.handleAddressChanged(selectedAddress));
-
     if(isLoggedIn){
       await this.getAccount();
     }

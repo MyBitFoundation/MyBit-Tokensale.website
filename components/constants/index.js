@@ -33,7 +33,7 @@ export const getContentForNotification = (type, amount, period, actionType) => {
     switch (type) {
       case 'success':
         return {
-          title: `#${period} - Received ${amount.toLocaleString()} MYB successfully!`,
+          title: `#${period} - Received ${amount} MYB successfully!`,
           message: 'Thank you for participating in the token sale.',
         }
         break;
@@ -55,19 +55,19 @@ export const getContentForNotification = (type, amount, period, actionType) => {
     switch (type) {
       case 'success':
         return {
-          title: `#${period} - Contributed with ${amount.toLocaleString()} ETH successfully!`,
+          title: `#${period} - Contributed with ${amount} ETH successfully!`,
           message: 'You will be able to claim your MYB tokens as soon as the current period is over.',
         }
         break;
       case 'info':
         return {
-          title: `#${period} - Processing your contribution of ${amount.toLocaleString()} ETH`,
+          title: `#${period} - Processing your contribution of ${amount} ETH`,
           message: 'This action can take several minutes. This message will update as soon as the transaction is processed.',
         }
         break;
       case 'error':
         return {
-          title: `#${period} - Failed to contribute with ${amount.toLocaleString()} ETH`,
+          title: `#${period} - Failed to contribute with ${amount} ETH`,
           message: 'Unfortunately your transaction failed.',
         }
         break;

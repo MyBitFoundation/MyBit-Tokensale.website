@@ -18,6 +18,7 @@ class AppInfo extends React.Component {
     this.setEffectivePrice = this.setEffectivePrice.bind(this);
     this.loadPrices = this.loadPrices.bind(this);
     this.pullContributionsServer = this.pullContributionsServer.bind(this);
+    this.subscribeToEvents = this.subscribeToEvents.bind(this);
 
     this.state = {
       mobileMenu: false,
@@ -37,71 +38,14 @@ class AppInfo extends React.Component {
       extensionUrl: this.props.extensionUrl,
       isBraveBrowser: this.props.isBraveBrowser,
       network: this.props.network,
+      batchWithdrawing: false,
     };
 
     this.subscribedToEvents = false;
   }
 
-  componentDidMount() {
-     try{
-
-      if ((this.props.isMetamaskInstalled && this.props.network === 'ropsten') || !this.props.isMetamaskInstalled) {
-        this.userHasMetamask();
-      }
-
-      events.on('fund', (data) => this.handleFundEvent(data));
-      events.on('claim', (data) => this.handleClaimEvent(data));
-
-      this.pricesInterval = setInterval(() => this.loadPrices(), 120000);
-    }catch(err){
-      console.log(err)
-    }
-  }
-
-  handleClaimEvent({amount, day, contributor, transactionHash}){
-    const contributions = this.state.contributions.slice();
-    let totalOwed = this.state.totalOwed;
-    let flag = false;
-    if(this.state.isMetamaskInstalled && (!this.contributor === this.state.user.userName.toLowerCase())){
-      contributions[day].myb_received = amount;
-      contributions[day].owed = 0;
-      totalOwed -= amount;
-      flag = true;
-      updateNotification(transactionHash, undefined, 1, amount);
-    }
-    if(flag){
-      this.setState({
-        contributions,
-        totalOwed
-      });
-    }
-  }
-
-  handleFundEvent({amount, day, contributor, transactionHash}){
-    const contributions = this.state.contributions.slice();
-    contributions[day].total_eth = contributions[day].total_eth + amount;
-    // user himself funded
-    if(this.state.isMetamaskInstalled && (contributor === this.state.user.userName.toLowerCase())){
-      contributions[day].your_contribution = contributions[day].your_contribution + amount;
-      this.updateNotification(transactionHash, undefined, 1);
-      const updatedInfo = Core.calculateOwedAmounts(contributions, this.state.currentDay);
-      this.setState({
-        ...updatedInfo,
-      })
-      return;
-    }
-    this.setState({contributions});
-  }
-
-  async userHasMetamask(){
-    await Promise.all([
-      await this.getCurrentDayAndSetupTimer(),
-      await this.loadPrices(),
-    ]);
-    this.getAllContributionsPerDay(this.state.currentDay);
-  }
-
   componentWillReceiveProps(nextProps){
+
     // case where account changes
     if(nextProps.user.userName && (this.state.user.userName !== nextProps.user.userName)){
       this.setState({
@@ -130,9 +74,76 @@ class AppInfo extends React.Component {
     }
   }
 
+  componentDidMount() {
+    try{
+      if ((this.props.isMetamaskInstalled && this.props.network === 'ropsten') || !this.props.isMetamaskInstalled) {
+        this.userHasMetamask();
+      }
+      this.subscribeToEvents();
+      this.pricesInterval = setInterval(() => this.loadPrices(), 120000);
+    }catch(err){
+      debug(err)
+    }
+  }
+
+  componentWillUnmount(){
+    events.removeAllListeners();
+  }
+
+  subscribeToEvents(){
+    events.on('fund', data => this.handleFundEvent(data));
+    events.on('claim', data => this.handleClaimEvent(data));
+  }
+
+  // TODO does this work for batch claiming? no. receives days instead of day
+  handleClaimEvent({amount, day, contributor, transactionHash}){
+    const contributions = this.state.contributions.slice();
+    let totalOwed = this.state.totalOwed;
+    let daysOwed = this.state.daysOwed.slice();
+    let flag = false;
+    let updatedInfo = undefined;
+    // user himself is claiming
+    if(this.state.isMetamaskInstalled && (contributor === this.state.user.userName.toLowerCase())){
+      flag = true;
+      contributions[day].myb_received = amount;
+      contributions[day].owed = 0;
+      updatedInfo = Core.calculateOwedAmounts(contributions, this.state.currentDay);
+      this.updateNotification(transactionHash, undefined, 1, amount);
+    }
+    if(flag){
+      this.setState({
+        ...updatedInfo,
+      });
+    }
+  }
+
+  handleFundEvent({amount, day, contributor, transactionHash}){
+    const contributions = this.state.contributions.slice();
+    contributions[day].total_eth = contributions[day].total_eth + amount;
+    // user himself funded
+    if(this.state.isMetamaskInstalled && (contributor === this.state.user.userName.toLowerCase())){
+      contributions[day].your_contribution = contributions[day].your_contribution + amount;
+      this.updateNotification(transactionHash, undefined, 1);
+      const updatedInfo = Core.calculateOwedAmounts(contributions, this.state.currentDay);
+      this.setState({
+        ...updatedInfo,
+      })
+      return;
+    }
+    this.setState({contributions});
+  }
+
+  async userHasMetamask(){
+    await Promise.all([
+      await this.getCurrentDayAndSetupTimer(),
+      await this.loadPrices(),
+    ]);
+    this.getAllContributionsPerDay(this.state.currentDay);
+  }
+
   async pullContributionsServer(){
     const { timestampStartTokenSale, contributions, currentDay } = await Core.fetchContributionsServer();
-    console.log("pulled from server...")
+    debug("pulled from server...")
     if(!this.state.contributions){
       this.getCurrentDayAndSetupTimer(timestampStartTokenSale);
       this.setEffectivePrice(contributions, currentDay);
@@ -185,7 +196,6 @@ class AppInfo extends React.Component {
   setupTimerForCurrentDay(past){
     const currentTime = new Date().getTime();
     const milisecondsUntilNextDay = ((1 - past) * dayInSeconds * 1000).toFixed(0);
-    console.log(milisecondsUntilNextDay)
     // increments day at the next midnight
     setTimeout(() => {
       const updateCurrentDay = () => {
@@ -223,11 +233,19 @@ class AppInfo extends React.Component {
   }
 
   async batchWithdrawal(days){
+    const updateState = (flag) => {
+      this.setState({
+        batchWithdrawing: flag,
+      })
+    }
+    updateState(true);
     await Core.batchWithdrawal(this.state.user, days, this.updateNotification)
       .then((response) => {
+        updateState(false);
         debug(response);
       })
       .catch((err) => {
+        updateState(false);
         debug(err);
       });
   }
