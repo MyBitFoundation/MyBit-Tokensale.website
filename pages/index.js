@@ -4,10 +4,38 @@ import { default as Layout } from '../components/layout/layout'
 import { Header } from '../components/header/header'
 import { LandingBanner } from '../components/landingBanner/landing-banner'
 import { Countdown } from '../components/Countdown/countdown'
+import { DevelopersCards } from '../components/developersCards/developers-cards'
+import { TeamCards } from '../components/teamCards/team-cards'
+import { MyBitApplications } from '../components/myBitAplications/my-bit-applications'
+import { JoinSection } from '../components/joinSection/join-section'
+import { NewsEventsSection } from '../components/newsEventsSection/news-events-section'
+import { UpdateSection } from '../components/updateSection/update-section'
 import { MyBitFooter } from '../components/footer/footer'
+import { SliderMediaList } from '../components/slider'
+import { getSecondsUntilNextPeriod } from '../components/constants'
+import Banner from '../components/banner'
 
 class HomePage extends Component {
+  static async getInitialProps({ req, query }) {
+    if (req) {
+      const response = await fetch(`http://localhost:8080/api/home`)
+      const jsonResponse = await response.json()
+
+      return {
+        ...jsonResponse
+      }
+    }
+
+    return null
+  }
+
   render() {
+    const { timestampStartTokenSale, currentDay, currentDayServer } = this.props
+
+    const secondsUntilNextPeriod = getSecondsUntilNextPeriod(
+      timestampStartTokenSale
+    )
+
     return (
       <Layout>
         <div className="LandingPage">
@@ -19,8 +47,21 @@ class HomePage extends Component {
             </div>
           </div>
           <div className="countdownWrapper">
-            <Countdown />
+            <div className="mainContainer form-wrapper">
+              <Banner
+                {...this.props}
+                secondsUntilNextPeriod={secondsUntilNextPeriod}
+                currentPeriod={currentDay ? currentDay : currentDayServer}
+              />
+            </div>
           </div>
+          <DevelopersCards />
+          <TeamCards />
+          <MyBitApplications />
+          <JoinSection />
+          <NewsEventsSection />
+          <UpdateSection />
+          <SliderMediaList type="chevron" />
           <MyBitFooter />
         </div>
       </Layout>

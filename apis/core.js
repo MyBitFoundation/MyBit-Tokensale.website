@@ -39,7 +39,6 @@ const fetchGasPriceFromServer = async () => {
     if(gasPriceServer && gasPriceServer > 0){
       gasPrice = gasPriceServer * 1000000000;
     }
-    console.log(gasPriceServer);
     setTimeout(() => fetchGasPriceFromServer(), 60000);
   } catch (error) {
     debug(error);
@@ -290,6 +289,7 @@ export const getAllContributionsPerDay = async (userAddress, currentDay) =>
   export const calculateOwedAmounts = (contributions, currentDay) => {
     let totalOwed = 0;
     const daysOwed = [];
+    let currentPeriodTotal = 0;
 
     contributions = contributions.map((contribution, index) => {
       if(contribution.your_contribution === 0){
@@ -306,6 +306,10 @@ export const getAllContributionsPerDay = async (userAddress, currentDay) =>
         totalOwed += owed;
       }
 
+      if(contribution.key === currentDay - 1){
+        currentPeriodTotal += contribution.total_eth;
+      }
+
       // also setting closed and phaseActive here because
       // this method is called once a period is over and the
       // current day changes
@@ -316,10 +320,12 @@ export const getAllContributionsPerDay = async (userAddress, currentDay) =>
         phaseActive: index + 1 === currentDay,
       }
     })
+
     return {
       contributions,
       totalOwed,
       daysOwed,
+      currentPeriodTotal,
     }
   }
 

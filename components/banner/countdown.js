@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import classNames from 'classnames'
 import stylesheet from './countdown.scss'
 import { countdownInfo } from '../constants'
@@ -24,7 +24,7 @@ class Timer extends Component {
     var difference = tokensalePhaseStartDate.getTime() - today.getTime();
 
     if(difference < 0){
-      this.props.handleNext();
+      this.props.renderTokenSaleDetails();
       return;
     }
 
@@ -137,10 +137,10 @@ class Timer extends Component {
  }
 }
 
-export const Countdown = () => {
+const Countdown = ({ renderTokenSaleDetails }) => {
     const formButtonTitle = "Sign Up";
     return(
-      <div className="mainContainer form-wrapper">
+      <Fragment>
         <div className={
               classNames({
                 'Countdown': true
@@ -148,10 +148,12 @@ export const Countdown = () => {
             }>
           <div className={
               classNames({
-                'Countdown__title': true
+                'Banner__title': true
               })
             }>{countdownInfo.title}</div>
-            <Timer />
+            <Timer
+              renderTokenSaleDetails={renderTokenSaleDetails}
+            />
             <div className={
               classNames({
                 'Countdown__input-form': true
@@ -160,6 +162,8 @@ export const Countdown = () => {
               <InputForm title={ formButtonTitle } placeholder="Your email address"/>
             </div>
         </div>
-      </div>
+      </Fragment>
     )
 }
+
+export default Countdown;

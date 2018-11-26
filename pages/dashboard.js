@@ -14,7 +14,8 @@ import { Pagination, Alert } from 'antd'
 import Notifications from '../components/notifications'
 import {
   getSecondsUntilNextPeriod,
-  tokensPerDay
+  tokensPerDay,
+  periodsPerPage
 } from '../components/constants'
 
 class Dashboard extends Component {
@@ -37,17 +38,15 @@ class Dashboard extends Component {
       }
     }
 
-    return null
+    return {}
   }
 
   state = {
     showContributeModal: false,
     showCalculateModal: false,
-    periodsPerPage: 20,
-    currentPage: 0,
+    currentPage: undefined,
     selectedDay: this.props.currentDay,
-    selectedAmount: undefined,
-    type: 'info'
+    selectedAmount: undefined
   }
 
   /* CONTRIBUTE MODAL FUNCTIONS */
@@ -133,16 +132,23 @@ class Dashboard extends Component {
     )
 
     const { allowed } = query
-    let warningMessageCountry =
-      allowed === false ? (
-        <div className="CountryBanned">
-          People located in the USA are not allowed to participate in the Token
-          Distribution.
-        </div>
-      ) : null
+    const warningMessageCountry = allowed === false && (
+      <div className="CountryBanned">
+        People located in the USA are not allowed to participate in the Token
+        Distribution.
+      </div>
+    )
+
+    // when using SSR set the page to whichever page inclues the current period
+    let currentPage = Math.floor(currentDayServer / periodsPerPage) + 1
+    // client takes control
+    if (this.state.currentPage) {
+      currentPage = this.state.currentPage
+    }
 
     return (
       <div>
+        <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
         <ContributeModal
           visible={this.state.showContributeModal}
           handleCancel={this.handleContributeCancel}
@@ -177,7 +183,6 @@ class Dashboard extends Component {
         />
         <Layout>
           <div className="LandingPage">
-            <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
             {warningMessageCountry}
             <div className="headerWrapper">
               <div className="mainContainer">
@@ -214,18 +219,18 @@ class Dashboard extends Component {
             <PhaseTable
               onShowContributeModal={this.showContributeModal}
               data={contributions}
-              currentPage={this.state.currentPage}
+              currentPage={currentPage - 1}
               timestampStartTokenSale={timestampStartTokenSale}
               withdraw={withdraw}
               ethPrice={ethPrice}
             />
             <Pagination
               onChange={currentPage =>
-                this.setState({ currentPage: currentPage - 1 })
+                this.setState({ currentPage: currentPage })
               }
               total={365}
-              current={this.state.currentPage + 1}
-              pageSize={25}
+              current={currentPage}
+              pageSize={periodsPerPage}
               defaultCurrent={1}
             />
             <Notifications

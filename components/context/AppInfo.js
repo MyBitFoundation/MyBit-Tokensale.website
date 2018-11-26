@@ -24,7 +24,7 @@ class AppInfo extends React.Component {
       mobileMenu: false,
       handleClickMobileMenu: this.handleClickMobileMenu,
       removeNotification: this.removeNotification,
-      currentDay: 0,
+      currentDay: undefined,
       fund: this.fund,
       withdraw: this.withdraw,
       batchWithdrawal: this.batchWithdrawal,

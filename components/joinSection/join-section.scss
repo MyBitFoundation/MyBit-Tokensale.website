@@ -1,0 +1,143 @@
+@import '../select/mixins.scss';
+@import 'include-media/dist/_include-media.scss';
+
+.ant-btn{
+    padding: 0;
+}
+
+.JoinSection{
+    background-image: linear-gradient(79deg, #001358, #125ac4);
+    display: flex;
+    width: 100%;
+    height: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    font-family: 'Roboto', sans-serif;
+    position: relative;
+    overflow-y: hidden;
+
+    &__content{
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    &__container{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        position: relative;
+
+        margin: 0 auto;
+        text-align: center;
+        color: #ffffff;
+        width: 100%;
+
+        height: 180px;
+
+        @include media("<=375px") {
+            height: 90px;
+            padding-bottom: 27px;
+        }
+
+        @include media(">375px", "<=tablet") {
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+    }
+
+    &__picture-container{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform:translate(-50%, -50%);
+
+
+        margin: 0 auto;
+        width: 100%;
+        height: 478px;
+
+        @include media("<=375px") {
+            height: 150px;
+            width: 190px;
+        }
+
+        @include media(">375px", "<=tablet") {
+            height: 400px;
+            width: 250px;
+        }
+    }
+
+    &__picture{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    &__header{
+        @include headerDesctop();
+        margin-bottom: 40px;
+        font-family: 'Gilroy', sans-serif;
+        font-weight: 800;
+        line-height: 0.75;
+
+        @include media("<=375px") {
+            @include headerMobile();
+            margin-bottom: 20px;
+        }
+    }
+
+    &__subheader{
+        font-size: 1.125rem;
+        line-height: 1.67;
+        font-size: 1.125rem;
+        padding-top: 5px;
+        margin-bottom: 47px;
+
+        @include media("<=375px") {
+            font-size: 0.75rem;
+            margin-bottom: 28px;
+        }
+
+        @include media(">375px", "<=tablet") {
+            font-size: 0.94rem;
+        }
+
+        @include media(">tablet", "<desktop") {
+            font-size: 1.125rem;
+        }
+    }
+
+    .ant-btn.JoinSection__btn.ant-btn-primary{
+        @include buttonDefault();
+        width: 174px;
+        height: 52px;
+        margin: 0 auto;
+        padding-right: 25px;
+        padding-left: 11px;
+        font-size: 1.375rem;
+        letter-spacing: 1.1px;
+        line-height: 52px;
+        box-sizing: border-box;
+
+        @include media("<=375px") {
+            font-size: 12px;
+            width: 100px;
+            height: 24px;
+            line-height: 24px;
+            padding-right: 5px;
+            padding-left: 4px;
+            border-radius: 2px;
+            letter-spacing: normal;
+        }
+    }
+
+    .ant-btn > .anticon + span{
+        @include media("<=375px") {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+    }
+}

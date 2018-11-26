@@ -8,6 +8,8 @@ export const tokensPerDay = 100000;
 
 export const dayInSeconds = 86400;
 
+export const periodsPerPage = 25;
+
 export const tokenSaleEvents = {
   fund: '0xd498819977fb9763f29bab6e4eee516c4cf59053922eb6a9fe59370a7bc28b3d',
   claim: '0x33a4ae6c0627280fcb7aaf7e07deb59bbce49aa4808ee5457f8622f77ab5d28c',
@@ -20,7 +22,6 @@ export const getSecondsUntilNextPeriod = (timestampStartTokenSale) => {
 
   return secondsUntilNextPeriod;
 }
-
 
 export const shortenAddress = (address, leftSide=15, rightSide=8) => {
   const size = address.length;
@@ -76,8 +77,8 @@ export const getContentForNotification = (type, amount, period, actionType) => {
 }
 
 export const countdownInfo = {
-  finalDate: new Date("Jul 30 2019 12:00:00 GMT-0"),
-  title: 'Index page with phase information (bday example)',
+  finalDate: new Date("Jan 01 2019 12:00:00 GMT-0"),
+  title: 'Token Distribution Phase 2 Begins Jan 1, 2019',
   parts: {day:'Days', hour: 'Hours', minut: 'Minutes', second: 'Seconds'}
 }
 
@@ -330,3 +331,32 @@ export const wallets = [{
   <p>MyBit offers everyone to either invest or manage revenue generating machines over the blockchain, resulting in a new way to generate income in an automated world. MyBit lets the machines work for you again so you can enjoy the things that are truly important.</p>`
     }
   ];
+
+  export const teamsData = {
+  title: 'Empowering Disruptive Teams',
+  button: {text: 'Learn More', url: links.fund},
+  image: '../../static/svgs/mybit_ventures.svg',
+  content: `Whether you want to build a project from scratch, contribute to an existing project,
+  or hunt for bugs, MyBit Ventures is here to support everyone who’s serious about our
+  Network and the broader Ethereum community.`,
+}
+
+export const eventsData = {
+  title: 'Upcoming Events',
+  button: {text: 'Find an Event', url: links.events, external: true},
+  imageUrl: '/static/assets/event-graphic2.png'
+}
+
+export const newsData = {
+  title: 'Latest News',
+  button: {text: 'Read More', url: links.news, external: true},
+  imageUrl: '/static/assets/news-banner.png'
+}
+
+export const developersData = {
+  title: 'Developers',
+  button: {text: 'Get Started', url: links.devs, external: true},
+  image: {url: null, alt: 'Code image' },
+  content: `We believe in making development effective, efficient and fun. This is why we have designed the MyBit Software Development Kit (SDK) to streamline development. It enables engineers to quickly get concepts off the ground and focus on building the future.`,
+}
+

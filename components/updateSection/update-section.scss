@@ -1,0 +1,120 @@
+@import '../select/mixins.scss';
+@import 'include-media/dist/_include-media.scss';
+
+.UpdateSection{
+    background-image: linear-gradient(79deg, #001358, #125ac4);
+    display: flex;
+    width: 100%;
+    height: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+    position: relative;
+
+    & .Signup__confirmation {
+        color: #fff;
+    }
+
+    &__content{
+        margin: 0 auto;
+        position: relative;
+    }
+
+    &__container{
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        margin: 0 auto;
+        text-align: center;
+        color: #ffffff;
+        width: 100%;
+        height: 200px;
+
+        padding-top: 0;
+        padding-bottom: 0;
+
+        @include media("<=375px") {
+          height: 120px;
+        }
+    }
+
+    &__picture-container{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform:translate(-50%, -50%);
+
+        margin: 0 auto;
+        width: 100%;
+        height: 478px;
+
+        @include media("<=375px") {
+            height: 150px;
+            width: 190px;
+        }
+
+        @include media(">375px", "<=tablet") {
+            height: 400px;
+            width: 250px;
+        }
+    }
+
+    &__picture{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    &__header{
+        @include headerDesctop();
+        font-family: 'Gilroy';
+        font-weight: 800;
+        line-height: 0.75;
+
+        @include media("<=375px") {
+            @include headerMobile();
+        }
+    }
+
+    &__subheader{
+        font-size: 1.125rem;
+        line-height: 1.67;
+        font-size: 1.125rem;
+        padding-top: 5px;
+
+        @include media("<=375px") {
+            font-size: 0.75rem;
+        }
+
+        @include media(">375px", "<=tablet") {
+            font-size: 0.94rem;
+        }
+
+        @include media(">tablet", "<desktop") {
+            font-size: 1.125rem;
+        }
+    }
+
+    &__input-form{
+        margin-top: 20px;
+        width: 100%;
+        min-width: 256px;
+        max-width: 469px;
+
+        @include media("<=375px") {
+            margin-top: 10px;
+        }
+
+        @include media(">375px", "<=tablet") {
+            margin-top: 30px;
+        }
+
+        @include media(">tablet", "<desktop") {
+            margin-top: 20px;
+        }
+    }
+}

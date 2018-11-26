@@ -23,6 +23,7 @@
 @import 'antd/lib/input-number/style/index.css';
 @import 'antd/lib/alert/style/index.css';
 @import 'antd/lib/pagination/style/index.css';
+@import 'antd/lib/checkbox/style/index.css';
 
 
 *, *:after, *:before {
@@ -72,6 +73,9 @@ a:hover {
 .mainContainer {
   max-width: 1140;
   margin: 0 auto;
+  padding: 0 2%;
+  max-width: 1440px;
+  margin: 0 auto;
 }
 .headerWrapper {
   background: linear-gradient(to top, #001358, #125ac4);
@@ -79,6 +83,7 @@ a:hover {
 .countdownWrapper{
   position: relative;
   transform: translateY(-50%);
+  z-index: 1;
 }
 
 .grid__container {

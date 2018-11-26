@@ -26,21 +26,25 @@ const i18nextMiddleware = require('i18next-express-middleware')
 const Backend = require('i18next-node-fs-backend')
 const i18n = require('./i18n')
 const core = require('./fetchContributionsServer');
-const ips = {};
+let ips = {};
 
+const resetLocalDb = function() {
+  ips = {};
+}
 
-var geoBlocker = function (req, res, next) {
+setInterval(resetLocalDb, 5000);
+
+const geoBlocker = function (req, res, next) {
   const isDashBoard = req.originalUrl.indexOf('/dashboard') !== -1 && req.originalUrl.indexOf('?allowed=false') === -1;
 
   if(ips[req.ip] === true){
     next();
-  } else if(isDashBoard) {
+  } else if(isDashBoard && ips[req.ip] === false) {
     app.render(req, res, '/dashboard', {
       allowed: false,
     })
   } else if(isDashBoard) {
       const details = geoip.lookup(req.ip);
-      console.log(details)
       if(details && details.region && details.country === 'US'){
         ips[req.ip] = false
         app.render(req, res, '/dashboard', {
@@ -86,12 +90,34 @@ i18n
         server.post('/locales/add/:lng/:ns', i18nextMiddleware.missingKeyHandler(i18n))
 
         server.get('/api/contributions', (req, res) => {
-
+          if(!loaded){
+            res.send({
+              loaded: false,
+            });
+            return;
+          }
           res.send({
             timestampStartTokenSale,
             contributions,
             loaded,
             currentDay,
+            ethPrice,
+          });
+        });
+
+        server.get('/api/home', (req, res) => {
+          if(!loaded){
+            res.send({
+              loaded: false,
+            });
+            return;
+          }
+          const currentPeriodTotal = contributions[currentDay - 1].total_eth;
+          res.send({
+            timestampStartTokenSale,
+            currentPeriodTotal,
+            loaded,
+            currentDayServer: currentDay,
             ethPrice,
           });
         });

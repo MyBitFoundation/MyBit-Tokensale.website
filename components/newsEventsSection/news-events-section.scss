@@ -1,0 +1,94 @@
+@import '../select/mixins.scss';
+@import 'include-media/dist/_include-media.scss';
+
+.newsEventsSection {
+    margin: 0 auto;
+    max-width: 1440px;
+}
+.newsEventsCards {
+  text-align: center;
+  @include media(">tablet") {
+    padding: 0 0 20px;
+  }
+  @include media("<=tablet") {
+    padding: 0 0 15px;
+    flex-direction: column-reverse;
+  }
+  .ant-card-body {
+    padding: 0;
+  }
+  &-btn {
+    &.ant-btn-primary {
+      @include buttonDefault();
+      width: 186px;
+      height: 52px;
+      line-height: 52px;
+      @include media("<=375px") {
+        padding:0;
+        width: 100px;
+        height: 24px;
+        font-size: 12px;
+        line-height: 24px;
+        border-radius: 2px;
+      }
+    }
+  }
+  &-imageContainer {
+    border: 5px solid #fff;
+    margin-bottom: 24px;
+    background: linear-gradient(281deg, #001358, #125ac4);
+
+    @include media("<=375px") {
+      margin-bottom: 10px;
+    }
+  }
+  .eventsCard {
+    @include media("<=tablet") {
+      padding-bottom:24px;
+    }
+    @include media("<=375px") {
+      padding-bottom:0;
+    }
+  }
+  .newsCard {
+    &-image {
+      width:100%;
+    }
+    &-content {
+      height:100%;
+      width:100%;
+      padding: 10px;
+      position: relative;
+      &:after {
+        margin:15px 0;
+        @include bit();
+      }
+      &:before {
+        content: "au•to•ma•tion";
+        display: block;
+        position: absolute;
+        bottom: 35%;
+        left: 50%;
+        transform: translate(-50%);
+        color: #fff;
+        font-family: 'Roboto', 'Arial', sans-serif;
+        font-size: 40px;
+        font-weight: 800;
+      }
+    }
+  }
+  &-header {
+    @include headerDesctop();
+    @include media(">tablet") {
+      text-align: left;
+    }
+    @include media("<=375px"){
+      @include headerMobile();
+      line-height: 1.16;
+      margin-bottom: 10px;
+    }
+    color: #4a4a4a;
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 800;
+  }
+}

@@ -1,0 +1,309 @@
+@import '../select/mixins.scss';
+@import 'include-media/dist/_include-media.scss';
+
+.Banner{
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 1140px;
+  border-radius: 4px;
+  margin: 0 auto;
+  padding: 25px 10px 30px;
+  position: relative;
+  height: 300px;
+  box-shadow: 0 4px 12px 0 rgba(0,0,0,.2);
+  background-color: #fff;
+
+
+  &__title{
+    @include headerDesctop();
+    display: flex;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 800;
+    color: #4a4a4a;
+    margin: 0 auto 22px;
+    @include media("<=560px") {
+        font-size: 25px;
+    }
+    @include media("<=375px") {
+        font-size: 14px;
+    }
+
+    &--is-green{
+      color: #24f281;
+    }
+  }
+
+  &__section{
+    position: absolute;
+    width: 100%;
+    transition: opacity 1s;
+    border-radius: 4px;
+    left: 0px;
+    padding-bottom: 30px;
+    top: 0px;
+    padding-top: 25px;
+
+    &:nth-child(4){
+      z-index: 3;
+      height: 300px;
+      overflow: hidden;
+      visibility: hidden;
+      transition: visibility 0.5s ease 0.6s;
+
+      .Banner__title{
+        opacity: 0;
+        transition: opacity 0.5s;
+      }
+
+      .Timer{
+        opacity: 0;
+        transition: opacity 0.5s ease 0.3s;
+      }
+
+      .Countdown__input-form{
+        opacity: 0;
+        transition: opacity 0.5s ease 0.6s;
+      }
+    }
+
+    &:nth-child(3){
+      z-index: 3;
+      height: 300px;
+      overflow: hidden;
+      visibility: hidden;
+      transition: visibility 0s 0.4s;
+
+      .Banner__title, .TokenSaleDetails__group, a{
+        opacity: 0;
+        transition: opacity 0.4s;
+      }
+
+    }
+
+    &:nth-child(2){
+      transition: opacity 0.3s ease 0.5s;
+      z-index: 3;
+      max-height: 300px;
+      overflow: hidden;
+      visibility: hidden;
+
+      .Banner__title{
+        opacity: 0;
+      }
+
+      .TermsOfService__description{
+        opacity: 0;
+      }
+
+      .TermsOfService__rectangle{
+        opacity: 0;
+      }
+    }
+
+  }
+
+  .Countdown{
+    .Countdown__input-form{
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      max-width: 469px;
+      margin: 0 auto;
+    }
+  }
+
+  .TokenSaleDetails{
+    width: 100%;
+    text-align: center;
+
+    &__countdown{
+      color: #1890ff;
+      margin-left: 10px;
+    }
+
+    &__title{
+      font-family: Roboto,sans-serif;
+      font-weight: 500;
+      font-size: 25px;
+      color: #1890ff;
+      margin-bottom: 10px;
+    }
+
+    &__group{
+      display: flex;
+      justify-content: center;
+
+      div{
+        margin: 0px 50px;
+      }
+    }
+
+    &__value{
+      font-family: Gilroy,sans-serif;
+      font-size: 3.12rem;
+      font-weight: 800;
+      color: #4a4a4a;
+      margin-bottom: 20px;
+    }
+
+    &-btn{
+      font-family: Roboto,sans-serif;
+      font-size: 20px;
+      font-weight: 500;
+      background-color: #1890ff;
+      width: 238px;
+      height: 52px;
+      line-height: 52px;
+
+      &:focus,
+      &:hover{
+        box-shadow: none;
+        background-color: #46adfb;
+      }
+    }
+  }
+
+  .TermsOfService{
+    margin-top: 40px;
+
+    &__description{
+      font-family: Roboto,sans-serif;
+      font-size: 18px;
+      line-height: 1.56;
+      margin-bottom: 20px;
+      color: rgba(0,0,0,.65);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    &__rectangle{
+      background-color: rgba(155, 155, 155, 0.1);
+      height: 336px;
+      margin: 20px 70px;
+      overflow: scroll;
+
+      &-content{
+        height: 1000px;
+      }
+    }
+
+    &__checkboxes{
+      margin: 10px 70px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+      padding: 0px 10px;
+
+      & span{
+        color: rgba(0,0,0,.65);
+      }
+
+      &-group{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 70px;
+      }
+
+      .ant-checkbox-wrapper:nth-child(2){
+        transform: translateX(100%);
+        left: -50%;
+        position: relative;
+      }
+    }
+
+    &__pleaseCheck{
+      font-family: Roboto;
+      font-size: 18px;
+      text-align: center;
+      color: #4a4a4a;
+    }
+
+    &__btn{
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.1;
+      width: 186px;
+      height: 52px;
+      line-height: 52px;
+    }
+
+    &__link{
+      width: max-content;
+      margin: 0 auto;
+      display: block;
+      margin-top: 30px;
+    }
+  }
+}
+
+.Banner__section--is-active.Banner__section:nth-child(4) {
+  visibility: visible;
+  .Banner__title{
+    opacity: 1;
+    transition: opacity 0.5s;
+  }
+
+  .Timer{
+    opacity: 1;
+    transition: opacity 0.5s;
+  }
+
+  .Countdown__input-form{
+    opacity: 1;
+    transition: opacity 0.5s;
+  }
+}
+
+.Banner__section--is-active.Banner__section:nth-child(3) {
+  visibility: visible;
+
+  .Banner__title{
+    opacity: 1;
+    transition: opacity 0.5s ease 1s;
+  }
+
+  .TokenSaleDetails__group{
+    opacity: 1;
+    transition: opacity 0.5s ease 1.3s;;
+  }
+
+  a {
+    opacity: 1;
+    transition: opacity 0.5s ease 1.6s;;
+  }
+}
+
+.Banner__section--is-active.Banner__section:nth-child(2) {
+  visibility: visible;
+  box-shadow: 0 4px 12px 0 rgba(0,0,0,.2);
+  background-color: #fff;
+  transition: visibility 0.5s ease 0.5s, max-height 0.8s ease 0.5s;
+  max-height: 2000px;
+
+  .Banner{
+    box-shadow: none;
+  }
+
+  .Banner__title{
+    opacity: 1;
+    transition: opacity 0.5s ease 0.5s;
+  }
+
+  .TermsOfService__description{
+    opacity: 1;
+    transition: opacity 0.5s ease 0.5s;
+  }
+
+  .TermsOfService__rectangle{
+    opacity: 1;
+    transition: opacity 0.5s ease 0.5s;
+  }
+}
+
