@@ -146,7 +146,9 @@ async function PullContributions(){
     timestampStartTokenSale = await core.getStartTimestamp(web3);
     currentDay = Math.floor(((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / 86400) + 1);
     contributions = await core.getAllContributionsPerDay(web3, currentDay);
-    loaded = true;
+    if(contributions){
+      loaded = true;
+    }
   }catch(err){
     console.log(err);
   }

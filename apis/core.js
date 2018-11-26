@@ -247,11 +247,11 @@ export const getStartTimestamp = async () =>
 
 export const getAllContributionsPerDay = async (userAddress, currentDay) =>
   new Promise(async (resolve, reject) => {
-    if(subscriptionFund){
-      debug("clearing events")
-      await clearEvents();
-    }
     try {
+      if(subscriptionFund){
+        debug("clearing events")
+        await clearEvents();
+      }
       debug("fetching all contributions with web3")
       const tokenSaleContract = new window.web3js.eth.Contract(
         TokenSale.ABI,

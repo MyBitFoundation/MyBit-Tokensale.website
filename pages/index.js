@@ -36,6 +36,8 @@ class HomePage extends Component {
       timestampStartTokenSale
     )
 
+    console.log(currentDayServer)
+
     return (
       <Layout>
         <div className="LandingPage">
