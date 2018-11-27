@@ -135,6 +135,7 @@ class Dashboard extends Component {
       query
     } = this.props
 
+    console.log(this.props)
     const secondsUntilNextPeriod = getSecondsUntilNextPeriod(
       timestampStartTokenSale
     )

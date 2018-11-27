@@ -25,7 +25,6 @@ class Banner extends React.Component {
   }
 
   componentWillReceiveProps(nextProps){
-    console.log("nextprops: ", nextProps)
     if((nextProps.currentDay > 0 || nextProps.currentDayServer > 0) && this.state.active === 1){
       this.setState({
         active: 2,

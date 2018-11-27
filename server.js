@@ -9,7 +9,7 @@ const ipRegex = require('ip-regex');
 const geoip = require('geoip-lite');
 const requestIp = require('request-ip');
 
-const web3 = new Web3(new Web3.providers.WebsocketProvider(`wss://possibly-possible-lark.quiknode.io/49102400-d67e-456d-bd4d-05b51fef855c/kula72q-V9q6lO5DDhTahw==/`));
+const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/0e98ea17ef2947a6916df1c4e78fecd1'));
 
 let contributions = [];
 let timestampStartTokenSale = 0;
@@ -148,9 +148,6 @@ async function PullContributions(){
     timestampStartTokenSale = await core.getStartTimestamp(web3);
     currentDay = Math.floor(((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / 86400) + 1);
     contributions = await core.getAllContributionsPerDay(web3, currentDay);
-    console.log(timestampStartTokenSale);
-    console.log(currentDay)
-    console.log(contributions)
     if(contributions) {
       loaded = true;
     } else {
