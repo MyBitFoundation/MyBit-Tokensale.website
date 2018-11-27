@@ -3,6 +3,10 @@ import TokenSaleDetails from './tokenSaleDetails';
 import TermsOfService from './termsOfService';
 import Countdown from './countdown';
 import stylesheet from './banner.scss'
+import {
+  getUserAcceptedTermsOfService,
+  setUserAcceptedTermsOfService
+ } from '../../utils';
 
 class Banner extends React.Component {
   constructor(props){
@@ -11,7 +15,7 @@ class Banner extends React.Component {
       termsOfService: false,
       shouldUpdate: false,
       active: 1,
-      acceptedTermsOfService: false,
+      acceptedTermsOfService: getUserAcceptedTermsOfService(),
       checkBoxesChecked: 0,
     };
 
@@ -21,18 +25,11 @@ class Banner extends React.Component {
   }
 
   componentWillReceiveProps(nextProps){
-    console.log(nextProps)
     if((nextProps.currentDay > 0 || nextProps.currentDayServer > 0) && this.state.active === 1){
-      console.log("here")
       this.setState({
         active: 2,
       });
     }
-  }
-
-  //todo remove
-  componentWillMount(){
-    setTimeout(() => this.setState({shouldUpdate: true}), 1000);
   }
 
   renderTokenSaleDetails(){
@@ -42,7 +39,6 @@ class Banner extends React.Component {
   }
 
   handleContributeClicked(){
-    console.log("called here")
     this.setState({
       acceptedTermsOfService: false,
       active: 3,
@@ -50,9 +46,7 @@ class Banner extends React.Component {
   }
 
   handleCheckboxChange(value){
-    console.log(value)
-    let { checkBoxesChecked } = this.state;
-    console.log(checkBoxesChecked)
+    const { checkBoxesChecked } = this.state;
     this.setState({
       checkBoxesChecked: value ? checkBoxesChecked + 1 : checkBoxesChecked - 1,
     });
@@ -74,6 +68,8 @@ class Banner extends React.Component {
       acceptedTermsOfService,
    } = this.state;
 
+   //TODO remove/reevaluate
+   console.log(currentDay)
    if(currentDay && active === 1){
     active = 2;
    }
@@ -85,6 +81,7 @@ class Banner extends React.Component {
           <TermsOfService
             allCheckBoxesChecked={this.state.checkBoxesChecked === 4}
             handleCheckboxChange={this.handleCheckboxChange}
+            setUserAcceptedTermsOfService={setUserAcceptedTermsOfService}
           />
         </div>
         <div className={`Banner__section ${ active == 2 ? 'Banner__section--is-active' : undefined}`}>
@@ -92,6 +89,7 @@ class Banner extends React.Component {
             {...this.props}
             acceptedTermsOfService={acceptedTermsOfService}
             handleContributeClicked={this.handleContributeClicked}
+            setUserAcceptedTermsOfService={setUserAcceptedTermsOfService}
           />
         </div>
         <div className={`Banner__section ${ active == 1 ? 'Banner__section--is-active' : undefined}`}>
