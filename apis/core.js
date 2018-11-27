@@ -10,7 +10,7 @@ const abiDecoder = require('abi-decoder');
 import { tokenSaleEvents, tokensPerDay, debug } from '../components/constants';
 import { events } from '../utils/EventEmitter';
 
-const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://enormously-singular-mustang.quiknode.io/f8ae3871-b3fb-4e7d-ba45-b6c9d220757f/snN_gx_F-oK6Ij27ihhzRw==/'));
+const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://possibly-possible-lark.quiknode.io/49102400-d67e-456d-bd4d-05b51fef855c/kula72q-V9q6lO5DDhTahw==/'));
 let subscriptionClaim = undefined;
 let subscriptionFund = undefined;
 let gasPrice = 1;

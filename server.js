@@ -9,8 +9,7 @@ const ipRegex = require('ip-regex');
 const geoip = require('geoip-lite');
 const requestIp = require('request-ip');
 
-const web3 = new Web3();
-web3.setProvider(new web3.providers.WebsocketProvider(`wss://enormously-singular-mustang.quiknode.io/f8ae3871-b3fb-4e7d-ba45-b6c9d220757f/snN_gx_F-oK6Ij27ihhzRw==/`));
+const web3 = new Web3(new Web3.providers.WebsocketProvider(`wss://possibly-possible-lark.quiknode.io/49102400-d67e-456d-bd4d-05b51fef855c/kula72q-V9q6lO5DDhTahw==/`));
 
 let contributions = [];
 let timestampStartTokenSale = 0;
@@ -96,13 +95,15 @@ i18n
             });
             return;
           }
-          res.send({
-            timestampStartTokenSale,
-            contributions,
-            loaded,
-            currentDay,
-            ethPrice,
-          });
+          else {
+            res.send({
+              timestampStartTokenSale,
+              contributions,
+              loaded,
+              currentDay,
+              ethPrice,
+            });
+          }
         });
 
         server.get('/api/home', (req, res) => {
@@ -110,16 +111,17 @@ i18n
             res.send({
               loaded: false,
             });
-            return;
+          } else {
+            console.log(contributions)
+            const currentPeriodTotal = contributions[currentDay - 1].total_eth;
+            res.send({
+              timestampStartTokenSale,
+              currentPeriodTotal,
+              loaded,
+              currentDayServer: currentDay,
+              ethPrice,
+            });
           }
-          const currentPeriodTotal = contributions[currentDay - 1].total_eth;
-          res.send({
-            timestampStartTokenSale,
-            currentPeriodTotal,
-            loaded,
-            currentDayServer: currentDay,
-            ethPrice,
-          });
         });
 
         server.get('/api/gasprice', (req, res) => {
@@ -146,7 +148,14 @@ async function PullContributions(){
     timestampStartTokenSale = await core.getStartTimestamp(web3);
     currentDay = Math.floor(((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / 86400) + 1);
     contributions = await core.getAllContributionsPerDay(web3, currentDay);
-    loaded = true;
+    console.log(timestampStartTokenSale);
+    console.log(currentDay)
+    console.log(contributions)
+    if(contributions) {
+      loaded = true;
+    } else {
+      loaded = false;
+    }
   }catch(err){
     console.log(err);
   }

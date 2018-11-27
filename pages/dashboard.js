@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import fetch from 'isomorphic-unfetch'
 import stylesheet from '../styles/main.scss'
 import { default as Layout } from '../components/layout/layout'
@@ -18,23 +18,30 @@ import {
   periodsPerPage
 } from '../components/constants'
 
+import {
+  getUserAcceptedTermsOfService,
+  setUserAcceptedTermsOfService
+} from '../utils'
+
 class Dashboard extends Component {
   static async getInitialProps({ req, query }) {
     if (req) {
       const response = await fetch(`http://localhost:8080/api/contributions`)
       const jsonResponse = await response.json()
-      const { contributions, currentDay, ethPrice } = jsonResponse
-      const totalEthContributed = contributions[currentDay - 1].total_eth
-      const effectivePrice =
-        totalEthContributed > 0
-          ? (ethPrice * totalEthContributed) / tokensPerDay
-          : 0
+      const { contributions, currentDay, ethPrice, loaded } = jsonResponse
+      if (loaded) {
+        const totalEthContributed = contributions[currentDay - 1].total_eth
+        const effectivePrice =
+          totalEthContributed > 0
+            ? (ethPrice * totalEthContributed) / tokensPerDay
+            : 0
 
-      return {
-        ...jsonResponse,
-        currentDayServer: currentDay,
-        effectivePrice,
-        query
+        return {
+          ...jsonResponse,
+          currentDayServer: currentDay,
+          effectivePrice,
+          query
+        }
       }
     }
 
@@ -46,7 +53,8 @@ class Dashboard extends Component {
     showCalculateModal: false,
     currentPage: undefined,
     selectedDay: this.props.currentDay,
-    selectedAmount: undefined
+    selectedAmount: undefined,
+    acceptedTermsOfService: getUserAcceptedTermsOfService()
   }
 
   /* CONTRIBUTE MODAL FUNCTIONS */
@@ -147,7 +155,7 @@ class Dashboard extends Component {
     }
 
     return (
-      <div>
+      <Fragment>
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
         <ContributeModal
           visible={this.state.showContributeModal}
@@ -181,6 +189,7 @@ class Dashboard extends Component {
           enabled={enabled}
           allowed={allowed}
         />
+
         <Layout>
           <div className="LandingPage">
             {warningMessageCountry}
@@ -240,7 +249,7 @@ class Dashboard extends Component {
             <MyBitFooter />
           </div>
         </Layout>
-      </div>
+      </Fragment>
     )
   }
 }
