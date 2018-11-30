@@ -96,12 +96,14 @@ i18n
             return;
           }
           else {
+            const currentPeriodTotal = contributions[currentDay - 1].total_eth;
             res.send({
               timestampStartTokenSale,
               contributions,
               loaded,
               currentDay,
               ethPrice,
+              currentPeriodTotal,
             });
           }
         });
@@ -112,7 +114,6 @@ i18n
               loaded: false,
             });
           } else {
-            console.log(contributions)
             const currentPeriodTotal = contributions[currentDay - 1].total_eth;
             res.send({
               timestampStartTokenSale,

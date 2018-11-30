@@ -80,6 +80,14 @@ export const loadMetamaskUserDetails = async () =>
 export const fund = async (user, amount, day, updateNotification) =>
   new Promise(async (resolve, reject) => {
     try {
+      const id = Date.now();
+      updateNotification(id, {
+        amount,
+        period: day,
+        status: 0,
+        actionType: 'metamaskContribute',
+      });
+
       const tokenSaleContract = new window.web3js.eth.Contract(
         TokenSale.ABI,
         TokenSale.ADDRESS,
@@ -103,22 +111,24 @@ export const fund = async (user, amount, day, updateNotification) =>
           gasPrice: gasPrice,
         })
         .on('transactionHash', (transactionHash) => {
-          updateNotification(transactionHash, {
+          updateNotification(id, {
             amount,
             period: day,
             status: 0,
             actionType: 'contribute',
+            transactionHash,
           });
         })
         .on('error', (error) => {
+          updateNotification(id, undefined, -1);
           resolve(false);
         })
         .then((receipt) => {
           debug(receipt)
           if(receipt.status){
-            updateNotification(receipt.transactionHash, undefined, 1);
+            updateNotification(id, undefined, 1);
           } else {
-            updateNotification(receipt.transactionHash, undefined, -1);
+            updateNotification(id, undefined, -1);
           }
           resolve(receipt.status);
         });
@@ -132,6 +142,13 @@ export const fund = async (user, amount, day, updateNotification) =>
 export const batchWithdrawal = async (user, days, updateNotification) =>
   new Promise(async (resolve, reject) => {
     try {
+      const id = Date.now();
+      updateNotification(id, {
+        period: days[0] + 1,
+        status: 0,
+        actionType: 'metamaskClaim',
+      });
+
       const tokenSaleContract = new window.web3js.eth.Contract(
         TokenSale.ABI,
         TokenSale.ADDRESS,
@@ -155,9 +172,11 @@ export const batchWithdrawal = async (user, days, updateNotification) =>
             period: days[0] + 1,
             status: 0,
             actionType: 'claim',
+            transactionHash,
           });
         })
         .on('error', (error) => {
+          updateNotification(id, undefined, -1);
           resolve(false);
         })
         .then((receipt) => {
@@ -165,9 +184,9 @@ export const batchWithdrawal = async (user, days, updateNotification) =>
             debug(receipt)
             const amountReceivedInWei = receipt.events['LogTokensCollected'].returnValues._amount;
             const amountReceived = window.web3js.utils.fromWei(amountReceivedInWei, 'ether');
-            updateNotification(receipt.transactionHash, undefined, 1, amountReceived);
+            updateNotification(id, undefined, 1, amountReceived);
           } else {
-            updateNotification(receipt.transactionHash, undefined, -1);
+            updateNotification(id, undefined, -1);
           }
           resolve(receipt.status);
         });
@@ -180,6 +199,12 @@ export const batchWithdrawal = async (user, days, updateNotification) =>
 export const withdraw = async (user, day, updateNotification) =>
   new Promise(async (resolve, reject) => {
     try {
+      const id = Date.now();
+      updateNotification(id, {
+        period: day,
+        status: 0,
+        actionType: 'metamaskClaim',
+      });
       const tokenSaleContract = new window.web3js.eth.Contract(
         TokenSale.ABI,
         TokenSale.ADDRESS,
@@ -199,13 +224,15 @@ export const withdraw = async (user, day, updateNotification) =>
           gasPrice: gasPrice,
         })
         .on('transactionHash', (transactionHash) => {
-          updateNotification(transactionHash, {
+          updateNotification(id, {
             period: day,
             status: 0,
             actionType: 'claim',
+            transactionHash,
           });
         })
         .on('error', (error) => {
+          updateNotification(id, undefined, -1);
           resolve(false);
         })
         .then((receipt) => {
@@ -213,9 +240,9 @@ export const withdraw = async (user, day, updateNotification) =>
           if(receipt.status){
             const amountReceivedInWei = receipt.events['LogTokensCollected'].returnValues._amount;
             const amountReceived = window.web3js.utils.fromWei(amountReceivedInWei, 'ether');
-            updateNotification(receipt.transactionHash, undefined, 1, amountReceived);
+            updateNotification(id, undefined, 1, amountReceived);
           } else {
-            updateNotification(receipt.transactionHash, undefined, -1);
+            updateNotification(id, undefined, -1);
           }
           resolve(receipt.status);
         });

@@ -79,6 +79,14 @@ a:hover {
 }
 .headerWrapper {
   background: linear-gradient(to top, #001358, #125ac4);
+  @include media("<1130px") {
+    padding-bottom: 40px;
+  }
+
+  .ant-alert{
+    position: relative;
+    margin-left: 40px;
+  }
 }
 .countdownWrapper{
   position: relative;
@@ -237,6 +245,9 @@ a:hover {
 .ant-pagination{
   width: max-content;
   margin: 20px auto 65px;
+  @include media("<1130px") {
+    margin-top: 100px;
+  }
 }
 
 .ant-alert{
@@ -268,4 +279,13 @@ div div .ant-select-dropdown--single{
 }
 
 
-
+.fade-enter {
+  opacity: 0.01;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 2s ease-in;
+}
+.fade-exit {
+  opacity: 1;
+}

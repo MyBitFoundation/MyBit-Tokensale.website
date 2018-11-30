@@ -30,7 +30,7 @@ export const shortenAddress = (address, leftSide=15, rightSide=8) => {
 }
 
 export const getContentForNotification = (type, amount, period, actionType) => {
-  if(actionType == 'claim'){
+  if(actionType === 'claim'){
     switch (type) {
       case 'success':
         return {
@@ -52,7 +52,7 @@ export const getContentForNotification = (type, amount, period, actionType) => {
         break;
     }
   }
-  else {
+  else if(actionType === 'contribute') {
     switch (type) {
       case 'success':
         return {
@@ -72,6 +72,16 @@ export const getContentForNotification = (type, amount, period, actionType) => {
           message: 'Unfortunately your transaction failed.',
         }
         break;
+    }
+  } else if(actionType === 'metamaskContribute'){
+    return {
+      title: `#${period} - Contribution of ${amount} ETH`,
+      message: 'Please confirm the transaction in Metamask.',
+    }
+  } else if(actionType === 'metamaskClaim'){
+    return {
+      title: `#${period} - Claiming`,
+      message: 'Please confirm the transaction in Metamask.',
     }
   }
 }

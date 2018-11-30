@@ -74,16 +74,16 @@
     }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1130px) {
     .phaseTable__main-heading {
         display: none;
     }
     .phaseTableWrapper {
-        transform: translateY(-150px);
-        width: 90%;
+        width: 96%;
         margin: 0 auto;
         margin-bottom: -100px;
         padding: 0;
+        transform: translateY(-45px);
         .ant-table {
             font-size: 12px;
             .ant-table-thead {

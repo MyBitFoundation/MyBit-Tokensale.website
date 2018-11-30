@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import fetch from 'isomorphic-unfetch'
 import stylesheet from '../styles/main.scss'
+import stylesheetTerms from '../components/termsOfService/style.scss'
 import { default as Layout } from '../components/layout/layout'
 import { Header } from '../components/header/header'
 import { MyBitFooter } from '../components/footer/footer'
@@ -12,6 +13,7 @@ import CalculateModal from '../components/calculateModal/calculateModal'
 import AppInfoContext from '../components/context/AppInfoContext'
 import { Pagination, Alert } from 'antd'
 import Notifications from '../components/notifications'
+import TermsOfService from '../components/termsOfService'
 import {
   getSecondsUntilNextPeriod,
   tokensPerDay,
@@ -28,7 +30,13 @@ class Dashboard extends Component {
     if (req) {
       const response = await fetch(`http://localhost:8080/api/contributions`)
       const jsonResponse = await response.json()
-      const { contributions, currentDay, ethPrice, loaded } = jsonResponse
+      const {
+        contributions,
+        currentDay,
+        ethPrice,
+        loaded,
+        currentPeriodTotal
+      } = jsonResponse
       if (loaded) {
         const totalEthContributed = contributions[currentDay - 1].total_eth
         const effectivePrice =
@@ -40,7 +48,8 @@ class Dashboard extends Component {
           ...jsonResponse,
           currentDayServer: currentDay,
           effectivePrice,
-          query
+          query,
+          currentPeriodTotal
         }
       }
     }
@@ -54,15 +63,30 @@ class Dashboard extends Component {
     currentPage: undefined,
     selectedDay: this.props.currentDay,
     selectedAmount: undefined,
-    acceptedTermsOfService: getUserAcceptedTermsOfService()
+    acceptedTermsOfService: getUserAcceptedTermsOfService(),
+    termsOfService: false
   }
 
   /* CONTRIBUTE MODAL FUNCTIONS */
   showContributeModal = selectedDay => {
-    this.setState({
-      showContributeModal: true,
-      selectedDay
-    })
+    if (!this.state.acceptedTermsOfService) {
+      this.setState({
+        termsOfService: true
+      })
+      this.handleConfirmTerms = () => {
+        this.setState({
+          showContributeModal: true,
+          termsOfService: false,
+          acceptedTermsOfService: true,
+          selectedDay
+        })
+      }
+    } else {
+      this.setState({
+        showContributeModal: true,
+        selectedDay
+      })
+    }
   }
 
   handleContributeConfirm = e => {
@@ -88,9 +112,22 @@ class Dashboard extends Component {
   /* CALCULATE MODAL FUNCTIONS */
   showCalculateModal = e => {
     e.preventDefault()
-    this.setState({
-      showCalculateModal: true
-    })
+    if (!this.state.acceptedTermsOfService) {
+      this.setState({
+        termsOfService: true
+      })
+      this.handleConfirmTerms = () => {
+        this.setState({
+          showCalculateModal: true,
+          termsOfService: false,
+          acceptedTermsOfService: true
+        })
+      }
+    } else {
+      this.setState({
+        showCalculateModal: true
+      })
+    }
   }
 
   handleCalculateCancel = e => {
@@ -108,6 +145,12 @@ class Dashboard extends Component {
 
   onSelectChange = selectedDay => {
     this.setState({ selectedDay })
+  }
+
+  handleTermsOfServiceCancel = () => {
+    this.setState({
+      termsOfService: false
+    })
   }
 
   render() {
@@ -132,10 +175,10 @@ class Dashboard extends Component {
       isBraveBrowser,
       network,
       batchWithdrawing,
-      query
+      query,
+      currentPeriodTotal
     } = this.props
 
-    console.log(this.props)
     const secondsUntilNextPeriod = getSecondsUntilNextPeriod(
       timestampStartTokenSale
     )
@@ -158,6 +201,12 @@ class Dashboard extends Component {
     return (
       <Fragment>
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
+        <style dangerouslySetInnerHTML={{ __html: stylesheetTerms }} />
+        <TermsOfService
+          visible={this.state.termsOfService}
+          onCancel={this.handleTermsOfServiceCancel}
+          handleConfirm={this.handleConfirmTerms}
+        />
         <ContributeModal
           visible={this.state.showContributeModal}
           handleCancel={this.handleContributeCancel}
@@ -222,6 +271,7 @@ class Dashboard extends Component {
                   timestampStartTokenSale={timestampStartTokenSale}
                   batchWithdrawing={batchWithdrawing}
                   allowed={allowed}
+                  currentPeriodTotal={currentPeriodTotal}
                 />
               </div>
             </div>

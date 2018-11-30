@@ -8,29 +8,35 @@ const Notifications = ({ data, removeNotification }) => {
   const difference = 110;
 
   const toRender = Object.entries(data).map((notification, index) => {
-    const hash = notification[0];
-    const { period, status, amount, actionType } = notification[1];
+    const id = notification[0];
+    const { period, status, amount, actionType, transactionHash } = notification[1];
     const type = status === 0 ? 'info' : status === 1 ? 'success' : 'error';
     const { title, message } =  getContentForNotification(type, Number(amount).toLocaleString(), period, actionType);
 
-    return(
-      <a
-        href={`https://ropsten.etherscan.io/tx/${hash}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        key={hash}
-      >
-        <Alert
-          message={title}
-          description={message}
-          type={type}
-          showIcon
-          closable={type === 'success' || type === 'error'}
-          style={{bottom: initialBottomDistance + (index * difference) + 'px'}} key={hash}
-          onClose={() => removeNotification(hash)}
-        />
-      </a>
+    const alert = (
+      <Alert
+        message={title}
+        description={message}
+        type={type}
+        showIcon
+        closable={type === 'success' || type === 'error'}
+        style={{bottom: initialBottomDistance + (index * difference) + 'px'}} key={id}
+        onClose={() => removeNotification(id)}
+      />
     )
+
+    const toReturn = transactionHash ? (
+        <a
+          href={`https://ropsten.etherscan.io/tx/${transactionHash}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          key={transactionHash}
+        >
+        {alert}
+        </a>
+    ) : alert;
+
+    return toReturn;
   });
 
   return toRender;

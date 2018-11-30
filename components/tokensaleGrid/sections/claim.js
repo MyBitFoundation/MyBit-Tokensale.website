@@ -8,6 +8,7 @@ const Claim  = ({
   isLoggedIn,
   batchWithdrawing,
   allowed,
+  batchWithdrawal,
 }) => (
   <Fragment>
     <div className="Section__title">MYB Ready to Claim</div>

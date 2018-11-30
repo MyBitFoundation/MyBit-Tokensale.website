@@ -16,7 +16,9 @@ const Section = ({
         <img src={tokensaleTooltip} alt={imgAlt} className="Section__tooltip-img"></img>
       </Tooltip>
     )}
-    <img src={img} alt={imgAlt} className={`Section__${imgClassName}`}></img>
+    {img && (
+      <img src={img} alt={imgAlt} className={`Section__${imgClassName}`}></img>
+    )}
     <div className={childrenClassName}>
       {children}
     </div>

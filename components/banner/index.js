@@ -1,6 +1,5 @@
 import Router from 'next/router'
 import TokenSaleDetails from './tokenSaleDetails';
-import TermsOfService from './termsOfService';
 import Countdown from './countdown';
 import stylesheet from './banner.scss'
 import {
@@ -77,20 +76,8 @@ class Banner extends React.Component {
     return (
       <div className="Banner">
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
-        <div className={`Banner__section ${ active === 3 ? 'Banner__section--is-active' : undefined}`}>
-          <TermsOfService
-            allCheckBoxesChecked={this.state.checkBoxesChecked === 4}
-            handleCheckboxChange={this.handleCheckboxChange}
-            setUserAcceptedTermsOfService={setUserAcceptedTermsOfService}
-          />
-        </div>
         <div className={`Banner__section ${ active == 2 ? 'Banner__section--is-active' : undefined}`}>
-          <TokenSaleDetails
-            {...this.props}
-            acceptedTermsOfService={acceptedTermsOfService}
-            handleContributeClicked={this.handleContributeClicked}
-            setUserAcceptedTermsOfService={setUserAcceptedTermsOfService}
-          />
+          <TokenSaleDetails {...this.props} />
         </div>
         <div className={`Banner__section ${ active == 1 ? 'Banner__section--is-active' : undefined}`}>
           <Countdown

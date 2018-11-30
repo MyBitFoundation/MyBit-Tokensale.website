@@ -19,6 +19,7 @@ class AppInfo extends React.Component {
     this.loadPrices = this.loadPrices.bind(this);
     this.pullContributionsServer = this.pullContributionsServer.bind(this);
     this.subscribeToEvents = this.subscribeToEvents.bind(this);
+    this.getNotificationIdFromHash = this.getNotificationIdFromHash.bind(this);
 
     this.state = {
       mobileMenu: false,
@@ -75,6 +76,12 @@ class AppInfo extends React.Component {
   }
 
   componentDidMount() {
+    document.addEventListener('visibilitychange', () => {
+      if(!document.hidden){
+        this.getAllContributionsPerDay();
+      }
+    });
+
     try{
       if ((this.props.isMetamaskInstalled && this.props.network === 'ropsten') || !this.props.isMetamaskInstalled) {
         this.userHasMetamask();
@@ -97,6 +104,7 @@ class AppInfo extends React.Component {
 
   // TODO does this work for batch claiming? no. receives days instead of day
   handleClaimEvent({amount, day, contributor, transactionHash}){
+    const id = this.getNotificationIdFromHash(transactionHash);
     const contributions = this.state.contributions.slice();
     let totalOwed = this.state.totalOwed;
     let daysOwed = this.state.daysOwed.slice();
@@ -108,7 +116,7 @@ class AppInfo extends React.Component {
       contributions[day].myb_received = amount;
       contributions[day].owed = 0;
       updatedInfo = Core.calculateOwedAmounts(contributions, this.state.currentDay);
-      this.updateNotification(transactionHash, undefined, 1, amount);
+      this.updateNotification(id, undefined, 1, amount);
     }
     if(flag){
       this.setState({
@@ -118,12 +126,13 @@ class AppInfo extends React.Component {
   }
 
   handleFundEvent({amount, day, contributor, transactionHash}){
+    const id = this.getNotificationIdFromHash(transactionHash);
     const contributions = this.state.contributions.slice();
     contributions[day].total_eth = contributions[day].total_eth + amount;
     // user himself funded
     if(this.state.isMetamaskInstalled && (contributor === this.state.user.userName.toLowerCase())){
       contributions[day].your_contribution = contributions[day].your_contribution + amount;
-      this.updateNotification(transactionHash, undefined, 1);
+      this.updateNotification(id, undefined, 1);
       const updatedInfo = Core.calculateOwedAmounts(contributions, this.state.currentDay);
       this.setState({
         ...updatedInfo,
@@ -248,6 +257,17 @@ class AppInfo extends React.Component {
         updateState(false);
         debug(err);
       });
+  }
+
+  getNotificationIdFromHash(hash){
+    const notifications = this.state.notifications;
+    for (var key in notifications) {
+      if (notifications[key] && notifications[key].transactionHash === hash) {
+          return key;
+      }
+    }
+
+    return null;
   }
 
   updateNotification(transactionHash, details, status, amountReceived){

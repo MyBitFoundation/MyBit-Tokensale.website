@@ -15,6 +15,9 @@
   box-shadow: 0 4px 12px 0 rgba(0,0,0,.2);
   background-color: #fff;
 
+  @include media("<=375px") {
+      height: 200px;
+  }
 
   &__title{
     @include headerDesctop();
@@ -48,7 +51,7 @@
     top: 0px;
     padding-top: 25px;
 
-    &:nth-child(4){
+    &:nth-child(3){
       z-index: 3;
       height: 300px;
       overflow: hidden;
@@ -71,7 +74,7 @@
       }
     }
 
-    &:nth-child(3){
+    &:nth-child(2){
       z-index: 3;
       height: 300px;
       overflow: hidden;
@@ -85,29 +88,11 @@
 
     }
 
-    &:nth-child(2){
-      transition: opacity 0.3s ease 0.5s;
-      z-index: 3;
-      max-height: 300px;
-      overflow: hidden;
-      visibility: hidden;
-
-      .Banner__title{
-        opacity: 0;
-      }
-
-      .TermsOfService__description{
-        opacity: 0;
-      }
-
-      .TermsOfService__rectangle{
-        opacity: 0;
-      }
-    }
-
   }
 
   .Countdown{
+    padding: 0px 10px;
+
     .Countdown__input-form{
       display: flex;
       justify-content: center;
@@ -121,6 +106,21 @@
     width: 100%;
     text-align: center;
 
+    .Banner__title{
+
+      @include media("<=630px") {
+        font-size: 35px;
+      }
+
+      @include media("<=560px") {
+        font-size: 30px;
+      }
+
+      @include media("<=375px") {
+        font-size: 16px;
+      }
+    }
+
     &__countdown{
       color: #1890ff;
       margin-left: 10px;
@@ -132,6 +132,17 @@
       font-size: 25px;
       color: #1890ff;
       margin-bottom: 10px;
+
+      @include media("<=630px") {
+        font-size: 28px;
+      }
+
+      @include media("<=560px") {
+        font-size: 25px;
+      }
+      @include media("<=375px") {
+        font-size: 16px;
+      }
     }
 
     &__group{
@@ -140,6 +151,10 @@
 
       div{
         margin: 0px 50px;
+
+        @include media("<=560px") {
+          margin: 0px 20px;
+        }
       }
     }
 
@@ -149,6 +164,18 @@
       font-weight: 800;
       color: #4a4a4a;
       margin-bottom: 20px;
+
+      @include media("<=630px") {
+        font-size: 28px;
+      }
+
+      @include media("<=560px") {
+        font-size: 25px;
+      }
+      @include media("<=375px") {
+        font-size: 16px;
+      }
+
     }
 
     &-btn{
@@ -165,99 +192,19 @@
         box-shadow: none;
         background-color: #46adfb;
       }
-    }
-  }
 
-  .TermsOfService{
-    margin-top: 40px;
-
-    &__description{
-      font-family: Roboto,sans-serif;
-      font-size: 18px;
-      line-height: 1.56;
-      margin-bottom: 20px;
-      color: rgba(0,0,0,.65);
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    &__rectangle{
-      background-color: rgba(155, 155, 155, 0.1);
-      height: 336px;
-      margin: 20px 70px;
-      overflow: scroll;
-
-      &-content{
-        color: rgba(0,0,0,.65);
-        padding: 20px 20px;
+      @include media("<=375px") {
+        height: 30px;
+        line-height: 30px;
+        font-size: 16px;
+        width: 173px;
       }
-    }
-
-    &__checkboxes{
-      margin: 10px 70px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 50px;
-      padding: 0px 10px;
-
-      & span{
-        color: rgba(0,0,0,.65);
-      }
-
-      &-group{
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 70px;
-
-        & p{
-          margin: 0px 0px;
-          display: inline-block;
-          margin-left: 23px;
-          color: rgba(0,0,0,.65);
-          line-height: 25px;
-        }
-      }
-
-      .ant-checkbox-wrapper:nth-child(2){
-        transform: translateX(100%);
-        left: -50%;
-        position: relative;
-      }
-
-      .ant-checkbox-wrapper{
-        position: absolute;
-        top: 3px;
-      }
-    }
-
-    &__pleaseCheck{
-      font-family: Roboto;
-      font-size: 18px;
-      text-align: center;
-      color: #4a4a4a;
-    }
-
-    &__btn{
-      font-size: 20px;
-      font-weight: 500;
-      line-height: 1.1;
-      width: 186px;
-      height: 52px;
-      line-height: 52px;
-    }
-
-    &__link{
-      width: max-content;
-      margin: 0 auto;
-      display: block;
-      margin-top: 30px;
     }
   }
 }
 
-.Banner__section--is-active.Banner__section:nth-child(4) {
+
+.Banner__section--is-active.Banner__section:nth-child(3) {
   visibility: visible;
   .Banner__title{
     opacity: 1;
@@ -275,7 +222,7 @@
   }
 }
 
-.Banner__section--is-active.Banner__section:nth-child(3) {
+.Banner__section--is-active.Banner__section:nth-child(2) {
   visibility: visible;
 
   .Banner__title{
@@ -291,33 +238,6 @@
   a {
     opacity: 1;
     transition: opacity 0.5s ease 1.6s;;
-  }
-}
-
-.Banner__section--is-active.Banner__section:nth-child(2) {
-  visibility: visible;
-  box-shadow: 0 4px 12px 0 rgba(0,0,0,.2);
-  background-color: #fff;
-  transition: visibility 0.5s ease 0.5s, max-height 0.8s ease 0.5s;
-  max-height: 2000px;
-
-  .Banner{
-    box-shadow: none;
-  }
-
-  .Banner__title{
-    opacity: 1;
-    transition: opacity 0.5s ease 0.5s;
-  }
-
-  .TermsOfService__description{
-    opacity: 1;
-    transition: opacity 0.5s ease 0.5s;
-  }
-
-  .TermsOfService__rectangle{
-    opacity: 1;
-    transition: opacity 0.5s ease 0.5s;
   }
 }
 

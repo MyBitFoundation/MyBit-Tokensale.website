@@ -2,11 +2,11 @@ import React, { Fragment } from 'react'
 import stylesheet from './tokensaleGrid.scss'
 import { Tooltip, Button } from 'antd'
 
-import CountdownHours from '../countdownHours';
 import Metamask from './sections/metamask';
 import Calculate from './sections/calculate';
 import GetMyb from './sections/getMyb';
 import Claim from './sections/claim';
+import Mobile from './sections/mobile';
 import Section from './sections/section';
 
 const tokensaleClock = '../../static/tokensale/tokensale_clock.svg';
@@ -65,7 +65,8 @@ const TokensaleGrid = (props) => {
     network,
     timestampStartTokenSale,
     batchWithdrawing,
-    allowed
+    allowed,
+    currentPeriodTotal,
   } = props;
   return (
     <Fragment>
@@ -87,16 +88,15 @@ const TokensaleGrid = (props) => {
           ))}
         </div>
         <div className="TokenSaleGrid__mobile">
-          <div className="tokensaleGrid__item">
-            <div className="tokensaleGrid__item-main">Phase <span className="tokensaleGrid__blue-span">#{currentPeriod}</span> ends in:</div>
-            <div className="tokensaleGrid__item-bold">
-              <CountdownHours
-                time={secondsToGo}
-              />
-            </div>
-            <div className="tokensaleGrid__item-main">ETH Contributed:</div>
-            <div className="tokensaleGrid__item-eth">5 ETH</div>
-          </div>
+        <Section
+          hasTooltip={false}
+        >
+          <Mobile
+            currentPeriod={currentPeriod}
+            totalEthContributed={currentPeriodTotal}
+            secondsToGo={secondsToGo}
+          />
+       </Section>
         </div>
       </div>
     </Fragment>

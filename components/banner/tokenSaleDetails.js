@@ -2,7 +2,7 @@ import CountdownHours from '../countdownHours';
 import { Button } from 'antd';
 import Link from 'next/link'
 
-const TokenSaleDetails = ({currentPeriod, secondsUntilNextPeriod, ethPrice, currentPeriodTotal, handleContributeClicked, active, acceptedTermsOfService}) => {
+const TokenSaleDetails = ({currentPeriod, secondsUntilNextPeriod, ethPrice, currentPeriodTotal, active}) => {
   const price = (ethPrice * currentPeriodTotal) / 100000;
   return (
     <div className="TokenSaleDetails TokenSaleDetails--is-active">
@@ -23,11 +23,10 @@ const TokenSaleDetails = ({currentPeriod, secondsUntilNextPeriod, ethPrice, curr
           <p className="TokenSaleDetails__value">{`${currentPeriodTotal.toLocaleString()} ETH`}</p>
         </div>
       </div>
-      <a href={acceptedTermsOfService || window.innerWidth <= 768 ? "/dashboard" : undefined}>
+      <a href="/dashboard">
        <Button
           type="primary"
           className="TokenSaleDetails-btn"
-          onClick={!acceptedTermsOfService && window.innerWidth > 768 ? handleContributeClicked : {}}
         >
           Contribute
         </Button>
