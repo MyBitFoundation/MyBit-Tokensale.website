@@ -29,7 +29,7 @@ export const Header = ({isDark}) => {
                     'Header__logo-container': true
                   })
                 }>
-            <Link prefetch href="/">
+            <a href="/">
               <Logo
                 className={
                   classNames({
@@ -37,7 +37,7 @@ export const Header = ({isDark}) => {
                   })
                 }
               />
-            </Link>
+            </a>
           </div>
         <AppInfoContext.Consumer>
           {({

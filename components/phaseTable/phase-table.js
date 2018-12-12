@@ -11,7 +11,7 @@ const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTo
   const currentDayInt = Math.floor(currentDay);
   const past = currentDay % 1;
   const secondsUntilNextPeriod = ((1 - past) * dayInSeconds).toFixed(0);
-
+  console.log(allowed)
   const tableColumns = [{
     title: 'Period',
     dataIndex: 'period',
@@ -116,7 +116,7 @@ const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTo
           <Button
             onClick={() => withdraw(record.period)}
             className="phaseTable__closed-row-button"
-            disabled={!allowed}
+            disabled={allowed === false}
           >
             Claim
           </Button>

@@ -1,160 +1,216 @@
 @import 'include-media/dist/_include-media.scss';
 
 .HowTo{
-  &__wrapper{
-    width: 90%;
-    text-align: center;
-    margin: 0 auto;
-    padding-top: 50px;
-    max-width: 1150px;
+  color: #4a4a4a;
+  text-align: center;
+  font-family: 'Roboto'
 
-    & .ant-modal{
-      margin: 0px !important;
-    }
+  & section{
+    background: rgba(216, 216, 216, 0.2);
+    padding: 15px;
+  }
 
-    @include media("<desktop") {
-      width: 100%;
-    }
+  & .ant-modal{
+    margin: 0px !important;
+  }
+
+  & .ant-modal-body{
+    height: 74vh;
+    overflow: scroll;
 
     @include media("<tablet") {
-      padding-top: 50px;
+      padding: 15px;
+      height: 64vh;
+    }
+  }
+
+  & .ant-modal-header{
+    border-bottom: none;
+    box-shadow: 0 4px 6px -3px rgba(0,0,0,.15);
+    padding-bottom: 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
+  & .ant-modal-title{
+    font-family: Roboto;
+    line-height: 37px;
+    font-size: 30px;
+  }
+
+  & .ant-modal-content{
+    z-index: 24;
+    position: absolute;
+    width: 90%;
+    margin: 0 auto;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    max-width: 1150px;
+
+    @include media("<tablet") {
+      width: 96%;
     }
 
-    & p{
-      color: #4A4A4A;
-      font-family: 'Roboto';
-      font-size: 18px;
+  }
+
+  & p{
+    color: #4A4A4A;
+    font-family: 'Roboto';
+    font-size: 18px;
+  }
+  & a{
+    font-family: 'Roboto';
+  }
+
+  &__paddedSection{
+    max-width: 850px;
+    margin: 0 auto;
+
+    @include media("<tablet") {
+      padding: 0 2%;
     }
-    & a{
-      font-family: 'Roboto';
+  }
+
+  &__steps{
+    display: flex;
+    justify-content: center;
+
+    & a:focus{
+      text-decoration: none;
     }
+  }
 
-    &-paddedSection{
-      max-width: 850px;
-      margin: 0 auto;
-    }
+  &__step{
+    width: 147px;
+    height: 147px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin: 10px;
 
-    &--steps{
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-
-      & a:focus{
-        text-decoration: none;
-      }
-    }
-
-    &-step{
-      width: 147px;
-      height: 147px;
-      background: #FFFFFF;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-      border-radius: 4px;
-      margin: 10px;
-
-      & img{
-        width: 49px;
-        height: 49px;
-        margin-top: 30px;
-      }
-
-      &-title{
-        font-weight: 500;
-        margin-top: 15px !important;
-        margin-bottom: 0px;
-        font-size: 14px !important;
-      }
-
-      &-desc{
-        margin-top: 0px;
-        line-height: 10px;
-        font-size: 14px !important;
-      }
+    @include media("<tablet") {
+      margin: 5px;
     }
 
-    &-img-calculate{
-      background: linear-gradient(10.73deg, #001358 0%, #125AC4 100%);
-      border-radius: 4px;
-      padding: 0 20px;
-
-      & p{
-        color: #ffffff;
-        font-size: 14px;
-      }
-
-      &-formula{
-        font-size: 28px !important;
-        font-weight: bold;
-        padding-top: 40px;
-        margin-bottom: 30px;
-      }
-
-      &-example{
-        font-size: 14px;
-        font-weight: normal;
-        padding-bottom: 10px;
-      }
+    & img{
+      width: 49px;
+      height: 49px;
+      margin-top: 30px;
     }
 
     &-title{
-      line-height: 37px;
-      font-size: 30px !important;
-      font-weight: 600;
-    }
-
-    &-title-desc{
       font-weight: 500;
-    }
-
-    &-subtitle{
-      font-size: 30px;
-      font-weight: 500;
-
-      &--is-medium{
-        font-size: 20px !important;
-      }
-
-      &--is-left{
-        text-align: left;
-      }
-    }
-
-    &-img-template{
-      width: 100%;
-      height: 300px;
-    }
-
-    &-address-text{
+      margin-top: 15px !important;
       margin-bottom: 0px;
-      line-height: 13px;
+      font-size: 14px !important;
     }
 
-    &-address:focus{
-      text-decoration: none;
+    &-desc{
+      margin-top: 0px;
+      line-height: 15px;
+      font-size: 14px !important;
+    }
+  }
+
+  &__img-calculate{
+    background: linear-gradient(10.73deg, #001358 0%, #125AC4 100%);
+    border-radius: 4px;
+    padding: 0 20px;
+    margin-bottom: 30px;
+
+    & p{
+      color: #ffffff;
+      font-size: 14px;
     }
 
-    &-address{
+    &-formula{
+      font-size: 28px !important;
+      font-weight: bold;
+      padding-top: 40px;
+      margin-bottom: 30px;
+    }
+
+    &-example{
+      font-size: 14px;
+      font-weight: normal;
+      padding-bottom: 10px;
+    }
+  }
+
+  &__title{
+    line-height: 37px;
+    font-size: 30px !important;
+    font-weight: 600;
+    margin-top: 30px;
+  }
+
+  &__title-desc{
+    font-weight: 500;
+  }
+
+  &__subtitle{
+    font-size: 30px !important;
+    font-weight: 600;
+
+    &--is-big{
+      font-size: 25px !important;
+    }
+
+    &--is-medium{
+      font-size: 20px !important;
+    }
+
+    &--is-left{
+      text-align: left;
+
       @include media("<tablet") {
-        font-size: 13px;
-        font-weight: 500;
+        text-align: center;
       }
     }
+  }
 
-    &-btn{
-      background: #24f281;
-      border: none;
+  &__img-template{
+    width: 100%;
+    height: 300px;
+  }
+
+  &__address-text{
+    margin-bottom: 0px;
+  }
+
+  &__address:focus{
+    text-decoration: none;
+  }
+
+  &__address{
+    margin-bottom: 40px;
+    display: block;
+    font-weight: 500;
+    word-break: break-all;
+  }
+
+  &__btn{
+    background: #24f281;
+    border: none;
+    color: #fff;
+    width: 129px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: 500;
+
+    &:focus,
+    &:hover {
+      background-color: #55eaa5;
       color: #fff;
-      width: 129px;
-      margin-bottom: 20px;
-      font-size: 16px;
-      font-weight: 500;
+      border-color: #55eaa5;
+    }
+  }
 
-      &:focus,
-      &:hover {
-        background-color: #55eaa5;
-        color: #fff;
-        border-color: #55eaa5;
-      }
+  & video{
+    width: 50%;
+
+    @include media("<tablet") {
+      width: 100%;
     }
   }
 }

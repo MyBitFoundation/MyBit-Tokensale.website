@@ -14,7 +14,7 @@ import AppInfoContext from '../components/context/AppInfoContext'
 import { Pagination, Alert } from 'antd'
 import Notifications from '../components/notifications'
 import TermsOfService from '../components/termsOfService'
-import HowTo from '../components/howTo'
+
 import {
   getSecondsUntilNextPeriod,
   tokensPerDay,
@@ -69,14 +69,7 @@ class Dashboard extends Component {
     selectedDay: this.props.currentDay || this.props.currentDayServer || 1,
     selectedAmount: undefined,
     acceptedTermsOfService: getUserAcceptedTermsOfService(),
-    termsOfService: false,
-    showingHowTo: false
-  }
-
-  handleHowToOnClose = () => {
-    this.setState({
-      showingHowTo: false
-    })
+    termsOfService: false
   }
 
   /* CONTRIBUTE MODAL FUNCTIONS */
@@ -254,31 +247,13 @@ class Dashboard extends Component {
           enabled={enabled}
           allowed={allowed}
         />
-        <HowTo
-          visible={this.state.showingHowTo}
-          onClose={openContributeModal => {
-            this.handleHowToOnClose()
-            if (openContributeModal) {
-              this.setState({
-                showContributeModal: true
-              })
-            }
-          }}
-        />
-
         <Layout>
           <div className="LandingPage">
             {warningMessageCountry}
             <div className="headerWrapper">
               <div className="mainContainer">
                 <Header isDark={false} />
-                <DashboardPageHeader
-                  onClick={() =>
-                    this.setState({
-                      showingHowTo: true
-                    })
-                  }
-                />
+                <DashboardPageHeader />
                 <TokensaleGrid
                   onShowContributeModal={() =>
                     this.showContributeModal(

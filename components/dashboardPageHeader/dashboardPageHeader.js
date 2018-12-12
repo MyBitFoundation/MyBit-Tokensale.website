@@ -9,7 +9,13 @@ const DashboardPageHeader = (props) => (
             <Alert message="Metamask required to participate." type="error" closeText="Close" className="dashboardHeader__mobile" />
             <h1 className="dashboardHeader__main-title">Welcome to the MyBit Token Distribution</h1>
             <div className="dashboardHeader__help">Need help getting started? Follow our guide.</div>
-            <Button className="dashboardHeader__guide" onClick={props.onClick}>How-to guide</Button>
+            <a
+              href="/guide"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button className="dashboardHeader__guide">How-to guide</Button>
+            </a>
         </div>
     </Fragment>
 )
