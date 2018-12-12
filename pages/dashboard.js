@@ -95,12 +95,17 @@ class Dashboard extends Component {
   }
 
   handleContributeConfirm = e => {
+    if (this.clicked) {
+      return
+    }
+    this.clicked = true
+    setTimeout(() => (this.clicked = false), 1000)
+    this.props.fund(this.state.selectedAmount, this.state.selectedDay)
     this.setState({
       showContributeModal: false,
-      showCalculateModal: false,
-      selectedAmount: undefined
+      selectedAmount: undefined,
+      showCalculateModal: undefined
     })
-    this.props.fund(this.state.selectedAmount, this.state.selectedDay)
   }
 
   handleContributeCancel = e => {
