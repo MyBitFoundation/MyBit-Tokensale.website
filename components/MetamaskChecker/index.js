@@ -70,6 +70,10 @@ class MetamaskChecker extends Component {
             isInstalled: true,
           })
         }
+      } else{
+        this.setState({
+          isLoggedIn: false,
+        })
       }
     }catch(err){
       console.log(err)
