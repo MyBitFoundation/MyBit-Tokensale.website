@@ -52,7 +52,10 @@ class TermsOfService extends React.Component {
           visible={this.props.visible}
           title="MYB Token Distribution"
           onOk={() => {}}
-          onCancel={this.props.onCancel}
+          onCancel={() => {
+            this.setState({checkBoxesChecked: 0, hitBottom: false})
+            this.props.onCancel();
+          }}
           footer={null}
           destroyOnClose
           width="90%"
