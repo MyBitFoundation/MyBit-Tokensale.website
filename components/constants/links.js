@@ -29,6 +29,8 @@ export const links = {
   youTube: 'https://www.youtube.com/channel/UCtLn7Vi-3VbsY5F9uF1RJYg',
   linkedin: 'https://www.linkedin.com/company/mybit/',
 
+  news: 'https://medium.com/mybit-dapp/introduction-a8275e6bcbec',
+
   //Media
   forbes: 'https://www.forbes.com/sites/omribarzilay/2017/08/14/why-blockchain-is-the-future-of-the-sharing-economy/#8a6994033422',
   nasdaq: 'https://www.nasdaq.com/article/blockchain-technology-could-disrupt-and-reboot-the-sharing-economy-cm836757',

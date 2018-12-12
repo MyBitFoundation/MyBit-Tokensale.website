@@ -2,25 +2,14 @@ import Router from 'next/router'
 import TokenSaleDetails from './tokenSaleDetails';
 import Countdown from './countdown';
 import stylesheet from './banner.scss'
-import {
-  getUserAcceptedTermsOfService,
-  setUserAcceptedTermsOfService
- } from '../../utils';
+import { getSecondsUntilNextPeriod } from '../constants'
 
 class Banner extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      termsOfService: false,
-      shouldUpdate: false,
-      active: 1,
-      acceptedTermsOfService: getUserAcceptedTermsOfService(),
-      checkBoxesChecked: 0,
+      active: this.props.currentDayServer ? 2 : 1,
     };
-
-    this.renderTokenSaleDetails = this.renderTokenSaleDetails.bind(this);
-    this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
-    this.handleContributeClicked = this.handleContributeClicked.bind(this);
   }
 
   componentWillReceiveProps(nextProps){
@@ -31,26 +20,6 @@ class Banner extends React.Component {
     }
   }
 
-  renderTokenSaleDetails(){
-    this.setState({
-      active: 2,
-    });
-  }
-
-  handleContributeClicked(){
-    this.setState({
-      acceptedTermsOfService: false,
-      active: 3,
-    });
-  }
-
-  handleCheckboxChange(value){
-    const { checkBoxesChecked } = this.state;
-    this.setState({
-      checkBoxesChecked: value ? checkBoxesChecked + 1 : checkBoxesChecked - 1,
-    });
-  }
-
   render(){
     const {
       timestampStartTokenSale,
@@ -59,29 +28,28 @@ class Banner extends React.Component {
       currentDay,
       currentDayServer,
       price,
-
     } = this.props;
 
     let {
       active,
-      acceptedTermsOfService,
-   } = this.state;
+    } = this.state;
 
-   //TODO remove/reevaluate
-   console.log(currentDay)
-   if(currentDay && active === 1){
-    active = 2;
-   }
+    const secondsUntilNextPeriod = getSecondsUntilNextPeriod(
+      timestampStartTokenSale
+    )
 
     return (
       <div className="Banner">
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
         <div className={`Banner__section ${ active == 2 ? 'Banner__section--is-active' : undefined}`}>
-          <TokenSaleDetails {...this.props} />
+          <TokenSaleDetails
+            {...this.props}
+            secondsUntilNextPeriod={secondsUntilNextPeriod}
+          />
         </div>
         <div className={`Banner__section ${ active == 1 ? 'Banner__section--is-active' : undefined}`}>
           <Countdown
-            renderTokenSaleDetails={() => this.renderTokenSaleDetails()}
+            timestampStartTokenSale={timestampStartTokenSale}
           />
         </div>
       </div>

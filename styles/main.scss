@@ -92,6 +92,7 @@ a:hover {
   position: relative;
   transform: translateY(-50%);
   z-index: 1;
+  margin-top: 20px;
 }
 
 .grid__container {
@@ -278,14 +279,7 @@ div div .ant-select-dropdown--single{
   height: 40px;
 }
 
-
-.fade-enter {
-  opacity: 0.01;
-}
-.fade-enter-active {
-  opacity: 1;
-  transition: opacity 2s ease-in;
-}
-.fade-exit {
-  opacity: 1;
+.ant-alert-with-description .ant-alert-close-icon{
+  padding: 5px;
+  top: 11px;
 }

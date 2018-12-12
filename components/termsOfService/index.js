@@ -30,9 +30,9 @@ class TermsOfService extends React.Component {
 
   handleCheckboxChange(value){
     const { checkBoxesChecked } = this.state;
-    this.setState({
-      checkBoxesChecked: value ? checkBoxesChecked + 1 : checkBoxesChecked - 1,
-    });
+    this.setState(prevState => ({
+      checkBoxesChecked: value ? prevState.checkBoxesChecked + 1 : prevState.checkBoxesChecked - 1,
+    }));
   }
 
   continueToContribute(){

@@ -1,8 +1,15 @@
 import AppInfoContext from './AppInfoContext';
-import { ETHEREUM_TICKER_COINMARKETCAP, debug, dayInSeconds, tokensPerDay } from '../constants/';
+import {
+  ETHEREUM_TICKER_COINMARKETCAP,
+  debug,
+  dayInSeconds,
+  tokensPerDay,
+  correctNetwork
+ } from '../constants/';
 import * as Core from '../../apis/core';
 import * as TokenSale from '../constants/contracts/TokenSale';
 import { events } from '../../utils/EventEmitter';
+import Web3 from 'web3';
 
 class AppInfo extends React.Component {
 
@@ -17,9 +24,9 @@ class AppInfo extends React.Component {
     this.getCurrentDayAndSetupTimer = this.getCurrentDayAndSetupTimer.bind(this);
     this.setEffectivePrice = this.setEffectivePrice.bind(this);
     this.loadPrices = this.loadPrices.bind(this);
-    this.pullContributionsServer = this.pullContributionsServer.bind(this);
     this.subscribeToEvents = this.subscribeToEvents.bind(this);
     this.getNotificationIdFromHash = this.getNotificationIdFromHash.bind(this);
+    this.loadInfo = this.loadInfo.bind(this);
 
     this.state = {
       mobileMenu: false,
@@ -76,15 +83,15 @@ class AppInfo extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('visibilitychange', () => {
-      if(!document.hidden){
-        this.getAllContributionsPerDay();
-      }
-    });
-
     try{
-      if ((this.props.isMetamaskInstalled && this.props.network === 'ropsten') || !this.props.isMetamaskInstalled) {
-        this.userHasMetamask();
+      if ((this.props.isMetamaskInstalled && this.props.network === correctNetwork) || !this.props.isMetamaskInstalled) {
+        this.loadInfo();
+      }
+      //case where user has metamask but is connected to the wrong network, we
+      //still need to load the data properly from the correct network
+      else if(this.props.isMetamaskInstalled && (this.props.network !== correctNetwork)){
+        window.web3js = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/0e98ea17ef2947a6916df1c4e78fecd1'))
+        this.loadInfo();
       }
       this.subscribeToEvents();
       this.pricesInterval = setInterval(() => this.loadPrices(), 120000);
@@ -102,21 +109,24 @@ class AppInfo extends React.Component {
     events.on('claim', data => this.handleClaimEvent(data));
   }
 
-  // TODO does this work for batch claiming? no. receives days instead of day
   handleClaimEvent({amount, day, contributor, transactionHash}){
-    const id = this.getNotificationIdFromHash(transactionHash);
+    const notifData = this.getNotificationIdFromHash(transactionHash);
     const contributions = this.state.contributions.slice();
     let totalOwed = this.state.totalOwed;
     let daysOwed = this.state.daysOwed.slice();
     let flag = false;
     let updatedInfo = undefined;
+
+    debug(`got claim event, contributor ${contributor} and day ${day}`);
     // user himself is claiming
-    if(this.state.isMetamaskInstalled && (contributor === this.state.user.userName.toLowerCase())){
+    if(this.state.isMetamaskInstalled && this.state.user.userName && (contributor === this.state.user.userName.toLowerCase())){
       flag = true;
       contributions[day].myb_received = amount;
       contributions[day].owed = 0;
       updatedInfo = Core.calculateOwedAmounts(contributions, this.state.currentDay);
-      this.updateNotification(id, undefined, 1, amount);
+      if(notifData){
+        this.updateNotification(notifData.id, undefined, 1, notifData.currentAmount + amount);
+      }
     }
     if(flag){
       this.setState({
@@ -126,42 +136,35 @@ class AppInfo extends React.Component {
   }
 
   handleFundEvent({amount, day, contributor, transactionHash}){
-    const id = this.getNotificationIdFromHash(transactionHash);
-    const contributions = this.state.contributions.slice();
-    contributions[day].total_eth = contributions[day].total_eth + amount;
-    // user himself funded
-    if(this.state.isMetamaskInstalled && (contributor === this.state.user.userName.toLowerCase())){
-      contributions[day].your_contribution = contributions[day].your_contribution + amount;
-      this.updateNotification(id, undefined, 1);
+    try{
+      const notifData = this.getNotificationIdFromHash(transactionHash);
+      const contributions = this.state.contributions.slice();
+      contributions[day].total_eth = contributions[day].total_eth + amount;
+      debug(`got fund event,  contributor ${contributor} and amount ${amount} and day ${day}`);
+      // user himself funded
+      if(this.state.isMetamaskInstalled && this.state.user.userName && (contributor === this.state.user.userName.toLowerCase())){
+        contributions[day].your_contribution = contributions[day].your_contribution + amount;
+        if(notifData){
+          this.updateNotification(notifData.id, undefined, 1);
+        }
+      }
       const updatedInfo = Core.calculateOwedAmounts(contributions, this.state.currentDay);
+
       this.setState({
         ...updatedInfo,
-      })
-      return;
+      }, () => this.setEffectivePrice(this.state.contributions));
+
+    }catch(err){
+      debug(`Error processing funding event: ${err}`)
     }
-    this.setState({contributions});
   }
 
-  async userHasMetamask(){
+  async loadInfo(){
     await Promise.all([
       await this.getCurrentDayAndSetupTimer(),
       await this.loadPrices(),
     ]);
-    this.getAllContributionsPerDay(this.state.currentDay);
-  }
-
-  async pullContributionsServer(){
-    const { timestampStartTokenSale, contributions, currentDay } = await Core.fetchContributionsServer();
-    debug("pulled from server...")
-    if(!this.state.contributions){
-      this.getCurrentDayAndSetupTimer(timestampStartTokenSale);
-      this.setEffectivePrice(contributions, currentDay);
-      this.setState({
-        contributions,
-        totalOwed: 0,
-        currentDay,
-      })
-    }
+    this.getAllContributionsPerDay();
   }
 
   async loadPrices() {
@@ -177,6 +180,7 @@ class AppInfo extends React.Component {
   async getCurrentDayAndSetupTimer(timestamp){
     try{
       let timestampStartTokenSale = timestamp ? timestamp : await Core.getStartTimestamp();
+      const started = timestampStartTokenSale <= Math.floor(Date.now() / 1000);
 
       // tests that updating the currentDay works and that
       // the UI updates everything successfuly
@@ -186,17 +190,28 @@ class AppInfo extends React.Component {
       x.setHours(18);
       x.setMinutes(25);
       x.setSeconds(10);
-      console.log(timestampStartTokenSale)
+      debug(timestampStartTokenSale)
       const difference = Math.floor((x - new Date()) / 1000);
-      console.log(difference)
+      debug(difference)
       timestampStartTokenSale -= difference;
       */
 
-      const currentDay = ((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / dayInSeconds) + 1;
-      const currentDayInt = Math.floor(currentDay);
+      if(started){
+        const currentDay = ((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / dayInSeconds) + 1;
+        const currentDayInt = Math.floor(currentDay);
 
-      this.setState({currentDay: currentDayInt, timestampStartTokenSale});
-      this.setupTimerForCurrentDay(currentDay % 1);
+        this.setState({currentDay: currentDayInt, timestampStartTokenSale});
+        this.setupTimerForCurrentDay(currentDay % 1);
+      } else {
+        this.setState({timestampStartTokenSale});
+        setTimeout(async () => {
+          console.log("getting contributions with day 1");
+          await this.getAllContributionsPerDay(1);
+          console.log("got contributions, setting timer")
+          this.getCurrentDayAndSetupTimer();
+        }, (timestampStartTokenSale * 1000 - Date.now()));
+        console.log("timer for: ", (new Date(Date.now() + (timestampStartTokenSale * 1000 - Date.now()) + 5000)));
+      }
     }catch(err){
       debug(err);
     }
@@ -263,7 +278,10 @@ class AppInfo extends React.Component {
     const notifications = this.state.notifications;
     for (var key in notifications) {
       if (notifications[key] && notifications[key].transactionHash === hash) {
-          return key;
+        return {
+          id: key,
+          currentAmount: notifications[key].amount,
+        };
       }
     }
 
@@ -292,16 +310,22 @@ class AppInfo extends React.Component {
   }
 
   setEffectivePrice(contributions, currentDay){
-    currentDay = currentDay ? currentDay : this.state.currentDay;
-    const totalEthContributed = contributions[currentDay - 1].total_eth;
+    currentDay = currentDay || this.state.currentDay;
+    const totalEthContributed = contributions[currentDay ? currentDay - 1 : 0].total_eth;
+    const percentageOwed = totalEthContributed > 0 ? (100 / (totalEthContributed + 1)) / 100 : 1;
     const effectivePrice = totalEthContributed > 0 ? (this.state.ethPrice * totalEthContributed) / tokensPerDay : 0;
-    this.setState({effectivePrice});
+    this.setState({
+      effectivePrice,
+      exchangeRate: tokensPerDay * percentageOwed,
+      totalEthContributed,
+    });
   }
 
-  async getAllContributionsPerDay(){
-    await Core.getAllContributionsPerDay(this.state.user.userName, this.state.currentDay)
+  async getAllContributionsPerDay(optionalCurrentDay){
+    return await Core.getAllContributionsPerDay(this.state.user.userName, optionalCurrentDay ? optionalCurrentDay : this.state.currentDay, this.state.timestampStartTokenSale * 1000)
       .then(({contributions, daysOwed, totalOwed}) => {
-        this.setEffectivePrice(contributions);
+        this.setEffectivePrice(contributions, optionalCurrentDay);
+        console.log("set effectivePrice")
         this.setState({
           contributions,
           daysOwed,

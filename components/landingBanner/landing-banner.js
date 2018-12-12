@@ -11,8 +11,7 @@ const lendingBannerData = {
   content:
   <Fragment>
     <p>
-      MyBit enables the rapid building, testing, and deployment of wealth
-      management applications on the Ethereum blockchain.
+      MyBit makes it easy to build financial applications on the Blockchain.
     </p>
     <p>
       Our vision is to distribute wealth using technology, not middlemen. Everything

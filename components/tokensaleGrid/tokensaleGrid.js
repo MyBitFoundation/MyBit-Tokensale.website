@@ -19,29 +19,27 @@ const sections = [{
   img: tokensaleClock,
   imgAlt: 'Clock',
   imgClassName: 'tokensaleClock',
-  hasTooltip: true,
-  tooltipTitle: 'Clock',
+  hasTooltip: false,
   component: GetMyb,
 }, {
   img: tokensaleCoins,
   imgAlt: 'Coins',
   imgClassName: 'tokensaleCoins',
   hasTooltip: true,
-  tooltipTitle: 'Coins',
+  tooltipTitle: 'The amount MYB you receive is based entirely on demand and will change depending on the period.',
   component: Calculate,
 }, {
   img: tokensaleMetamask,
   imgAlt: 'Metamask',
   imgClassName: 'tokensaleMetamask',
-  hasTooltip: true,
-  tooltipTitle: 'Metamask',
+  hasTooltip: false,
   component: Metamask,
 }, {
   img: tokensaleMyb,
   imgAlt: 'Coins',
   imgClassName: 'tokensaleMyb',
   hasTooltip: true,
-  tooltipTitle: 'Coins',
+  tooltipTitle: 'You can claim all your available MYB token here or claim for individual periods below.',
   component: Claim,
 }]
 
@@ -67,6 +65,7 @@ const TokensaleGrid = (props) => {
     batchWithdrawing,
     allowed,
     currentPeriodTotal,
+    exchangeRate,
   } = props;
   return (
     <Fragment>

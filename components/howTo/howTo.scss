@@ -1,0 +1,160 @@
+@import 'include-media/dist/_include-media.scss';
+
+.HowTo{
+  &__wrapper{
+    width: 90%;
+    text-align: center;
+    margin: 0 auto;
+    padding-top: 50px;
+    max-width: 1150px;
+
+    & .ant-modal{
+      margin: 0px !important;
+    }
+
+    @include media("<desktop") {
+      width: 100%;
+    }
+
+    @include media("<tablet") {
+      padding-top: 50px;
+    }
+
+    & p{
+      color: #4A4A4A;
+      font-family: 'Roboto';
+      font-size: 18px;
+    }
+    & a{
+      font-family: 'Roboto';
+    }
+
+    &-paddedSection{
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    &--steps{
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+
+      & a:focus{
+        text-decoration: none;
+      }
+    }
+
+    &-step{
+      width: 147px;
+      height: 147px;
+      background: #FFFFFF;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      margin: 10px;
+
+      & img{
+        width: 49px;
+        height: 49px;
+        margin-top: 30px;
+      }
+
+      &-title{
+        font-weight: 500;
+        margin-top: 15px !important;
+        margin-bottom: 0px;
+        font-size: 14px !important;
+      }
+
+      &-desc{
+        margin-top: 0px;
+        line-height: 10px;
+        font-size: 14px !important;
+      }
+    }
+
+    &-img-calculate{
+      background: linear-gradient(10.73deg, #001358 0%, #125AC4 100%);
+      border-radius: 4px;
+      padding: 0 20px;
+
+      & p{
+        color: #ffffff;
+        font-size: 14px;
+      }
+
+      &-formula{
+        font-size: 28px !important;
+        font-weight: bold;
+        padding-top: 40px;
+        margin-bottom: 30px;
+      }
+
+      &-example{
+        font-size: 14px;
+        font-weight: normal;
+        padding-bottom: 10px;
+      }
+    }
+
+    &-title{
+      line-height: 37px;
+      font-size: 30px !important;
+      font-weight: 600;
+    }
+
+    &-title-desc{
+      font-weight: 500;
+    }
+
+    &-subtitle{
+      font-size: 30px;
+      font-weight: 500;
+
+      &--is-medium{
+        font-size: 20px !important;
+      }
+
+      &--is-left{
+        text-align: left;
+      }
+    }
+
+    &-img-template{
+      width: 100%;
+      height: 300px;
+    }
+
+    &-address-text{
+      margin-bottom: 0px;
+      line-height: 13px;
+    }
+
+    &-address:focus{
+      text-decoration: none;
+    }
+
+    &-address{
+      @include media("<tablet") {
+        font-size: 13px;
+        font-weight: 500;
+      }
+    }
+
+    &-btn{
+      background: #24f281;
+      border: none;
+      color: #fff;
+      width: 129px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      font-weight: 500;
+
+      &:focus,
+      &:hover {
+        background-color: #55eaa5;
+        color: #fff;
+        border-color: #55eaa5;
+      }
+    }
+  }
+}

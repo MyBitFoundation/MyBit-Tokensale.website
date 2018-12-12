@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import classNames from 'classnames'
+import { Button } from 'antd';
 import stylesheet from './countdown.scss'
 import { countdownInfo } from '../constants'
 import { InputForm } from '../inputForm/input-form';
@@ -24,7 +25,7 @@ class Timer extends Component {
     var difference = tokensalePhaseStartDate.getTime() - today.getTime();
 
     if(difference < 0){
-      this.props.renderTokenSaleDetails();
+      clearInterval(this.intervalId);
       return;
     }
 
@@ -154,12 +155,16 @@ const Countdown = ({ renderTokenSaleDetails }) => {
             <Timer
               renderTokenSaleDetails={renderTokenSaleDetails}
             />
-            <div className={
-              classNames({
-                'Countdown__input-form': true
-              })
-            }>
-              <InputForm title={ formButtonTitle } placeholder="Your email address"/>
+            <div className="Countdown__contribute">
+              <span className="Countdown__pre-contributions-txt">Pre contributions now open</span>
+              <a href="/dashboard">
+               <Button
+                  type="primary"
+                  className="Countdown__btn"
+                >
+                  Contribute
+                </Button>
+              </a>
             </div>
         </div>
       </Fragment>

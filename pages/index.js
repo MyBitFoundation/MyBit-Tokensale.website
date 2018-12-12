@@ -12,7 +12,6 @@ import { NewsEventsSection } from '../components/newsEventsSection/news-events-s
 import { UpdateSection } from '../components/updateSection/update-section'
 import { MyBitFooter } from '../components/footer/footer'
 import { SliderMediaList } from '../components/slider'
-import { getSecondsUntilNextPeriod } from '../components/constants'
 import Banner from '../components/banner'
 
 class HomePage extends Component {
@@ -30,11 +29,7 @@ class HomePage extends Component {
   }
 
   render() {
-    const { timestampStartTokenSale, currentDay, currentDayServer } = this.props
-
-    const secondsUntilNextPeriod = getSecondsUntilNextPeriod(
-      timestampStartTokenSale
-    )
+    const { currentDay, currentDayServer } = this.props
 
     return (
       <Layout>
@@ -50,7 +45,6 @@ class HomePage extends Component {
             <div className="mainContainer form-wrapper">
               <Banner
                 {...this.props}
-                secondsUntilNextPeriod={secondsUntilNextPeriod}
                 currentPeriod={currentDay ? currentDay : currentDayServer}
               />
             </div>

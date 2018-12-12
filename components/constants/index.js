@@ -15,6 +15,10 @@ export const tokenSaleEvents = {
   claim: '0x33a4ae6c0627280fcb7aaf7e07deb59bbce49aa4808ee5457f8622f77ab5d28c',
 };
 
+export const correctNetwork = 'ropsten';
+//represents mainnet in metamask
+export const tmp = 'main';
+
 export const getSecondsUntilNextPeriod = (timestampStartTokenSale) => {
   const currentDay = ((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / dayInSeconds) + 1;
   const past = currentDay % 1;
@@ -35,7 +39,7 @@ export const getContentForNotification = (type, amount, period, actionType) => {
       case 'success':
         return {
           title: `#${period} - Received ${amount} MYB successfully!`,
-          message: 'Thank you for participating in the token sale.',
+          message: `Thank you for participating in the token sale. If you have any questions, please don't hesitate to reach us at info@mybit.io.`,
         }
         break;
       case 'info':
@@ -88,7 +92,7 @@ export const getContentForNotification = (type, amount, period, actionType) => {
 
 export const countdownInfo = {
   finalDate: new Date("Jan 01 2019 12:00:00 GMT-0"),
-  title: 'Token Distribution Phase 2 Begins Jan 1, 2019',
+  title: 'Token Distribution Begins Jan 1, 2019',
   parts: {day:'Days', hour: 'Hours', minut: 'Minutes', second: 'Seconds'}
 }
 
@@ -128,8 +132,15 @@ applications:[{
   id: 4,
   name: 'myBitWill',
   imageUrl: '/static/svgs/my-bit-apps/will.svg',
-  button: {text: 'Coming Soon', url: links.mybitWill, type: 'bordered', disabled:true},
+  button: {text: 'Try now', url: links.mybitWill},
   content:'Blockchain-based wills for distributing assets'
+},
+{
+  id: 7,
+  name: 'myBitDropzone',
+  imageUrl: '/static/svgs/my-bit-apps/drop-zone.svg',
+  button: {text: 'Try now', url: links.dropzone},
+  content:'Simple and efficient crypto airdrops'
 },
 {
   id: 5,
@@ -144,13 +155,6 @@ applications:[{
   imageUrl: '/static/svgs/my-bit-apps/fork.svg',
   button: {text: 'Coming Soon', url: links.fork, type: 'bordered', disabled:true},
   content: 'Decentralised bill-splitting'
-},
-{
-  id: 7,
-  name: 'myBitDropzone',
-  imageUrl: '/static/svgs/my-bit-apps/drop-zone.svg',
-  button: {text: 'Coming Soon', url: links.dropzone, type: 'bordered', disabled:true},
-  content:'Simple and efficient crypto airdrops'
 },
 {
   id: 8,

@@ -82,6 +82,14 @@
     font-weight: 500;
     font-size: 20px;
     margin-bottom: 10px;
+
+    &--not-started{
+      margin-bottom: -3px;
+    }
+
+    &--not-started2{
+      margin-bottom: 20px;
+    }
   }
 
   &__blue{
@@ -124,17 +132,12 @@
   }
 
   &__tokensaleClock {
-    margin-top: 38px;
+    margin-top: 30px;
     margin-bottom: 10px;
-    width: 87px;
-    height: 104px;
   }
 
   &__tokensaleCoins {
-    margin-top: 49px;
-    margin-bottom: 21px;
-    width: 101px;
-    height: 84px;
+    margin-top: 22px;
   }
 
   &__tokensaleMetamask {
@@ -178,6 +181,10 @@
       margin-top: 20px;
       padding: 0px 11px;
       margin-bottom: 0px;
+
+      & a:focus{
+        text-decoration: none;
+      }
     }
   }
 }

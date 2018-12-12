@@ -24,21 +24,21 @@ const CalculateModal = ({
   allowed,
 }) => {
   const periodsLeft = [];
-  for(let i = currentDay; i <= 365; i++){
+  for(let i = currentDay || 1; i <= 365; i++){
     periodsLeft.push(
       <Option key={i} value={i}>{`Distribution Period #${i}`}</Option>
     )
   }
   let effectivePrice = undefined;
   let estimatedMyb = undefined;
-  selectedDay = selectedDay > 0 ? selectedDay : currentDay;
+  selectedDay = selectedDay > 0 ? selectedDay : currentDay ? currentDay : 1;
   if(!isNaN(contribution)){
     const totalEther = contributions[selectedDay - 1].total_eth;
     effectivePrice = ((totalEther + contribution) * ethPrice) / tokensPerDay;
     effectivePrice = Number(effectivePrice).toLocaleString('en-US', {
       style: 'currency',
       currency: 'USD',
-      minimumFractionDigits: 4,
+      minimumFractionDigits: 3,
     });
     estimatedMyb = totalEther === 0 ? 100000 : contribution === 0 ? 0 : Math.round(tokensPerDay * (contribution / (totalEther + contribution)));
     estimatedMyb = estimatedMyb.toLocaleString();
@@ -80,8 +80,24 @@ const CalculateModal = ({
               Effective price per MYB:
           </div>
           <Input disabled value={effectivePrice} placeholder="1 MYB = $0.22" suffix={(<img src={mybIcon} alt="MYB Token Icon" className="mybIcon"></img>)} />
-          <Button disabled={!contribution || contribution === 0 || !isLoggedIn || enabled === false  || allowed === false} block className="calculateModal__confirm" onClick={handleConfirm}>
-            {!isMetamaskInstalled ?  'Install Metamask' : network !== 'ropsten' ? 'Switch to the Ropsten test network' : !isLoggedIn ? 'Login to Metamask' : enabled === false ? 'Connect Metamask' : allowed === false ? 'Not allowed to participate' : 'Confirm Contribution'}
+          <Button
+            disabled={!contribution || contribution === 0 || !isLoggedIn || enabled === false  || allowed === false}
+            block
+            className="calculateModal__confirm"
+            onClick={handleConfirm}
+          >
+            {!isMetamaskInstalled
+              ? 'Install Metamask'
+              : network !== 'ropsten'
+                ? 'Switch to the Ropsten test network'
+                : !isLoggedIn
+                  ? 'Login to Metamask'
+                  : enabled === false
+                    ? 'Connect Metamask'
+                    : allowed === false
+                      ? 'Not allowed to participate'
+                      : 'Confirm Contribution'
+                    }
             <img src={tokensaleMetamask} alt="Metamask Logo" width="26px"></img>
           </Button>
         </div>

@@ -21,7 +21,7 @@ const ContributeModal = ({
   allowed,
 }) => {
   const periodsLeft = [];
-  for(let i = currentDay; i <= 365; i++){
+  for(let i = currentDay || 1; i <= 365; i++){
     periodsLeft.push(
       <Option key={i} value={i}>{`Distribution Period #${i}`}</Option>
     )
@@ -43,7 +43,7 @@ const ContributeModal = ({
             <div className="contributeModal__label">
               Select distribution period
             </div>
-            <Select key="contribute_select" defaultValue={selectedDay && selectedDay > 0 ? selectedDay : currentDay} onChange={onSelectChange}>
+            <Select key="contribute_select" defaultValue={selectedDay && selectedDay > 0 ? selectedDay : currentDay ? currentDay : 1} onChange={onSelectChange}>
               {periodsLeft}
             </Select>
             <div className="contributeModal__label">

@@ -6,7 +6,7 @@ import Dayjs from 'dayjs';
 import CountdownHours from '../countdownHours';
 
 
-const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTokenSale, withdraw, ethPrice }) => {
+const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTokenSale, withdraw, ethPrice, allowed }) => {
   const currentDay = ((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / dayInSeconds) + 1;
   const currentDayInt = Math.floor(currentDay);
   const past = currentDay % 1;
@@ -28,8 +28,8 @@ const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTo
     className: "phaseTable__xs-hide",
     render: (value, record) => {
       return record.closed ?
-        (<div className="phaseTable__closed-row">{`${tokensPerDay.toLocaleString()} MYB`}</div>) :
-        (<div className="phaseTable__active-row">{`${tokensPerDay.toLocaleString()} MYB`}</div>)
+        (<div className="phaseTable__closed-row">{`${tokensPerDay.toLocaleString('en-US')} MYB`}</div>) :
+        (<div className="phaseTable__active-row">{`${tokensPerDay.toLocaleString('en-US')} MYB`}</div>)
     }
   }, {
     title: 'Total ETH',
@@ -37,8 +37,8 @@ const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTo
     key: 'total_eth',
     render: (value, record) => {
       return record.closed ?
-        (<div className="phaseTable__closed-row">{`${value.toLocaleString()} ETH`}</div>) :
-        (<div className="phaseTable__active-row">{`${value.toLocaleString()} ETH`}</div>)
+        (<div className="phaseTable__closed-row">{`${value.toLocaleString('en-US')} ETH`}</div>) :
+        (<div className="phaseTable__active-row">{`${value.toLocaleString('en-US')} ETH`}</div>)
     }
   }, {
     title: 'Effective Price',
@@ -47,9 +47,13 @@ const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTo
     render: (value, record) => {
       const contributedEth = record.total_eth;
       const effectivePrice = record.total_eth > 0 ? (ethPrice * contributedEth) / tokensPerDay : 0;
-      return record.closed ?
-        (<div className="phaseTable__closed-row">{`$${effectivePrice.toLocaleString()}`}</div>) :
-        (<div className="phaseTable__active-row">{`$${effectivePrice.toLocaleString()}`}</div>)
+      return (
+        <div
+          className={`phaseTable__${record.closed ? 'closed' : 'active'}-row`}
+          >
+            {`$${effectivePrice.toLocaleString('en-US', {minimumFractionDigits: 3})}`}
+        </div>
+      )
     }
   }, {
     title: 'Period ends',
@@ -71,8 +75,8 @@ const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTo
     className: "phaseTable__xs-hide",
     render: (value, record) => {
       return record.closed ?
-        (<div className="phaseTable__closed-row">{`${value.toLocaleString()} ETH`}</div>) :
-        (<div className="phaseTable__active-row">{`${value.toLocaleString()} ETH`}</div>)
+        (<div className="phaseTable__closed-row">{`${value.toLocaleString('en-US')} ETH`}</div>) :
+        (<div className="phaseTable__active-row">{`${value.toLocaleString('en-US')} ETH`}</div>)
     }
   }, {
     title: 'MYB received',
@@ -80,11 +84,11 @@ const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTo
     key: 'myb_received',
     className: "phaseTable__xs-hide",
     render: (value, record) => {
-      let toRender = `${value.toLocaleString()} MYB`;
+      let toRender = `${value.toLocaleString('en-US')} MYB`;
       if(record.your_contribution > 0 && record.period >= currentDayInt) {
         toRender = 'Pending';
       } else if (record.owed > 0) {
-        toRender = `${record.owed.toLocaleString()} MYB`;
+        toRender = `${record.owed.toLocaleString('en-US')} MYB`;
       }
       return record.closed ?
         (<div className="phaseTable__closed-row">{`${toRender}`}</div>) :
@@ -112,6 +116,7 @@ const PhaseTable = ({ onShowContributeModal, data, currentPage, timestampStartTo
           <Button
             onClick={() => withdraw(record.period)}
             className="phaseTable__closed-row-button"
+            disabled={!allowed}
           >
             Claim
           </Button>

@@ -36,8 +36,20 @@
         font-size: 14px;
     }
 
-    &--is-green{
-      color: #24f281;
+    &--is-blue{
+      color: #1890ff;
+      font-weight: 600;
+      font-size: 28px;
+      display: block;
+      margin-bottom: 40px;
+      margin-top: 10px;
+
+      @include media("<=560px") {
+          font-size: 23px;
+      }
+      @include media("<=375px") {
+          font-size: 14px;
+      }
     }
   }
 
@@ -68,7 +80,7 @@
         transition: opacity 0.5s ease 0.3s;
       }
 
-      .Countdown__input-form{
+      .Countdown__contribute{
         opacity: 0;
         transition: opacity 0.5s ease 0.6s;
       }
@@ -108,17 +120,33 @@
 
     .Banner__title{
 
-      @include media("<=630px") {
-        font-size: 35px;
+      &--is-blue{
+        color: #1890ff;
+        display: inline;
+        font-size: inherit;
       }
 
-      @include media("<=560px") {
-        font-size: 30px;
+      font-size: 18px;
+
+      @include media(">375px") {
+        font-size: 28px;
+        padding: 0 50px;
       }
 
-      @include media("<=375px") {
-        font-size: 16px;
+      @include media(">=512px") {
+        font-size: 32px;
+        margin-bottom: 30px;
+        margin-top: 10px;
+        padding: 0px;
       }
+
+      @include media(">tablet") {
+        font-size: 40px;
+        margin-bottom: 30px;
+        margin-top: 10px;
+        padding: 0px;
+      }
+
     }
 
     &__countdown{
@@ -138,11 +166,22 @@
       }
 
       @include media("<=560px") {
-        font-size: 25px;
+        font-size: 21px;
       }
+
+
       @include media("<=375px") {
         font-size: 16px;
       }
+
+     @include media(">=413px") {
+        font-size: 22px;
+      }
+
+      @include media(">=512px") {
+        font-size: 25px;
+      }
+
     }
 
     &__group{
@@ -159,8 +198,8 @@
     }
 
     &__value{
-      font-family: Gilroy,sans-serif;
-      font-size: 3.12rem;
+      font-family: Roboto,sans-serif;
+      font-size: 30px;
       font-weight: 800;
       color: #4a4a4a;
       margin-bottom: 20px;
@@ -170,12 +209,31 @@
       }
 
       @include media("<=560px") {
-        font-size: 25px;
+        font-size: 19px;
       }
       @include media("<=375px") {
         font-size: 16px;
       }
 
+     @include media(">=413px") {
+        font-size: 20px;
+      }
+
+      @include media(">=512px") {
+        font-size: 27px;
+      }
+
+      @include media(">tablet") {
+        font-size: 40px;
+      }
+
+    }
+
+    & a{
+      @include media("<=560px") {
+        margin-top: 20px;
+        display: block;
+      }
     }
 
     &-btn{
@@ -216,9 +274,8 @@
     transition: opacity 0.5s;
   }
 
-  .Countdown__input-form{
+  .Countdown__contribute{
     opacity: 1;
-    transition: opacity 0.5s;
   }
 }
 

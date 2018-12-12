@@ -9,6 +9,7 @@ import {
   METAMASK_FIREFOX,
   METAMASK_CHROME,
   METAMASK_OPERA,
+  PROVIDER,
 } from './constants';
 
 class MetamaskChecker extends Component {
@@ -21,7 +22,7 @@ class MetamaskChecker extends Component {
       user: {},
     };
     this.isBraveBrowser = false;
-    this.extensionUrl = '';
+    this.extensionUrl = undefined;
     this.checkNetwork = this.checkNetwork.bind(this);
     this.userHasMetamask = this.userHasMetamask.bind(this);
     this.haveAccessToAccounts = this.haveAccessToAccounts.bind(this);
@@ -44,7 +45,7 @@ class MetamaskChecker extends Component {
         window.web3js = new Web3(window.web3.currentProvider);
         await this.userHasMetamask(false);
       } else {
-        window.web3js = new Web3('https://ropsten.infura.io/metamask');
+        window.web3js = new Web3(new Web3.providers.HttpProvider(PROVIDER));
         this.isBrowserSupported();
       }
     } catch(err){
@@ -56,9 +57,7 @@ class MetamaskChecker extends Component {
     try{
       const accounts = await window.web3js.eth.getAccounts();
       if(accounts && accounts.length > 0){
-        console.log(accounts)
         let balance = await window.web3js.eth.getBalance(accounts[0]);
-        console.log(balance)
         balance = window.web3js.utils.fromWei(balance, 'ether');
         if((this.state.user && this.state.user.userName !== accounts[0]) || (this.state.user.balance !== balance) || !this.state.user || !this.state.enabled){
           this.setState({

@@ -1,5 +1,6 @@
 module.exports = {
-  ADDRESS: '0xf4f2da8d23bf5d412d172e25b3a6f16619c371e2',
+  ADDRESS: '0xC95cDfb6F1868A90fA59F28BAa495f207eDfFB2d',
+  //ADDRESS: '0xf4f2da8d23bf5d412d172e25b3a6f16619c371e2', - ropsten and started
   ABI: [
 {
 "constant": true,

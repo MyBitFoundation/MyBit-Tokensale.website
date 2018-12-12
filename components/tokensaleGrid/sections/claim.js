@@ -9,10 +9,11 @@ const Claim  = ({
   batchWithdrawing,
   allowed,
   batchWithdrawal,
+  currentPeriod,
 }) => (
   <Fragment>
     <div className="Section__title">MYB Ready to Claim</div>
-    <div className="Section__bold">
+    <div className={currentPeriod ? "Section__bold" : "Section__bold Section__bold--not-started2"}>
       <AnimatedNumber
         component="text"
         style={{

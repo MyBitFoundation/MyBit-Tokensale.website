@@ -13,22 +13,63 @@ const getSuccess = (userName, balance) =>
 const getLogin = () =>
   <p className="Section--is-metamask-login">Login to Metamask to contribute and to claim your tokens.</p>
 
-const getMetamaskRequired = (extensionUrl, isBraveBrowser) =>
-  <Fragment>
-    <div className="Section__title Section--is-metamask-required">Metamask required to contribute.</div>
-    <a
-      href={isBraveBrowser ? undefined : extensionUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={ (e) => isBraveBrowser && e.preventDefault() }
-    >
-      <Button
-        className="ant-btn TokenSaleGrid__button TokenSaleGrid__button--is-metamask TokenSaleGrid__button--is-metamask-install phaseTable__closed-row-button"
-      >
-        {isBraveBrowser ? 'Brave is cool.' : 'Install Metamask'}
-      </Button>
-    </a>
-  </Fragment>
+const getMetamaskRequired = (extensionUrl, isBraveBrowser) => {
+  if(!extensionUrl){
+    return(
+      <Fragment>
+        <div className="Section__title Section--is-metamask-required">Your browser does not support
+          <a
+            href="https://metamask.io"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {' '}Metamask.{' '}
+          </a>
+          <p style={{fontSize: '16px', marginTop: '10px'}}>Please try
+          <a
+            href="https://www.google.com/chrome/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {' '}Chrome
+          </a>,
+          <a
+            href="https://www.mozilla.org/firefox/new/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {' '}Firefox
+          </a>, or
+          <a
+            href="https://brave.com/download/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {' '}Brave
+          </a>.</p>
+        </div>
+      </Fragment>
+    )
+  } else {
+    return (
+      <Fragment>
+        <div className="Section__title Section--is-metamask-required">Metamask required to contribute.</div>
+        <a
+          href={isBraveBrowser ? undefined : extensionUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={ (e) => isBraveBrowser && e.preventDefault() }
+        >
+          <Button
+            className="ant-btn TokenSaleGrid__button TokenSaleGrid__button--is-metamask TokenSaleGrid__button--is-metamask-install phaseTable__closed-row-button"
+          >
+            {isBraveBrowser ? 'Brave is cool.' : 'Install Metamask'}
+          </Button>
+        </a>
+      </Fragment>
+    )
+  }
+}
 
 const getRopsten = () =>
   <p className="Section--is-metamask-ropsten">Switch to the Ropsten test network to contribute.</p>

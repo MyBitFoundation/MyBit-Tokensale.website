@@ -29,6 +29,7 @@ class CountdownHours extends React.Component{
     minutes = minutes < 10 ? '0' + minutes : minutes;
     let seconds = secondsToGo % 60
     seconds = seconds < 10 ? '0' + seconds : seconds;
+
     return(
       <span>{`00:${hours}:${minutes}:${seconds}`}</span>
     )

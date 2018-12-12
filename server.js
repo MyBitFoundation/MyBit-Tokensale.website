@@ -14,9 +14,12 @@ const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io
 let contributions = [];
 let timestampStartTokenSale = 0;
 let loaded = false;
-let currentDay = 0;
+let currentDay = undefined;
 let ethPrice = 0;
 let gasPrice = 0;
+let started = false;
+let currentPeriodTotal = undefined;
+let exchangeRate = undefined;
 
 const app = next({ dev })
 const handle = app.getRequestHandler()
@@ -31,12 +34,13 @@ const resetLocalDb = function() {
   ips = {};
 }
 
-setInterval(resetLocalDb, 5000);
+//resets every 24 hours
+setInterval(resetLocalDb, 86400000);
 
 const geoBlocker = function (req, res, next) {
   const isDashBoard = req.originalUrl.indexOf('/dashboard') !== -1 && req.originalUrl.indexOf('?allowed=false') === -1;
 
-  if(ips[req.ip] === true){
+  if(!isDashBoard || ips[req.ip] === true){
     next();
   } else if(isDashBoard && ips[req.ip] === false) {
     app.render(req, res, '/dashboard', {
@@ -79,7 +83,9 @@ i18n
         const server = express()
 
         server.enable('trust proxy')
-        server.use(geoBlocker)
+
+        //server.use(geoBlocker)
+
         // enable middleware for i18next
         server.use(i18nextMiddleware.handle(i18n))
         // serve locales for client
@@ -93,10 +99,8 @@ i18n
             res.send({
               loaded: false,
             });
-            return;
           }
           else {
-            const currentPeriodTotal = contributions[currentDay - 1].total_eth;
             res.send({
               timestampStartTokenSale,
               contributions,
@@ -104,6 +108,7 @@ i18n
               currentDay,
               ethPrice,
               currentPeriodTotal,
+              exchangeRate,
             });
           }
         });
@@ -114,13 +119,13 @@ i18n
               loaded: false,
             });
           } else {
-            const currentPeriodTotal = contributions[currentDay - 1].total_eth;
             res.send({
               timestampStartTokenSale,
               currentPeriodTotal,
               loaded,
               currentDayServer: currentDay,
               ethPrice,
+              exchangeRate,
             });
           }
         });
@@ -147,13 +152,20 @@ i18n
 async function PullContributions(){
   try{
     timestampStartTokenSale = await core.getStartTimestamp(web3);
-    currentDay = Math.floor(((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / 86400) + 1);
-    contributions = await core.getAllContributionsPerDay(web3, currentDay);
-    if(contributions) {
-      loaded = true;
+    started = timestampStartTokenSale <= Math.floor(Date.now() / 1000);
+    if(started){
+      currentDay = Math.floor(((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / 86400) + 1);
+
     } else {
-      loaded = false;
+      setTimeout(PullContributions, (timestampStartTokenSale * 1000 - Date.now()) + 5000);
     }
+    contributions = await core.getAllContributionsPerDay(web3, currentDay, timestampStartTokenSale * 1000);
+
+    currentPeriodTotal = contributions[currentDay ? currentDay - 1 : 0].total_eth;
+    const percentageOwed = currentPeriodTotal > 0 ? (100 / (currentPeriodTotal + 1)) / 100 : 1;
+    exchangeRate = 100000 * percentageOwed;
+
+    loaded = contributions ? true : false;
   }catch(err){
     console.log(err);
   }
@@ -185,8 +197,13 @@ GetGasPrice();
 GetPrice();
 PullContributions();
 
+//updates every 30 seconds
+setInterval(() => {
+  PullContributions();
+}, 30000);
+
+//updates every 10 mins
 setInterval(() => {
   GetGasPrice();
   GetPrice();
-  PullContributions();
-}, 60000);
+}, 600000)

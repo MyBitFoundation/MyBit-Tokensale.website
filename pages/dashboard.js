@@ -14,6 +14,7 @@ import AppInfoContext from '../components/context/AppInfoContext'
 import { Pagination, Alert } from 'antd'
 import Notifications from '../components/notifications'
 import TermsOfService from '../components/termsOfService'
+import HowTo from '../components/howTo'
 import {
   getSecondsUntilNextPeriod,
   tokensPerDay,
@@ -38,11 +39,15 @@ class Dashboard extends Component {
         currentPeriodTotal
       } = jsonResponse
       if (loaded) {
-        const totalEthContributed = contributions[currentDay - 1].total_eth
-        const effectivePrice =
-          totalEthContributed > 0
-            ? (ethPrice * totalEthContributed) / tokensPerDay
-            : 0
+        let totalEthContributed, effectivePrice
+
+        if (currentDay) {
+          totalEthContributed = contributions[currentDay - 1].total_eth
+          effectivePrice =
+            totalEthContributed > 0
+              ? (ethPrice * totalEthContributed) / tokensPerDay
+              : 0
+        }
 
         return {
           ...jsonResponse,
@@ -61,10 +66,17 @@ class Dashboard extends Component {
     showContributeModal: false,
     showCalculateModal: false,
     currentPage: undefined,
-    selectedDay: this.props.currentDay,
+    selectedDay: this.props.currentDay || this.props.currentDayServer || 1,
     selectedAmount: undefined,
     acceptedTermsOfService: getUserAcceptedTermsOfService(),
-    termsOfService: false
+    termsOfService: false,
+    showingHowTo: false
+  }
+
+  handleHowToOnClose = () => {
+    this.setState({
+      showingHowTo: false
+    })
   }
 
   /* CONTRIBUTE MODAL FUNCTIONS */
@@ -105,8 +117,8 @@ class Dashboard extends Component {
     })
   }
 
-  onContributeChange = contribution => {
-    this.setState({ contribution })
+  onContributeChange = selectedAmount => {
+    this.setState({ selectedAmount })
   }
 
   /* CALCULATE MODAL FUNCTIONS */
@@ -176,7 +188,8 @@ class Dashboard extends Component {
       network,
       batchWithdrawing,
       query,
-      currentPeriodTotal
+      currentPeriodTotal,
+      exchangeRate
     } = this.props
 
     const secondsUntilNextPeriod = getSecondsUntilNextPeriod(
@@ -192,7 +205,9 @@ class Dashboard extends Component {
     )
 
     // when using SSR set the page to whichever page inclues the current period
-    let currentPage = Math.floor(currentDayServer / periodsPerPage) + 1
+    let currentPage = currentDayServer
+      ? Math.floor(currentDayServer / periodsPerPage) + 1
+      : 1
     // client takes control
     if (this.state.currentPage) {
       currentPage = this.state.currentPage
@@ -239,6 +254,17 @@ class Dashboard extends Component {
           enabled={enabled}
           allowed={allowed}
         />
+        <HowTo
+          visible={this.state.showingHowTo}
+          onClose={openContributeModal => {
+            this.handleHowToOnClose()
+            if (openContributeModal) {
+              this.setState({
+                showContributeModal: true
+              })
+            }
+          }}
+        />
 
         <Layout>
           <div className="LandingPage">
@@ -246,11 +272,17 @@ class Dashboard extends Component {
             <div className="headerWrapper">
               <div className="mainContainer">
                 <Header isDark={false} />
-                <DashboardPageHeader />
+                <DashboardPageHeader
+                  onClick={() =>
+                    this.setState({
+                      showingHowTo: true
+                    })
+                  }
+                />
                 <TokensaleGrid
                   onShowContributeModal={() =>
                     this.showContributeModal(
-                      currentDay ? currentDay : currentDayServer
+                      currentDay || currentDayServer || 1
                     )
                   }
                   onShowCalculateModal={this.showCalculateModal}
@@ -272,6 +304,7 @@ class Dashboard extends Component {
                   batchWithdrawing={batchWithdrawing}
                   allowed={allowed}
                   currentPeriodTotal={currentPeriodTotal}
+                  exchangeRate={exchangeRate}
                 />
               </div>
             </div>
@@ -283,6 +316,7 @@ class Dashboard extends Component {
               timestampStartTokenSale={timestampStartTokenSale}
               withdraw={withdraw}
               ethPrice={ethPrice}
+              allowed={allowed}
             />
             <Pagination
               onChange={currentPage =>

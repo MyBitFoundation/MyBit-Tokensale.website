@@ -10,26 +10,11 @@ const abiDecoder = require('abi-decoder');
 import { tokenSaleEvents, tokensPerDay, debug } from '../components/constants';
 import { events } from '../utils/EventEmitter';
 
-const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://possibly-possible-lark.quiknode.io/49102400-d67e-456d-bd4d-05b51fef855c/kula72q-V9q6lO5DDhTahw==/'));
+let web3Socket = new Web3();
 let subscriptionClaim = undefined;
 let subscriptionFund = undefined;
 let gasPrice = 1;
-
-export const fetchContributionsServer = async ticker =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const response = await fetch(`${window.origin}/api/contributions`);
-      const jsonResponse = await response.json();
-      const { timestampStartTokenSale, contributions, currentDay } = jsonResponse;
-      resolve({
-        timestampStartTokenSale,
-        contributions,
-        currentDay,
-      });
-    } catch (error) {
-      reject(error);
-    }
-  });
+const transactionHashClaim = new Set();
 
 const fetchGasPriceFromServer = async () => {
   try {
@@ -37,7 +22,7 @@ const fetchGasPriceFromServer = async () => {
     const jsonResponse = await response.json();
     const gasPriceServer = jsonResponse.gasPrice;
     if(gasPriceServer && gasPriceServer > 0){
-      gasPrice = gasPriceServer * 1000000000;
+      gasPrice = (gasPriceServer * 1000000000).toFixed(0);
     }
     setTimeout(() => fetchGasPriceFromServer(), 60000);
   } catch (error) {
@@ -93,6 +78,8 @@ export const fund = async (user, amount, day, updateNotification) =>
         TokenSale.ADDRESS,
       );
 
+      debug(`Amount to contribute: ${amount}`);
+
       const weiAmount = window.web3js.utils.toWei(amount.toString(), 'ether');
 
       const estimatedGas = await tokenSaleContract.methods
@@ -101,6 +88,9 @@ export const fund = async (user, amount, day, updateNotification) =>
           value: weiAmount,
           from: user.userName,
         });
+
+      debug(`Amount gas: ${estimatedGas}`);
+      debug(`Amount gas price: ${gasPrice}`);
 
       const response = await tokenSaleContract.methods
         .fund(day - 1)
@@ -134,7 +124,7 @@ export const fund = async (user, amount, day, updateNotification) =>
         });
 
     } catch (err) {
-      console.log(err)
+      debug(err)
       resolve(false);
     }
   });
@@ -144,9 +134,10 @@ export const batchWithdrawal = async (user, days, updateNotification) =>
     try {
       const id = Date.now();
       updateNotification(id, {
-        period: days[0] + 1,
+        period: days.length > 1 ? `${days[0] + 1} to #${days[days.length -1] + 1}` : days[0] + 1,
         status: 0,
         actionType: 'metamaskClaim',
+        amount: 0,
       });
 
       const tokenSaleContract = new window.web3js.eth.Contract(
@@ -168,16 +159,17 @@ export const batchWithdrawal = async (user, days, updateNotification) =>
           gasPrice: gasPrice,
         })
         .on('transactionHash', (transactionHash) => {
-          updateNotification(transactionHash, {
-            period: days[0] + 1,
+          updateNotification(id, {
+            period: days.length > 1 ? `${days[0] + 1} to #${days[days.length -1] + 1}` : days[0] + 1,
             status: 0,
             actionType: 'claim',
             transactionHash,
+            amount: 0,
           });
         })
         .on('error', (error) => {
           updateNotification(id, undefined, -1);
-          resolve(false);
+          reject();
         })
         .then((receipt) => {
           if(receipt.status){
@@ -204,6 +196,7 @@ export const withdraw = async (user, day, updateNotification) =>
         period: day,
         status: 0,
         actionType: 'metamaskClaim',
+        amount: 0,
       });
       const tokenSaleContract = new window.web3js.eth.Contract(
         TokenSale.ABI,
@@ -229,6 +222,7 @@ export const withdraw = async (user, day, updateNotification) =>
             status: 0,
             actionType: 'claim',
             transactionHash,
+            amount: 0,
           });
         })
         .on('error', (error) => {
@@ -272,13 +266,13 @@ export const getStartTimestamp = async () =>
   });
 
 
-export const getAllContributionsPerDay = async (userAddress, currentDay) =>
+function getDateForPeriod(day, timestampStartTokenSale){
+  return(dayjs(timestampStartTokenSale).add(day + 1, 'day').format('MMM, DD YYYY'))
+}
+
+export const getAllContributionsPerDay = async (userAddress, currentDay, timestampStartTokenSale) =>
   new Promise(async (resolve, reject) => {
     try {
-      if(subscriptionFund){
-        debug("clearing events")
-        await clearEvents();
-      }
       debug("fetching all contributions with web3")
       const tokenSaleContract = new window.web3js.eth.Contract(
         TokenSale.ABI,
@@ -296,10 +290,11 @@ export const getAllContributionsPerDay = async (userAddress, currentDay) =>
       );
 
       const withdrawalsByDay = processWithdrawals(logWithdrawals);
-      let contributions = processContributions(logContributions, withdrawalsByDay, userAddress, currentDay);
+      let contributions = processContributions(logContributions, withdrawalsByDay, userAddress, currentDay, timestampStartTokenSale);
       //const result = await processOwedAmounts(contributions, currentDay, userAddress);
       //contributions = result.contributions;
-      contributions = createDataForInactiveDays(contributions, currentDay, withdrawalsByDay, userAddress);
+
+      contributions = createDataForInactiveDays(contributions, currentDay, timestampStartTokenSale);
       const result = calculateOwedAmounts(contributions, currentDay);
       debug("pulled from web3...")
       subscribeToEvents();
@@ -319,9 +314,14 @@ export const getAllContributionsPerDay = async (userAddress, currentDay) =>
     let currentPeriodTotal = 0;
 
     contributions = contributions.map((contribution, index) => {
+      if(contribution.key === currentDay - 1){
+        currentPeriodTotal += contribution.total_eth;
+      }
+
       if(contribution.your_contribution === 0){
         return contribution;
       }
+
       const contributed = contribution.your_contribution;
       const totalContributed = contribution.total_eth;
       const owed = (contributed / totalContributed) * tokensPerDay;
@@ -333,18 +333,14 @@ export const getAllContributionsPerDay = async (userAddress, currentDay) =>
         totalOwed += owed;
       }
 
-      if(contribution.key === currentDay - 1){
-        currentPeriodTotal += contribution.total_eth;
-      }
-
       // also setting closed and phaseActive here because
       // this method is called once a period is over and the
       // current day changes
       return {
         ...contribution,
         owed: owed > 0 ? owed : 0,
-        closed: index + 1 < currentDay,
-        phaseActive: index + 1 === currentDay,
+        closed: currentDay ? index + 1 < currentDay : false,
+        phaseActive: currentDay ? index + 1 === currentDay : false,
       }
     })
 
@@ -356,13 +352,13 @@ export const getAllContributionsPerDay = async (userAddress, currentDay) =>
     }
   }
 
-const createDataForInactiveDays = (contributions, currentDay) => {
+const createDataForInactiveDays = (contributions, currentDay, timestampStartTokenSale) => {
   contributions = contributions.map((contribution, index) => {
     if(contribution) {
       return contribution;
     }
 
-    const date = dayjs(new Date()).add(index - currentDay + 1, 'day').format('MMM, DD YYYY')
+    const date = getDateForPeriod(index, timestampStartTokenSale)
 
     return {
       key: index,
@@ -370,8 +366,8 @@ const createDataForInactiveDays = (contributions, currentDay) => {
       total_eth: 0,
       myb_received: 0,
       your_contribution: 0,
-      closed: index + 1 < currentDay,
-      phaseActive: index + 1 === currentDay,
+      closed: currentDay ? index + 1 < currentDay : false,
+      phaseActive: currentDay ? index + 1 === currentDay : false,
       owed: 0,
       date,
     };
@@ -392,7 +388,7 @@ const processOwedAmounts = async (contributions, currentDay, userAddress) =>
           try{
             owed = await getUnclaimedAmountOnDay(userAddress, dayInfo.key);
           }catch(err){
-            console.log(err);
+            debug(err);
           }
         }while(owed === 'undefined');
         dayInfo.owed = owed;
@@ -415,7 +411,7 @@ const processOwedAmounts = async (contributions, currentDay, userAddress) =>
  });
 
 
-const processContributions = (log, withdrawalsByDay, userAddress, currentDay) => {
+const processContributions = (log, withdrawalsByDay, userAddress, currentDay, timestampStartTokenSale) => {
   const contributions = Array(365).fill();
   for (const contribution of log) {
     const contributor = contribution.returnValues._contributor;
@@ -438,8 +434,7 @@ const processContributions = (log, withdrawalsByDay, userAddress, currentDay) =>
           : thisDay.your_contribution;
         thisDay.myb_received = withdrawal ? withdrawal : 0;
       } else {
-          const date = dayjs(new Date())
-            .add(day - currentDay + 1, 'day').format('MMM, DD YYYY')
+          const date = getDateForPeriod(day, timestampStartTokenSale)
 
           contributions[day] = {
             key: day,
@@ -447,8 +442,8 @@ const processContributions = (log, withdrawalsByDay, userAddress, currentDay) =>
             total_eth: contributed,
             myb_received: withdrawal ? withdrawal : 0,
             your_contribution: isUserContribution ? contributed : 0,
-            closed: day + 1 < currentDay,
-            phaseActive: day + 1 === currentDay,
+            closed: currentDay ? day + 1 < currentDay : false,
+            phaseActive: currentDay ? day + 1 === currentDay : false,
             date,
             owed: 0,
           };
@@ -498,6 +493,9 @@ const getUnclaimedAmountOnDay = async (contributor, day) =>
   });
 
 const clearEvents = () => {
+  if(!subscriptionFund){
+    return;
+  }
   return Promise.all([
     subscriptionFund.unsubscribe(), subscriptionClaim.unsubscribe()
   ]);
@@ -511,57 +509,85 @@ const resetSocket = async () => {
     subscriptionClaim = undefined;
     subscriptionFund = undefined;
 
-    subscribeToEvents();
     debug("reset socket")
   }catch(err){
     debug(err);
   }
 }
 
-const subscribeToEvents = () => {
-  debug("subscribing to events")
-  abiDecoder.addABI(TokenSale.ABI);
+let errorCounter = 0;
 
-  subscriptionFund = web3.eth.subscribe('logs', {
-    address: '0xf4f2da8d23bf5d412d172e25b3a6f16619c371e2',
-    topics: [tokenSaleEvents.fund],
-  }, (error, result) => {
-    if(error){
-      resetSocket();
-    }
-  }).on('data', async (trxData) => {
-    const receipt = await web3.eth.getTransactionReceipt(trxData.transactionHash);
-    const decodeData = abiDecoder.decodeLogs(receipt.logs);
-    const details = {
-      amount: Number(web3.utils.fromWei(decodeData[0].events[1].value, 'ether')),
-      day: decodeData[0].events[2].value.c[0],
-      contributor: decodeData[0].events[0].value,
-      transactionHash: trxData.transactionHash,
-    };
-    events.emit('fund', details);
-  })
+const subscribeToEvents = async () => {
+  const provider = new Web3.providers.WebsocketProvider('wss://possibly-possible-lark.quiknode.io/49102400-d67e-456d-bd4d-05b51fef855c/kula72q-V9q6lO5DDhTahw==/');
+  provider.on('error', e => {
+    debug("socket connection error ")
+    debug(e)
+    subscribeToEvents();
+  });
+  provider.on('end', e => {
+    debug("socket connection closed")
+    subscribeToEvents();
+  });
 
-  subscriptionClaim = web3.eth.subscribe('logs', {
-    address: '0xf4f2da8d23bf5d412d172e25b3a6f16619c371e2',
-    topics: [tokenSaleEvents.claim],
-  }, (error, result) => {
-    if(error) {
-      resetSocket();
-    }
-  }).on('data', async (trxData) => {
-    const receipt = await web3.eth.getTransactionReceipt(trxData.transactionHash);
-    const decodeData = abiDecoder.decodeLogs(receipt.logs);
-    const indexOfEvent = decodeData[0] ? 0 : 1;
-    const details = {
-      amount: Number(web3.utils.fromWei(decodeData[indexOfEvent].events[1].value, 'ether')),
-      day: decodeData[indexOfEvent].events[2].value.c[0],
-      contributor: decodeData[indexOfEvent].events[0].value,
-      transactionHash: trxData.transactionHash,
-    };
-    events.emit('claim', details);
+  provider.on('connect', () => {
+    web3Socket.setProvider(provider)
+
+    debug("subscribing to events")
+    abiDecoder.addABI(TokenSale.ABI);
+
+    subscriptionFund = web3Socket.eth.subscribe('logs', {
+      address: TokenSale.ADDRESS,
+      topics: [tokenSaleEvents.fund],
+    })
+    .on('data', async (trxData) => {
+      debug(`transaction hash of funding event: ${trxData.transactionHash}`)
+      const receipt = await web3Socket.eth.getTransactionReceipt(trxData.transactionHash);
+      debug(`receipt: ${receipt}`)
+      const decodeData = abiDecoder.decodeLogs(receipt.logs);
+      const details = {
+        amount: Number(window.web3js.utils.fromWei(decodeData[0].events[1].value, 'ether')),
+        day: decodeData[0].events[2].value.c[0],
+        contributor: decodeData[0].events[0].value,
+        transactionHash: trxData.transactionHash,
+      };
+      events.emit('fund', details);
+    })
+
+    subscriptionClaim = web3Socket.eth.subscribe('logs', {
+      address: TokenSale.ADDRESS,
+      topics: [tokenSaleEvents.claim],
+    })
+    .on('data', async (trxData) => {
+      const txHash = trxData.transactionHash;
+      debug(txHash)
+      if(!transactionHashClaim.has(txHash)){
+        transactionHashClaim.add(txHash)
+      } else {
+        return;
+      }
+      const receipt = await web3Socket.eth.getTransactionReceipt(txHash);
+      const decodeData = abiDecoder.decodeLogs(receipt.logs);
+      const indexOfEvent = decodeData[0] ? 0 : 1;
+      const actualEvents = indexOfEvent === 0 ? decodeData.slice(0, decodeData.length - 1) : decodeData.slice(1, decodeData.length);
+      debug(indexOfEvent)
+      debug(actualEvents)
+      for(let i = 0; i < actualEvents.length; i++){
+        const details = {
+          amount: Number(window.web3js.utils.fromWei(actualEvents[i].events[1].value, 'ether')),
+          day: actualEvents[i].events[2].value.c[0],
+          contributor: actualEvents[i].events[0].value,
+          transactionHash: txHash,
+        };
+        debug(details)
+        events.emit('claim', details);
+      }
+
+      debug(decodeData)
+    })
+
+    debug("subscribed to events")
   })
 }
-
 
 if(typeof window !== 'undefined'){
   fetchGasPriceFromServer();
