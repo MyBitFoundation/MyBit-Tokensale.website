@@ -461,8 +461,9 @@ const processWithdrawals = (log) => {
     const amount = withdrawal.returnValues._amount;
     const contributor = withdrawal.returnValues._contributor;
     const amountNumber = Number(window.web3js.utils.fromWei(amount, 'ether'));
+    if(amount === '0') return;
 
-    if(withdrawalsByDay[day]){
+    if(withdrawalsByDay[day] && !withdrawalsByDay[day][contributor]){
       withdrawalsByDay[day][contributor] = amountNumber;
     } else {
       withdrawalsByDay[day] = {
@@ -470,6 +471,7 @@ const processWithdrawals = (log) => {
       };
     }
   })
+
   return withdrawalsByDay;
 }
 
