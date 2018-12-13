@@ -71,7 +71,7 @@ class PhaseTable extends React.Component{
           <div
             className={`phaseTable__${record.closed ? 'closed' : 'active'}-row`}
             >
-              {`$${effectivePrice.toLocaleString('en-US', {minimumFractionDigits: 3})}`}
+              {`$${effectivePrice.toLocaleString('en-US', {minimumFractionDigits: 7})}`}
           </div>
         )
       }

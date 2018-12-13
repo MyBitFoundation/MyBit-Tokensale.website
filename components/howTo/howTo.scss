@@ -3,7 +3,7 @@
 .HowTo{
   color: #4a4a4a;
   text-align: center;
-  font-family: 'Roboto'
+  font-family: 'Roboto';
 
   & section{
     background: rgba(216, 216, 216, 0.2);
@@ -115,25 +115,40 @@
   &__img-calculate{
     background: linear-gradient(10.73deg, #001358 0%, #125AC4 100%);
     border-radius: 4px;
-    padding: 0 20px;
     margin-bottom: 30px;
+    height: 161px;
+    position: relative;
 
     & p{
       color: #ffffff;
       font-size: 14px;
+      padding: 0% 2%;
     }
 
     &-formula{
       font-size: 28px !important;
       font-weight: bold;
-      padding-top: 40px;
-      margin-bottom: 30px;
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      transform: translate(0%, -90%);
+      @include media("<tablet") {
+        font-size: 22px !important;
+      }
+
     }
 
     &-example{
+      position: absolute;
       font-size: 14px;
       font-weight: normal;
-      padding-bottom: 10px;
+      bottom: 5px;
+      text-align: center;
+      width: 100%;
+
+      @include media("<tablet") {
+        padding: 0% 5% !important;
+      }
     }
   }
 
@@ -150,13 +165,15 @@
 
   &__subtitle{
     font-size: 30px !important;
-    font-weight: 600;
-
-    &--is-big{
-      font-size: 25px !important;
-    }
+    font-weight: 600 !important;
+    margin-top: 20px !important;
 
     &--is-medium{
+      font-size: 25px !important;
+      margin-top: 0px !important;
+    }
+
+    &--is-small{
       font-size: 20px !important;
     }
 
@@ -166,6 +183,12 @@
       @include media("<tablet") {
         text-align: center;
       }
+    }
+
+    &--is-contribute{
+      font-size: 40px !important;
+      margin-bottom: 20px !important;
+      margin-top: 50px !important;
     }
   }
 
@@ -183,7 +206,7 @@
   }
 
   &__address{
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     display: block;
     font-weight: 500;
     word-break: break-all;
@@ -207,10 +230,17 @@
   }
 
   & video{
-    width: 50%;
+    width: 65%;
 
     @include media("<tablet") {
       width: 100%;
     }
+  }
+
+  &__solidified{
+    width: 300px;
+    position: relative;
+    top: -30px;
+    margin-bottom: -40px;
   }
 }
