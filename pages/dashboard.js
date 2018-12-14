@@ -14,7 +14,6 @@ import AppInfoContext from '../components/context/AppInfoContext'
 import { Pagination, Alert } from 'antd'
 import Notifications from '../components/notifications'
 import TermsOfService from '../components/termsOfService'
-const regexp = /^\d+(\.\d{1,18})?$/
 
 import {
   getSecondsUntilNextPeriod,
@@ -126,7 +125,7 @@ class Dashboard extends Component {
   onContributeChange = e => {
     const selectedAmount = e.target.value
     // don't update the state if its not a valid number
-    if (!regexp.test(selectedAmount)) {
+    if (!isDecimal(selectedAmount)) {
       return
     }
     this.setState({ selectedAmount })

@@ -81,7 +81,7 @@ class ContributeModal extends React.Component{
                 />
               </div>
               <Button
-                disabled={!contribution || isNaN(contribution) || contribution < 0.000000000000000001 || !isLoggedIn || enabled === false || allowed === false}
+                disabled={!contribution || isNaN(contribution) || Number(contribution) < Number(0.000000000000000001) || !isLoggedIn || enabled === false || allowed === false}
                 block
                 className="contributeModal__confirm"
                 onClick={handleConfirm}
