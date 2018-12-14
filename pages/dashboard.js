@@ -18,7 +18,8 @@ import TermsOfService from '../components/termsOfService'
 import {
   getSecondsUntilNextPeriod,
   tokensPerDay,
-  periodsPerPage
+  periodsPerPage,
+  debug
 } from '../components/constants'
 
 import {
@@ -95,6 +96,7 @@ class Dashboard extends Component {
   }
 
   handleContributeConfirm = e => {
+    e.preventDefault()
     if (this.clicked) {
       return
     }
@@ -108,15 +110,24 @@ class Dashboard extends Component {
     })
   }
 
-  handleContributeCancel = e => {
+  handlePopupCancel = e => {
+    e.preventDefault()
     this.setState({
       showContributeModal: false,
-      selectedDay: this.props.currentDay
+      selectedDay: this.props.currentDay,
+      selectedAmount: undefined,
+      showCalculateModal: false
     })
   }
 
   onContributeChange = selectedAmount => {
-    this.setState({ selectedAmount })
+    let updatedSelectedAmount
+    try {
+      updatedSelectedAmount = +selectedAmount
+    } catch (err) {
+      return
+    }
+    this.setState({ selectedAmount: updatedSelectedAmount })
   }
 
   /* CALCULATE MODAL FUNCTIONS */
@@ -138,19 +149,6 @@ class Dashboard extends Component {
         showCalculateModal: true
       })
     }
-  }
-
-  handleCalculateCancel = e => {
-    e.preventDefault()
-    this.setState({
-      showCalculateModal: false,
-      selectedDay: this.props.currentDay,
-      selectedAmount: undefined
-    })
-  }
-
-  onContributeChange = selectedAmount => {
-    this.setState({ selectedAmount })
   }
 
   onSelectChange = selectedDay => {
@@ -222,7 +220,7 @@ class Dashboard extends Component {
         />
         <ContributeModal
           visible={this.state.showContributeModal}
-          handleCancel={this.handleContributeCancel}
+          handleCancel={this.handlePopupCancel}
           handleConfirm={this.handleContributeConfirm}
           onSelectChange={this.onSelectChange}
           onContributeChange={this.onContributeChange}
@@ -237,7 +235,7 @@ class Dashboard extends Component {
         />
         <CalculateModal
           visible={this.state.showCalculateModal}
-          handleCancel={this.handleCalculateCancel}
+          handleCancel={this.handlePopupCancel}
           handleConfirm={this.handleContributeConfirm}
           onSelectChange={this.onSelectChange}
           onContributeChange={this.onContributeChange}

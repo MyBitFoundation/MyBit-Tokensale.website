@@ -22,6 +22,7 @@ const CalculateModal = ({
   network,
   enabled,
   allowed,
+  value,
 }) => {
   const periodsLeft = [];
   for(let i = currentDay || 1; i <= 365; i++){
@@ -41,12 +42,14 @@ const CalculateModal = ({
       minimumFractionDigits: 3,
     });
     estimatedMyb = totalEther === 0 ? 100000 : contribution === 0 ? 0 : Math.round(tokensPerDay * (contribution / (totalEther + contribution)));
-    estimatedMyb = estimatedMyb.toLocaleString();
+    estimatedMyb = estimatedMyb.toLocaleString('en-US', {maximumFractionDigits: 3});
+  } else {
+    effectivePrice = null;
+    estimatedMyb = null;
   }
-  if(contribution === 0 || !contribution || (contribution && contribution.toString().indexOf('.') + 1 === contribution.toString().length)){
-    estimatedMyb = undefined;
-    effectivePrice = undefined;
-  }
+  console.log(contribution)
+  console.log(effectivePrice)
+  console.log(estimatedMyb)
   return (
   <Fragment>
       <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
@@ -70,7 +73,7 @@ const CalculateModal = ({
           <div className="calculateModal__label">
             How much do you want to contribute?
           </div>
-          <InputNumber autoFocus value={contribution} onChange={onContributeChange} placeholder="Contribution in ETH" />
+          <InputNumber autoFocus onChange={onContributeChange} placeholder="Contribution in ETH" />
           <Icon type="arrow-down" theme="outlined" style={{color: "#1890FF"}} />
           <div className="calculateModal__label">
               Estimated MYB you will receive:
