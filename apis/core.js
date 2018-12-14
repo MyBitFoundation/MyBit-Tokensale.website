@@ -7,7 +7,12 @@ import * as MyBitToken from '../components/constants/contracts/MyBitToken';
 import dayjs from 'dayjs';
 import Web3 from 'web3';
 const abiDecoder = require('abi-decoder');
-import { tokenSaleEvents, tokensPerDay, debug } from '../components/constants';
+import {
+  tokenSaleEvents,
+  tokensPerDay,
+  debug,
+  MyBitTokenSaleAPIEndpoint
+} from '../components/constants';
 import { events } from '../utils/EventEmitter';
 
 let web3Socket = new Web3();
@@ -18,7 +23,7 @@ const transactionHashClaim = new Set();
 
 const fetchGasPriceFromServer = async () => {
   try {
-    const response = await fetch(`${window.origin}/api/gasprice`);
+    const response = await fetch(`${MyBitTokenSaleAPIEndpoint}/gasprice`);
     const jsonResponse = await response.json();
     const gasPriceServer = jsonResponse.gasPrice;
     if(gasPriceServer && gasPriceServer > 0){

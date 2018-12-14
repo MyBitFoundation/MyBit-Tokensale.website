@@ -20,7 +20,8 @@ import {
   tokensPerDay,
   periodsPerPage,
   debug,
-  isDecimal
+  isDecimal,
+  MyBitTokenSaleAPIEndpoint
 } from '../components/constants'
 
 import {
@@ -31,9 +32,7 @@ import {
 class Dashboard extends Component {
   static async getInitialProps({ req, query }) {
     if (req) {
-      const response = await fetch(
-        `https://mybittech-birltpxdck.now.sh/contributions`
-      )
+      const response = await fetch(`${MyBitTokenSaleAPIEndpoint}/contributions`)
       const jsonResponse = await response.json()
       const {
         contributions,
