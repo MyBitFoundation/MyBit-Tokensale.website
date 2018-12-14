@@ -11,7 +11,7 @@ export const dayInSeconds = 86400;
 
 export const periodsPerPage = 25;
 
-export const MyBitTokenSaleAPIEndpoint = 'https://mybittech-birltpxdck.now.sh';
+export const MyBitTokenSaleAPIEndpoint = 'https://mybittech-hzsqrsctic.now.sh';
 
 export const tokenSaleEvents = {
   fund: '0xd498819977fb9763f29bab6e4eee516c4cf59053922eb6a9fe59370a7bc28b3d',

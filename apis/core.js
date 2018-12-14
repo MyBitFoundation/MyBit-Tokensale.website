@@ -543,8 +543,8 @@ const subscribeToEvents = async () => {
       const actualEvents = indexOfEvent === 0 ? decodeData.slice(0, decodeData.length - 1) : decodeData.slice(1, decodeData.length);
       debug(indexOfEvent)
       debug(actualEvents)
-      const day = actualEvents[i].events[2].value;
       for(let i = 0; i < actualEvents.length; i++){
+        const day = actualEvents[i].events[2].value;
         const details = {
           amount: Number(window.web3js.utils.fromWei(actualEvents[i].events[1].value, 'ether')),
           day: +day,
