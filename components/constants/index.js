@@ -38,7 +38,7 @@ export const getContentForNotification = (type, amount, period, actionType) => {
     switch (type) {
       case 'success':
         return {
-          title: `#${period} - Received ${amount} MYB successfully!`,
+          title: `#${period} - Received ${Number(amount).toLocaleString('en-US')} MYB successfully!`,
           message: `Thank you for participating in the token sale. If you have any questions, please don't hesitate to reach us at info@mybit.io.`,
         }
         break;

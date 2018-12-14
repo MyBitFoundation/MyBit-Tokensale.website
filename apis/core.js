@@ -291,9 +291,6 @@ export const getAllContributionsPerDay = async (userAddress, currentDay, timesta
 
       const withdrawalsByDay = processWithdrawals(logWithdrawals);
       let contributions = processContributions(logContributions, withdrawalsByDay, userAddress, currentDay, timestampStartTokenSale);
-      //const result = await processOwedAmounts(contributions, currentDay, userAddress);
-      //contributions = result.contributions;
-
       contributions = createDataForInactiveDays(contributions, currentDay, timestampStartTokenSale);
       const result = calculateOwedAmounts(contributions, currentDay);
       debug("pulled from web3...")
@@ -375,41 +372,6 @@ const createDataForInactiveDays = (contributions, currentDay, timestampStartToke
 
   return contributions;
 }
-
-const processOwedAmounts = async (contributions, currentDay, userAddress) =>
-  new Promise(async (resolve, reject) => {
-    let totalOwed = 0;
-    const daysOwed = [];
-
-    contributions = await Promise.all(contributions.map(async (dayInfo) => {
-      if(dayInfo && dayInfo.your_contribution > 0){
-        let owed = undefined;
-        do{
-          try{
-            owed = await getUnclaimedAmountOnDay(userAddress, dayInfo.key);
-          }catch(err){
-            debug(err);
-          }
-        }while(owed === 'undefined');
-        dayInfo.owed = owed;
-        if(dayInfo.key < currentDay - 1) {
-          if(owed > 0) {
-            daysOwed.push(dayInfo.key);
-          }
-          totalOwed += owed;
-        }
-        return dayInfo;
-      }
-      return dayInfo;
-    }))
-
-    resolve({
-      contributions,
-      totalOwed,
-      daysOwed,
-    });
- });
-
 
 const processContributions = (log, withdrawalsByDay, userAddress, currentDay, timestampStartTokenSale) => {
   const contributions = Array(365).fill();
@@ -546,9 +508,11 @@ const subscribeToEvents = async () => {
       const receipt = await web3Socket.eth.getTransactionReceipt(trxData.transactionHash);
       debug(`receipt: ${receipt}`)
       const decodeData = abiDecoder.decodeLogs(receipt.logs);
+      debug(decodeData)
+      const day = decodeData[0].events[2].value;
       const details = {
         amount: Number(window.web3js.utils.fromWei(decodeData[0].events[1].value, 'ether')),
-        day: decodeData[0].events[2].value.c[0],
+        day: +day,
         contributor: decodeData[0].events[0].value,
         transactionHash: trxData.transactionHash,
       };
@@ -569,14 +533,16 @@ const subscribeToEvents = async () => {
       }
       const receipt = await web3Socket.eth.getTransactionReceipt(txHash);
       const decodeData = abiDecoder.decodeLogs(receipt.logs);
+      debug(decodeData)
       const indexOfEvent = decodeData[0] ? 0 : 1;
       const actualEvents = indexOfEvent === 0 ? decodeData.slice(0, decodeData.length - 1) : decodeData.slice(1, decodeData.length);
       debug(indexOfEvent)
       debug(actualEvents)
+      const day = actualEvents[i].events[2].value;
       for(let i = 0; i < actualEvents.length; i++){
         const details = {
           amount: Number(window.web3js.utils.fromWei(actualEvents[i].events[1].value, 'ether')),
-          day: actualEvents[i].events[2].value.c[0],
+          day: +day,
           contributor: actualEvents[i].events[0].value,
           transactionHash: txHash,
         };
