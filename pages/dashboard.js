@@ -14,12 +14,14 @@ import AppInfoContext from '../components/context/AppInfoContext'
 import { Pagination, Alert } from 'antd'
 import Notifications from '../components/notifications'
 import TermsOfService from '../components/termsOfService'
+const regexp = /^\d+(\.\d{1,18})?$/
 
 import {
   getSecondsUntilNextPeriod,
   tokensPerDay,
   periodsPerPage,
-  debug
+  debug,
+  isDecimal
 } from '../components/constants'
 
 import {
@@ -101,6 +103,7 @@ class Dashboard extends Component {
       return
     }
     this.clicked = true
+    console.log(this.state.selectedAmount)
     setTimeout(() => (this.clicked = false), 1000)
     this.props.fund(this.state.selectedAmount, this.state.selectedDay)
     this.setState({
@@ -120,14 +123,13 @@ class Dashboard extends Component {
     })
   }
 
-  onContributeChange = selectedAmount => {
-    let updatedSelectedAmount
-    try {
-      updatedSelectedAmount = +selectedAmount
-    } catch (err) {
+  onContributeChange = e => {
+    const selectedAmount = e.target.value
+    // don't update the state if its not a valid number
+    if (!regexp.test(selectedAmount)) {
       return
     }
-    this.setState({ selectedAmount: updatedSelectedAmount })
+    this.setState({ selectedAmount })
   }
 
   /* CALCULATE MODAL FUNCTIONS */

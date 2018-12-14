@@ -1,4 +1,5 @@
 import { links } from './links'
+const regexp = /^\d+(\.\d{1,18})?$/;
 
 export const ETHEREUM_TICKER_COINMARKETCAP = 1027;
 
@@ -25,6 +26,12 @@ export const getSecondsUntilNextPeriod = (timestampStartTokenSale) => {
   const secondsUntilNextPeriod = ((1 - past) * dayInSeconds).toFixed(0);
 
   return secondsUntilNextPeriod;
+}
+
+export const isDecimal = (val) => {
+  let x = regexp.test(val);
+  console.log(x)
+  return x;
 }
 
 export const shortenAddress = (address, leftSide=15, rightSide=8) => {

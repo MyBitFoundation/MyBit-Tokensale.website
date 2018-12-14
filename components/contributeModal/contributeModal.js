@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import stylesheet from './contributeModal.scss'
-import { Modal, Select, InputNumber, Button } from 'antd'
+import { Modal, Select, Input, Button } from 'antd'
 
 const Option = Select.Option;
 const tokensaleMetamask = '../../static/tokensale/metamask.svg';
@@ -13,6 +13,8 @@ class ContributeModal extends React.Component{
     } else if (this.props.selectedDay !== nextProps.selectedDay){
       return true;
     } else if(this.props.contribution !== nextProps.contribution){
+      return true;
+    } else if(this.props.isLoggedIn !== nextProps.isLoggedIn){
       return true;
     }
     return false;
@@ -72,7 +74,7 @@ class ContributeModal extends React.Component{
                   }
                 }}
               >
-                <InputNumber
+                <Input
                   autoFocus
                   onChange={onContributeChange}
                   placeholder="Contribution in ETH"
