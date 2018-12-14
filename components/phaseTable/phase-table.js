@@ -57,8 +57,8 @@ class PhaseTable extends React.Component{
       key: 'total_eth',
       render: (value, record) => {
         return record.closed ?
-          (<div className="phaseTable__closed-row">{`${value.toLocaleString('en-US', {maximumFractionDigits: 18}))} ETH`}</div>) :
-          (<div className="phaseTable__active-row">{`${value.toLocaleString('en-US', {maximumFractionDigits: 18}))} ETH`}</div>)
+          (<div className="phaseTable__closed-row">{`${value.toLocaleString('en-US')} ETH`}</div>) :
+          (<div className="phaseTable__active-row">{`${value.toLocaleString('en-US')} ETH`}</div>)
       }
     }, {
       title: 'Effective Price',
