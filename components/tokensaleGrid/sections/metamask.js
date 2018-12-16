@@ -20,7 +20,7 @@ class Metamask extends React.Component{
 
  getSuccess = (userName, balance) =>
   <Fragment>
-    <div className="Section__title">Connected account:</div>
+    <div className="Section__title">Connected Account:</div>
     <div className="Section--is-metamask-address">{shortenAddress(userName, 9, 9)}</div>
     <div className="Section__title">Ether Account Balance</div>
     <div className="Section__eth">{Number(balance).toLocaleString('en-US', { maximumFractionDigits: 5 })} ETH</div>
