@@ -6,7 +6,7 @@ const DashboardPageHeader = (props) => (
     <Fragment>
         <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
         <div className="dashboardHeader">
-            <Alert message="Metamask required to participate." type="error" closeText="Close" className="dashboardHeader__mobile" />
+            <Alert message={<p>Contributing on Mobile is not supported.<br />Please visit from your computer.</p>} type="error" closeText="Close" className="dashboardHeader__mobile" />
             <h1 className="dashboardHeader__main-title">Welcome to the MyBit Token Distribution</h1>
             <div className="dashboardHeader__help">Need help getting started? Follow our guide.</div>
             <a
