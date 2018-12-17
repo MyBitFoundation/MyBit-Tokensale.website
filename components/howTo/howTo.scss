@@ -60,6 +60,10 @@
   }
   & a{
     font-family: 'Roboto';
+
+    &:focus{
+      text-decoration: none;
+    }
   }
 
   &__paddedSection{
