@@ -1,0 +1,85 @@
+.TermsOfService{
+
+  &__wrapper{
+    .ant-modal-header{
+      text-align: center;
+    }
+  }
+  &__description{
+    font-family: Roboto,sans-serif;
+    font-size: 18px;
+    line-height: 1.56;
+    color: rgba(0,0,0,.65);
+    margin: 20px;
+  }
+
+  &__rectangle{
+    background-color: rgba(155, 155, 155, 0.1);
+    height: 336px;
+    margin: 20px 20px;
+    overflow: scroll;
+
+    &-content{
+      color: rgba(0,0,0,.65);
+      padding: 20px 20px;
+    }
+  }
+
+  &__checkboxes{
+    margin: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    padding: 0px 10px;
+
+    & span{
+      color: rgba(0,0,0,.65);
+    }
+
+    &-group{
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 70px;
+
+      & p{
+        margin: 0px 0px;
+        display: inline-block;
+        margin-left: 23px;
+        color: rgba(0,0,0,.65);
+        line-height: 25px;
+      }
+    }
+
+    .ant-checkbox-wrapper{
+      position: absolute;
+      top: 3px;
+    }
+  }
+
+  &__pleaseCheck{
+    font-family: Roboto;
+    font-size: 18px;
+    text-align: center;
+    color: #4a4a4a;
+  }
+
+  &__btn{
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.1;
+    width: 186px;
+    height: 52px;
+    line-height: 52px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  &__link{
+    width: max-content;
+    margin: 0 auto;
+    display: block;
+    margin-top: 30px;
+  }
+}

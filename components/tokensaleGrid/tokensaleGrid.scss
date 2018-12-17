@@ -1,0 +1,212 @@
+.TokenSaleGrid {
+  &__container {
+    padding: 0;
+    margin: 0px auto;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    max-width: 1160px;
+  }
+
+  &__mobile {
+    display: none;
+
+    .Section{
+      height: auto;
+      width: 100%;
+    }
+  }
+
+  &__button{
+    border-radius: 4px;
+    border: none;
+    width: 129px;
+    height: 36px;
+    font-size: 16px;
+    color: white;
+    &.green {
+      background-color: #24F281;
+      &:focus,
+      &:hover{
+        background-color: rgb(85, 234, 165);
+        color: white;
+        border-color: rgb(85, 234, 165);
+      }
+    }
+    &.blue {
+        background-color: #1890FF;
+        &:hover {
+            color: white;
+        }
+        &:focus {
+            background-color: #1890FF;
+            color: white;
+        }
+    }
+
+    &--is-metamask{
+      display: block;
+      margin: 0 auto;
+      width: 170px;
+      margin-top: 89px;
+
+      &-install{
+        margin: 0px auto;
+        margin-top: 30px;
+      }
+    }
+  }
+}
+
+.Section{
+  border-radius: 4px;
+  background: #ffffff;
+  padding: 5px;
+  width: 267px;
+  height: 300px;
+  margin-top: 10px;
+  font-size: 3em;
+  text-align: center;
+  margin-bottom: 30px;
+  box-shadow: 1px 5px 20px 2px rgba(0,0,0,0.4);
+  position: relative;
+  color: #4a4a4a;
+
+  &__title{
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 6px;
+  }
+
+  &__bold{
+    font-weight: 500;
+    font-size: 20px;
+    margin-bottom: 10px;
+
+    &--not-started{
+      margin-bottom: -3px;
+    }
+
+    &--not-started2{
+      margin-bottom: 20px;
+    }
+  }
+
+  &__blue{
+    color: #1890FF;
+  }
+
+  &__eth{
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  &__tooltip {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    transition: 0.3s opacity ease;
+
+    &-inner{
+      .ant-tooltip-content {
+          box-shadow: 1px 5px 20px 2px rgba(0,0,0,0.4);
+      }
+      .ant-tooltip-inner {
+          background-color: #ffffff;
+          color: #4a4a4a;
+          padding: 10px;
+          max-width: 200px;
+      }
+      .ant-tooltip-arrow {
+          border-top-color: #ffffff;
+      }
+    }
+  }
+
+  &:hover &__tooltip {
+    opacity: 1;
+    transition: 0.6s opacity ease;
+  }
+
+  &__tokensaleClock {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    width: 111px;
+    height: 111px;
+  }
+
+  &__tokensaleCoins {
+    margin-top: 22px;
+    width: 130px;
+    height: 130px;
+  }
+
+  &__tokensaleMetamask {
+    margin-top: 45px;
+    margin-bottom: 32px;
+    width: 80px;
+    height: 73px;
+  }
+
+  &__tokensaleMyb {
+    margin-top: 49px;
+    margin-bottom: 30px;
+    height: 73px;
+    width: 107px;
+  }
+
+  &--is-metamask{
+    font-size: 17px;
+
+    &-ropsten{
+      padding: 29px;
+    }
+
+    &-login{
+      padding: 40px;
+    }
+
+    &-address{
+      width: 215px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 16px;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 0px auto;
+      border: 2px solid rgba(0, 0, 0, 0.15);
+    }
+
+    &-required{
+      margin-top: 20px;
+      padding: 0px 11px;
+      margin-bottom: 0px;
+
+      & a:focus{
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+
+@media only screen and (max-width: 1130px) {
+    .TokenSaleGrid__container {
+        display: none;
+    }
+    .TokenSaleGrid__mobile {
+        margin: 0px auto;
+        display: flex;
+        .tokensaleGrid__item {
+            margin: 0px auto;
+            width: 90%;
+            height: 150px;
+            text-align: center;
+            margin-bottom: 200px;
+        }
+    }
+}

@@ -1,0 +1,13 @@
+FROM node:boron
+
+WORKDIR /var/www/mybit
+ADD package.json /var/www/mybit
+
+ADD yarn.lock /var/www/mybit
+RUN yarn install
+
+ADD . /var/www/mybit
+
+EXPOSE 8080
+
+CMD ["docker/start.sh"]

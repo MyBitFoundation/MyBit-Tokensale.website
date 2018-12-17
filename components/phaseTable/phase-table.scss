@@ -1,0 +1,111 @@
+.phaseTableWrapper {
+    margin: 0px auto;
+    margin-bottom: 65px;
+    margin-top: 20px;
+    max-width: 1120px;
+    overflow: auto;
+    width: 100%;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 1px 5px 20px 2px rgba(0,0,0,0.2);
+    padding: 10px;
+}
+.phaseTable__main-heading {
+    margin-top: 30px;
+    color: #4A4A4A;
+    font-weight: bold;
+    text-align: center;
+}
+
+.phaseTable {
+    min-width: 936px;
+
+    & button{
+      width: 94px;
+      height: 24px;
+    }
+}
+
+.phaseTable__closed-row {
+    color: rgba(0, 0, 0, 0.45);
+}
+
+.phaseTable__acive-row {
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.phaseTable__active-phase {
+    background: rgba(255, 163, 158, 0.2);
+}
+
+.phaseTable__active-phase-button {
+    background: #24f281;
+    border: none;
+    color: #ffffff;
+    line-height: 1;
+    &:focus,
+    &:hover{
+      background-color: rgb(85, 234, 165);
+      color: white;
+      border-color: rgb(85, 234, 165);
+    }
+}
+
+.phaseTable__closed-row-button {
+    background: transparent;
+    border: 2px solid #1890ff;
+    color: #1890ff;
+    line-height: 1;
+    &:focus {
+        color: #1890ff;
+        background: transparent;
+        border: 2px solid #1890ff;
+    }
+}
+
+.phaseTable__active-row-button {
+    background: #1890ff;
+    border: none;
+    color: #ffffff;
+    line-height: 1;
+    &:focus {
+        background: #1890ff;
+        color: #ffffff;
+    }
+}
+
+@media only screen and (max-width: 1130px) {
+    .phaseTable__main-heading {
+        display: none;
+    }
+    .phaseTableWrapper {
+        width: 96%;
+        margin: 0 auto;
+        margin-bottom: -100px;
+        padding: 0;
+        transform: translateY(-45px);
+        .ant-table {
+            font-size: 12px;
+            .ant-table-thead {
+                tr {
+                    th {
+                        padding: 16px 12px;
+                    }
+                }
+            }
+            .ant-table-tbody {
+                tr {
+                    td {
+                        padding: 16px 12px;
+                    }
+                }
+            }
+        }
+    }
+    .phaseTable__xs-hide {
+        display: none;
+    }
+    .phaseTable {
+        min-width: 300px;
+    }
+}

@@ -1,0 +1,63 @@
+@import 'include-media/dist/_include-media.scss';
+
+.DropdownCustom{
+  position: relative;
+  display: inline-block;
+  margin-left: 15.2px;
+  margin-right: 25.1px;
+  text-align: center;
+
+  .ant-menu-item {
+    margin: 0;
+  }
+
+ &:hover &__content{
+    display: block;
+  }
+
+ &__item{
+    background-color:transparent;
+    display: flex;
+    justify-content: space-between;
+ }
+
+ &__icon{
+    width: 9px;
+    height: 5px;
+    padding-top: 3px;
+    padding-left: 3px;
+    padding-bottom: 30px;
+    color: white;
+
+    & svg {
+      width: 0.7em;
+      height: 0.7em;
+    }
+ }
+
+ &__btn{
+    background-color:transparent;
+    height: 26px;
+    font-family: Roboto;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding-right: 2px;
+    margin: 0;
+ }
+
+ &__content{
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+ }
+
+  @include media("<980px") {
+    display: none;
+  }
+}

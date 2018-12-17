@@ -1,0 +1,9 @@
+@import 'include-media/dist/_include-media.scss';
+
+.headerWrapper {
+  background: linear-gradient(0deg,#0C3E99,#0E4CAE);
+
+  @include media("<1130px") {
+    padding-bottom: 0px;
+  }
+}
