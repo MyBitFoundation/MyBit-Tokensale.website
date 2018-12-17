@@ -61,7 +61,7 @@ const HowTo = () => (
         <p className="HowTo__subtitle HowTo__subtitle--is-small HowTo__subtitle--is-left">This is calculated using the following formula:</p>
         <div className="HowTo__img-calculate">
           <p className="HowTo__img-calculate-formula">(Your contribution in ETH / Total ETH contributed) * 100,000</p>
-          <p className="HowTo__img-calculate-example">For example. If 10ETH is contributed during one and you contributed 1 ETH of that, you would receive 10% or 10,000 MYB.</p>
+          <p className="HowTo__img-calculate-example">For example: If 10 ETH is contributed during a period and you contributed 1 ETH, you would receive 10% or 10,000 MYB.</p>
         </div>
       </div>
       <section>
