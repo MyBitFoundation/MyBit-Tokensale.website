@@ -11,7 +11,7 @@ export const footerSections = [
     className: 'products',
     isContentNode: true,
     links:[{
-        title: 'SDKs',
+        title: 'SDK',
         url: links.devs,
         newTab: true,
       }, {
