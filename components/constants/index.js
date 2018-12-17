@@ -2,6 +2,8 @@ const regexp = /^\d+(\.\d{1,29})?$/;
 
 export const ETHEREUM_TICKER_COINMARKETCAP = 1027;
 
+export const MYBIT_DISTRIBUTION_CODE_AUDIT = 'https://files.mybit.io/files/MyBit_TokenDistribution_Audit.pdf';
+
 export const debug = (message) => console.log(message);
 
 export const tokensPerDay = 100000;

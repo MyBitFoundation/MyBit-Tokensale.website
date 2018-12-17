@@ -1,6 +1,9 @@
 import { Modal, Button } from 'antd'
 import stylesheet from './howTo.scss'
 import * as MyBitToken from '../constants/contracts/MyBitToken';
+import {
+  MYBIT_DISTRIBUTION_CODE_AUDIT
+} from '../constants';
 
 const Section = ({imgSrc, title, desc}) => (
   <div className="HowTo__step">
@@ -122,7 +125,7 @@ const HowTo = () => (
         <p>Code Audit{' '}(
           <a
             href="#"
-            href={`https://google.com`}
+            href={MYBIT_DISTRIBUTION_CODE_AUDIT}
             target="_blank"
             rel="noopener noreferrer"
           >
