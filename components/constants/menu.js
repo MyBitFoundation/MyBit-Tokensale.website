@@ -1,4 +1,3 @@
-import { testAlphaUrl } from './';
 import { links } from '../constants/links';
 
 export const mobileMenu = [{
