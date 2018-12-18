@@ -104,8 +104,6 @@ const HowTo = () => (
         <p className="HowTo__subtitle HowTo__subtitle--is-contribute">Contribute now</p>
           <a
             href="/"
-            target="_blank"
-            rel="noopener noreferrer"
           >
           <Button
             className="HowTo__btn"
