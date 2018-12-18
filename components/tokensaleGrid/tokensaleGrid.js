@@ -26,7 +26,7 @@ const sections = [{
   imgAlt: 'Coins',
   imgClassName: 'tokensaleCoins',
   hasTooltip: true,
-  tooltipTitle: 'The amount MYB you receive is based entirely on demand and will change depending on the period.',
+  tooltipTitle: 'The number of MYB you receive is based entirely on the amount of ETH contributed and therefore may change constantly throughout a period. The exchange rate below is just an estimate and by no means a guarantee.',
   component: Calculate,
 }, {
   img: tokensaleMetamask,
@@ -39,7 +39,7 @@ const sections = [{
   imgAlt: 'Coins',
   imgClassName: 'tokensaleMyb',
   hasTooltip: true,
-  tooltipTitle: 'You can claim all your available MYB token here or claim for individual periods below.',
+  tooltipTitle: 'Once a period ends, you can claim your MYB here.',
   component: Claim,
 }]
 

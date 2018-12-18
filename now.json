@@ -1,4 +1,7 @@
 {
   "name": "mybit.io",
-  "version": 1
+  "version": 1,
+  "env": {
+    "WEBSOCKET_PROVIDER_ROPSTEN": "@websocket_provider_ropsten"
+  }
 }

@@ -210,7 +210,7 @@ class AppInfo extends React.Component {
           console.log("got contributions, setting timer")
           this.getCurrentDayAndSetupTimer();
         }, (timestampStartTokenSale * 1000 - Date.now()));
-        console.log("timer for: ", (new Date(Date.now() + (timestampStartTokenSale * 1000 - Date.now()) + 5000)));
+        console.log("timer for: ", (new Date(Date.now() + (timestampStartTokenSale * 1000 - Date.now()) + 1000)));
       }
     }catch(err){
       debug(err);

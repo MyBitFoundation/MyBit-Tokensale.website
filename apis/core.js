@@ -487,7 +487,7 @@ const resetSocket = async () => {
 let errorCounter = 0;
 
 const subscribeToEvents = async () => {
-  const provider = new Web3.providers.WebsocketProvider('wss://possibly-possible-lark.quiknode.io/49102400-d67e-456d-bd4d-05b51fef855c/kula72q-V9q6lO5DDhTahw==/');
+  const provider = new Web3.providers.WebsocketProvider(process.env.WEBSOCKET_PROVIDER_ROPSTEN);
   provider.on('error', e => {
     debug("socket connection error ")
     debug(e)

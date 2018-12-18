@@ -55,14 +55,14 @@ const HowTo = () => (
       </div>
       <section>
         <p className="HowTo__subtitle HowTo__subtitle--is-medium">Key Details</p>
-        <p>Token distribution starts Jan 1. 2019 12:00 UTC.</p>
-        <p>The token distribution lasts <b>365</b> days.</p>
+        <p>Token distribution starts <b>Jan 1. 2019 12:00 UTC</b>.</p>
+        <p>The token distribution lasts <b>365 days</b>.</p>
         <p>Each period lasts <b>24 hours</b>.</p>
-        <p>During each period <b>100,000</b> MYB are distributed.</p>
-        <p>A total of <b>36.5</b> million MYB will be distributed.</p>
+        <p>During each period <b>100,000 MYB</b> are distributed.</p>
+        <p>A total of <b>36.5 million MYB</b> will be distributed.</p>
       </section>
       <div className="HowTo__paddedSection">
-        <p className="HowTo__subtitle HowTo__subtitle--is-small" style={{marginTop: '20px'}}>How is the amount of MYB you received determined?</p>
+        <p className="HowTo__subtitle HowTo__subtitle--is-small" style={{marginTop: '20px'}}>How is the amount of MYB you receive determined?</p>
         <p>There is no set price, the amount you will receive is based entirely on demand. In short,
         you will receive a proportion of the 100,000 MYB depending on how much ETH was contributed during that 24 hour period.</p>
         <p className="HowTo__subtitle HowTo__subtitle--is-small HowTo__subtitle--is-left">This is calculated using the following formula:</p>
