@@ -51,7 +51,7 @@ const HowTo = () => (
 
       <div className="HowTo__paddedSection">
         <p className="HowTo__title">Token Distribution Guide</p>
-        <p className="HowTo__title-desc">Welcome to our token distribution guide. Here you will find all of the key information about our token distribution, as well as a step by step walkthrough to contribute ETH and claim your MYB. <br /> A total of 36.5 million MYB will be distributed.</p>
+        <p className="HowTo__title-desc">Welcome to our token distribution guide. Here you will find all of the key information about our token distribution, as well as a step by step walkthrough to contribute ETH and claim your MYB.</p>
       </div>
       <section>
         <p className="HowTo__subtitle HowTo__subtitle--is-medium">Key Details</p>
@@ -59,6 +59,7 @@ const HowTo = () => (
         <p>The token distribution lasts <b>365</b> days.</p>
         <p>Each period lasts <b>24 hours</b>.</p>
         <p>During each period <b>100,000</b> MYB are distributed.</p>
+        <p>A total of <b>36.5</b> million MYB will be distributed.</p>
       </section>
       <div className="HowTo__paddedSection">
         <p className="HowTo__subtitle HowTo__subtitle--is-small" style={{marginTop: '20px'}}>How is the amount of MYB you received determined?</p>
