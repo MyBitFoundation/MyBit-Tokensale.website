@@ -35,7 +35,13 @@ const sections = [{
         </a>,
 }, {
   imgSrc: '/static/tokensale/mybit-logo-circular.svg',
-  title: 'Token Distribution Dashboard',
+  title:  <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Token Distribution Dashboard
+          </a>,
 }]
 
 const HowTo = () => (
@@ -45,18 +51,18 @@ const HowTo = () => (
 
       <div className="HowTo__paddedSection">
         <p className="HowTo__title">Token Distribution Guide</p>
-        <p className="HowTo__title-desc">Welcome to our token distribution guide. Here you will find all of the key information about our token distribution, as well as a step by step walkthrough to contribute and claim your MYB.</p>
+        <p className="HowTo__title-desc">Welcome to our token distribution guide. Here you will find all of the key information about our token distribution, as well as a step by step walkthrough to contribute ETH and claim your MYB. <br /> A total of 36.5 million MYB will be distributed.</p>
       </div>
       <section>
         <p className="HowTo__subtitle HowTo__subtitle--is-medium">Key Details</p>
         <p>Token distribution starts Jan 1. 2019 12:00 UTC.</p>
         <p>The token distribution lasts <b>365</b> days.</p>
         <p>Each period lasts <b>24 hours</b>.</p>
-        <p>During each period <b>100,000</b> MYB is distributed.</p>
+        <p>During each period <b>100,000</b> MYB are distributed.</p>
       </section>
       <div className="HowTo__paddedSection">
         <p className="HowTo__subtitle HowTo__subtitle--is-small" style={{marginTop: '20px'}}>How is the amount of MYB you received determined?</p>
-        <p>There is no set price, the amount you will received is based entirely on demand. In short,
+        <p>There is no set price, the amount you will receive is based entirely on demand. In short,
         you will receive a proportion of the 100,000 MYB depending on how much ETH was contributed during that 24 hour period.</p>
         <p className="HowTo__subtitle HowTo__subtitle--is-small HowTo__subtitle--is-left">This is calculated using the following formula:</p>
         <div className="HowTo__img-calculate">
@@ -66,7 +72,7 @@ const HowTo = () => (
       </div>
       <section>
         <p className="HowTo__subtitle HowTo__subtitle--is-medium">Steps to Participate:</p>
-        <p>To take part in the token distribution you will need MetaMask and an Ethereum address <br /> (as well as the ETH you wish to contribute).</p>
+        <p>To take part in the token distribution you will need MetaMask <br /> (as well as the ETH you wish to contribute).</p>
         <div className="HowTo__steps">
           {sections.map(section => (
             <Section {...section}/>
@@ -74,8 +80,8 @@ const HowTo = () => (
         </div>
       </section>
       <div className="HowTo__paddedSection">
-        <p className="HowTo__subtitle">How to contribute in the curent period:</p>
-        <p>To contribute in the current period click the connect MetaMask button. Once connected, click the green get MYB button and select your contribution amount in ETH.</p>
+        <p className="HowTo__subtitle">How to contribute to the curent period:</p>
+        <p>To contribute to the current period click the "Connect MetaMask" button. Once connected, click the green "Get MYB" button and select your contribution amount in ETH.</p>
         <p>Wait for the transaction to confirm and you're done.</p>
       </div>
       <video loop controls muted>
@@ -83,9 +89,8 @@ const HowTo = () => (
       </video>
 
       <div className="HowTo__paddedSection">
-        <p className="HowTo__subtitle" style={{marginTop: '20px'}}>How to contribute in a future period:</p>
-        <p>To contribute in a future period click the blue calculate button and select a future period.</p>
-        <p>You can also use the table below for extra control.</p>
+        <p className="HowTo__subtitle" style={{marginTop: '20px'}}>How to contribute to a future period:</p>
+        <p>To contribute to a future period click the blue "Calculate" button and select a future period from the dropdown.</p>
       </div>
       <video loop controls muted>
         <source src="/static/tokensale/invest_future.mp4" type="video/mp4" />
@@ -93,17 +98,19 @@ const HowTo = () => (
 
 
       <div className="HowTo__paddedSection">
-        <p className="HowTo__subtitle">How to claim your MyBit tokens:</p>
-        <p>After each period has ended you are able to withdraw MYB to your metamask account. Click the claim button and sign in MetaMask.</p>
+        <p className="HowTo__subtitle">How to claim your MYB:</p>
+        <p>After each period has ended you are able to withdraw MYB to your metamask account. Click the blue "Claim" button and sign via MetaMask.</p>
       </div>
       <video loop controls muted>
         <source src="/static/tokensale/claiming.mp4" type="video/mp4" />
       </video>
 
       <div className="HowTo__paddedSection">
-        <p className="HowTo__subtitle HowTo__subtitle--is-contribute">Contribute now</p>
+        <p className="HowTo__subtitle HowTo__subtitle--is-contribute">Contribute Now</p>
           <a
             href="/"
+            target="_blank"
+            rel="noopener noreferrer"
           >
           <Button
             className="HowTo__btn"

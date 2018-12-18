@@ -8,7 +8,7 @@ const Mobile  = ({
 }) => {
   return currentPeriod ? (
     <Fragment>
-      <div className="Section__title">Phase <span style={{color: '#1890ff'}}>#{currentPeriod}</span> ends in:</div>
+      <div className="Section__title">Period <span style={{color: '#1890ff'}}>#{currentPeriod}</span> ends in:</div>
       <div className="Section__bold">
         <CountdownHours
           time={secondsToGo}

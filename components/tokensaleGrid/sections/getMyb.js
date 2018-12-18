@@ -23,7 +23,7 @@ class GetMyb extends React.Component{
 
     return currentPeriod ? (
       <Fragment>
-        <div className="Section__title">Phase <span className="Section__blue">#{currentPeriod}</span> ends in:</div>
+        <div className="Section__title">Period <span className="Section__blue">#{currentPeriod}</span> ends in:</div>
         <div className="Section__bold">
           <CountdownHours
             time={secondsToGo}
