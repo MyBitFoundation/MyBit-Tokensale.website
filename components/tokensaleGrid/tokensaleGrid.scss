@@ -48,7 +48,7 @@
       display: block;
       margin: 0 auto;
       width: 170px;
-      margin-top: 89px;
+      margin-top: 29px;
 
       &-install{
         margin: 0px auto;
@@ -184,7 +184,8 @@
     &-required{
       margin-top: 20px;
       padding: 0px 11px;
-      margin-bottom: 0px;
+      margin-bottom: 9px;
+      display: inline-block;
 
       & a:focus{
         text-decoration: none;
