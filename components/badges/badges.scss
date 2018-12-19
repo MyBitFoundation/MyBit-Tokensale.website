@@ -18,6 +18,10 @@
 
     .Badge{
       margin: 0 30px;
+
+      @include media("<tablet") {
+        margin: 0px;
+      }
     }
   }
 
