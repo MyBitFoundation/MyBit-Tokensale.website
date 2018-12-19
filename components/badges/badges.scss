@@ -1,0 +1,65 @@
+@import 'include-media/dist/_include-media.scss';
+
+.Badges .Badges{
+
+  &__learn-more{
+    margin-top: 30px;
+  }
+
+  &__container{
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    @include media("<tablet") {
+      flex-direction: column;
+    }
+
+
+    .Badge{
+      margin: 0 30px;
+    }
+  }
+
+  &__title{
+    color: #4a4a4a;
+    font-weight: bold;
+    line-height: normal;
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 10px;
+
+    @include media("<tablet") {
+      font-size: 35px;
+      padding: 0 20px;
+    }
+  }
+}
+
+.Badge .Badge{
+
+  &__img{
+    height: 100%;
+    width: 100%;
+    max-width: 389px;
+    max-height: 337px;
+  }
+
+  &__title{
+    font-weight: bold;
+    line-height: normal;
+    font-size: 30px;
+    margin-top: 10px;
+  }
+
+  &__description{
+    max-width: 318px;
+    margin: 0 auto;
+    text-align: center;
+
+    @include media("<tablet") {
+      max-width: inherit;
+    }
+  }
+}

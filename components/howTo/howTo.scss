@@ -71,7 +71,7 @@
     margin: 0 auto;
 
     @include media("<tablet") {
-      padding: 0 2%;
+      padding: 0 5%;
     }
   }
 
@@ -161,6 +161,11 @@
     font-size: 30px !important;
     font-weight: 600;
     margin-top: 80px;
+
+    @include media("<tablet") {
+      margin-top: 40px;
+    }
+
   }
 
   &__title-desc{
@@ -247,5 +252,9 @@
     top: -30px;
     margin-bottom: -40px;
     z-index: -1;
+  }
+
+  .Badges{
+    margin-top: 40px;
   }
 }
