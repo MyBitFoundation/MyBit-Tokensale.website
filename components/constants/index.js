@@ -69,7 +69,7 @@ export const getContentForNotification = (type, amount, period, actionType) => {
       case 'success':
         return {
           title: `#${period} - Contributed with ${amount} ETH successfully!`,
-          message: 'You will be able to claim your MYB tokens as soon as the current period is over.',
+          message: 'You will be able to claim your MyBit tokens as soon as the current period is over.',
         }
         break;
       case 'info':

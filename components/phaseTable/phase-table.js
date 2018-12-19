@@ -82,7 +82,7 @@ class PhaseTable extends React.Component{
         )
       }
     }, {
-      title: 'Period ends',
+      title: 'Period Ends',
       dataIndex: 'deadline',
       key: 'deadline',
       render: (value, record) => {
@@ -95,7 +95,7 @@ class PhaseTable extends React.Component{
             : (<div className="phaseTable__active-row">{record.date}</div>)
       }
     }, {
-      title: 'Your contribution',
+      title: 'Your Contribution',
       dataIndex: 'your_contribution',
       key: 'your_contribution',
       className: "phaseTable__xs-hide",
@@ -105,7 +105,7 @@ class PhaseTable extends React.Component{
           (<div className="phaseTable__active-row">{`${value.toLocaleString('en-US', {maximumFractionDigits: 18})} ETH`}</div>)
       }
     }, {
-      title: 'MYB received',
+      title: 'MYB Received',
       dataIndex: 'myb_received',
       key: 'myb_received',
       className: "phaseTable__xs-hide",
