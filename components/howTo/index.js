@@ -1,6 +1,6 @@
 import { Modal, Button } from 'antd'
 import stylesheet from './howTo.scss'
-import * as MyBitToken from '../constants/contracts/MyBitToken';
+import * as TokenSale from '../constants/contracts/TokenSale';
 import {
   MYBIT_DISTRIBUTION_CODE_AUDIT
 } from '../constants';
@@ -122,11 +122,11 @@ const HowTo = () => (
         <p className="HowTo__address-text">Token Distribution contract address:</p>
         <a
           className="HowTo__address"
-          href={`https://etherscan.io/address/${MyBitToken.ADDRESS}#code`}
+          href={`https://etherscan.io/address/${TokenSale.ADDRESS}#code`}
           target="_blank"
           rel="noopener noreferrer"
         >
-          {MyBitToken.ADDRESS}
+          {TokenSale.ADDRESS}
         </a>
         <p>Code Audit{' '}(
           <a
