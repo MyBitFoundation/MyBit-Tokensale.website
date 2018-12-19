@@ -18,6 +18,8 @@ import { events } from '../utils/EventEmitter';
 let web3Socket = new Web3();
 let subscriptionClaim = undefined;
 let subscriptionFund = undefined;
+let test = undefined;
+
 let gasPrice = 1;
 const transactionHashClaim = new Set();
 
@@ -275,6 +277,16 @@ function getDateForPeriod(day, timestampStartTokenSale){
   return(dayjs(timestampStartTokenSale).add(day + 1, 'day').format('MMM, DD YYYY'))
 }
 
+function cleanNumbersOfContributions(contributions){
+  return contributions.map(contribution => {
+    return {
+      ...contribution,
+      your_contribution: Number(window.web3js.utils.fromWei(contribution.your_contribution.toString(), 'ether')),
+      total_eth: Number(window.web3js.utils.fromWei(contribution.total_eth.toString(), 'ether')),
+    };
+  });
+}
+
 export const getAllContributionsPerDay = async (userAddress, currentDay, timestampStartTokenSale) =>
   new Promise(async (resolve, reject) => {
     try {
@@ -297,6 +309,7 @@ export const getAllContributionsPerDay = async (userAddress, currentDay, timesta
       const withdrawalsByDay = processWithdrawals(logWithdrawals);
       let contributions = processContributions(logContributions, withdrawalsByDay, userAddress, currentDay, timestampStartTokenSale);
       contributions = createDataForInactiveDays(contributions, currentDay, timestampStartTokenSale);
+      contributions = cleanNumbersOfContributions(contributions);
       const result = calculateOwedAmounts(contributions, currentDay);
       debug("pulled from web3...")
       subscribeToEvents();
@@ -382,7 +395,7 @@ const processContributions = (log, withdrawalsByDay, userAddress, currentDay, ti
   const contributions = Array(365).fill();
   for (const contribution of log) {
     const contributor = contribution.returnValues._contributor;
-    const contributed = Number(window.web3js.utils.fromWei(contribution.returnValues._amount, 'ether'))
+    const contributed = Number(contribution.returnValues._amount);
     const day = Number(contribution.returnValues._day);
     const isUserContribution = contributor === userAddress;
     let withdrawal = 0;
@@ -491,10 +504,12 @@ const subscribeToEvents = async () => {
   provider.on('error', e => {
     debug("socket connection error ")
     debug(e)
+    provider.connection.close()
     subscribeToEvents();
   });
   provider.on('end', e => {
     debug("socket connection closed")
+    provider.connection.close()
     subscribeToEvents();
   });
 
