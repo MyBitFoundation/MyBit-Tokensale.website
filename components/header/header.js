@@ -29,7 +29,7 @@ export const Header = ({isDark}) => {
                     'Header__logo-container': true
                   })
                 }>
-            <a href="/">
+            <a href="https://mybit.io">
               <Logo
                 className={
                   classNames({

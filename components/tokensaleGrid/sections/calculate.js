@@ -23,7 +23,7 @@ class Calculate extends React.Component{
     return(
       <Fragment>
         <div className="Section__title">Current Exchange Rate</div>
-        <div className={currentPeriod ? "Section__bold" : "Section__bold Section__bold--not-started2"}>{`1 ETH = ${exchangeRate.toLocaleString('en-US', {maximumFractionDigits: 0})} MYB`}</div>
+        <div className={currentPeriod ? "Section__bold" : "Section__bold Section__bold--not-started2"}>{`1 ETH = ${currentPeriod ? exchangeRate.toLocaleString('en-US', {maximumFractionDigits: 0}) : '100,000'} MYB`}</div>
         <Button
           className="TokenSaleGrid__button"
           onClick={onShowCalculateModal}

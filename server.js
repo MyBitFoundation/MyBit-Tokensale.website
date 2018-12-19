@@ -1,7 +1,7 @@
+require('dotenv').config()
 const express = require('express')
 const path = require('path')
 const next = require('next')
-
 const dev = process.env.NODE_ENV !== 'production'
 const ipRegex = require('ip-regex');
 const geoip = require('geoip-lite');

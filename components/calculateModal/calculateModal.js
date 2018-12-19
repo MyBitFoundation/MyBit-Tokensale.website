@@ -4,6 +4,7 @@ import { Modal, Select, InputNumber, Icon, Input, Button } from 'antd'
 import {
   tokensPerDay,
   isDecimal,
+  correctNetwork,
 } from '../constants';
 
 const Option = Select.Option;
@@ -119,8 +120,8 @@ class CalculateModal extends React.Component{
             >
               {!isMetamaskInstalled
                 ? 'Install Metamask'
-                : network !== 'ropsten'
-                  ? 'Switch to the Ropsten test network'
+                : network !== correctNetwork
+                  ? 'Switch to the Ethereum network'
                   : !isLoggedIn
                     ? 'Login to Metamask'
                     : enabled === false

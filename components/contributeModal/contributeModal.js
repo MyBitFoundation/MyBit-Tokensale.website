@@ -1,7 +1,9 @@
 import React, { Fragment } from 'react'
 import stylesheet from './contributeModal.scss'
 import { Modal, Select, Input, Button } from 'antd'
-
+import {
+  correctNetwork,
+} from '../constants';
 const Option = Select.Option;
 const tokensaleMetamask = '../../static/tokensale/metamask.svg';
 
@@ -88,8 +90,8 @@ class ContributeModal extends React.Component{
               >
                 {!isMetamaskInstalled
                   ?  'Install Metamask'
-                  : network !== 'ropsten'
-                  ? 'Switch to the Ropsten test network'
+                  : network !== correctNetwork
+                  ? 'Switch to the Ethereum network'
                   : !isLoggedIn
                   ? 'Login to Metamask'
                   : enabled === false

@@ -1,7 +1,12 @@
 import React, { Fragment } from 'react'
 import stylesheet from './phase-table.scss'
 import { Table, Button } from 'antd'
-import { tokensPerDay, dayInSeconds } from '../constants';
+import {
+  tokensPerDay,
+  dayInSeconds,
+  correctNetwork
+} from '../constants';
+
 import Dayjs from 'dayjs';
 import CountdownHours from '../countdownHours';
 
@@ -25,6 +30,7 @@ class PhaseTable extends React.Component{
       withdraw,
       ethPrice,
       allowed,
+      network,
     } = this.props;
 
     const currentDay = ((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / dayInSeconds) + 1;
@@ -136,7 +142,7 @@ class PhaseTable extends React.Component{
             <Button
               onClick={() => withdraw(record.period)}
               className="phaseTable__closed-row-button"
-              disabled={allowed === false}
+              disabled={allowed === false || correctNetwork !== network}
             >
               Claim
             </Button>

@@ -297,6 +297,7 @@ class Dashboard extends Component {
               withdraw={withdraw}
               ethPrice={ethPrice}
               allowed={allowed}
+              network={network}
             />
             <Pagination
               onChange={currentPage =>
