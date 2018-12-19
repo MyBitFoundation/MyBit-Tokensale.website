@@ -92,7 +92,7 @@ class Metamask extends React.Component{
   }
 
   getCorrectNetwork = () =>
-    <p className="Section--is-metamask-correctNetwork">Switch to the Ethereum network to contribute.</p>
+    <p className="Section--is-metamask-correctNetwork">Switch to the Ethereum network to Contribute.</p>
 
   getConnectMetamask = () =>
     <Fragment>
