@@ -85,7 +85,7 @@ const HowTo = () => (
         <p>To contribute to the current period click the "Connect MetaMask" button. Once connected, click the green "Get MYB" button and select your contribution amount in ETH.</p>
         <p>Wait for the transaction to confirm and you're done.</p>
       </div>
-      <video loop controls muted>
+      <video controls muted>
         <source src="/static/tokensale/investing.mp4" type="video/mp4" />
       </video>
 
@@ -93,7 +93,7 @@ const HowTo = () => (
         <p className="HowTo__subtitle" style={{marginTop: '20px'}}>How to contribute to a future period:</p>
         <p>To contribute to a future period click the blue "Calculate" button and select a future period from the dropdown.</p>
       </div>
-      <video loop controls muted>
+      <video controls muted>
         <source src="/static/tokensale/invest_future.mp4" type="video/mp4" />
       </video>
 
@@ -102,7 +102,7 @@ const HowTo = () => (
         <p className="HowTo__subtitle">How to claim your MYB:</p>
         <p>After each period has ended you are able to withdraw MYB to your metamask account. Click the blue "Claim" button and sign via MetaMask.</p>
       </div>
-      <video loop controls muted>
+      <video controls muted>
         <source src="/static/tokensale/claiming.mp4" type="video/mp4" />
       </video>
 
