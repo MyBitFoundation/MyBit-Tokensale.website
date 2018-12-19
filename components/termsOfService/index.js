@@ -91,7 +91,7 @@ class TermsOfService extends React.Component {
                   <p>
                     Click here to confirm that you are NOT a citizen or resident of the People's
                     Republic of China or an entity formed under the laws of the People's Republic
-                    of China (each a "Chinese Person") nor are you purchasing MYB Tokens (MYB) or
+                    of China (each a "Chinese Person") nor are you purchasing MyBit Tokens (MYB) or
                     signing on behalf of a Chinese Person.
                   </p>
                 </div>
