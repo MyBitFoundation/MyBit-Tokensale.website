@@ -1,6 +1,9 @@
 import { Fragment } from 'react';
 import { Button } from 'antd';
-import { shortenAddress } from '../../constants';
+import {
+  shortenAddress,
+  correctNetwork,
+} from '../../constants';
 
 class Metamask extends React.Component{
 
@@ -87,8 +90,8 @@ class Metamask extends React.Component{
     }
   }
 
-  getRopsten = () =>
-    <p className="Section--is-metamask-ropsten">Switch to the Ropsten test network to contribute.</p>
+  getCorrectNetwork = () =>
+    <p className="Section--is-metamask-correctNetwork">Switch to the Ethereum network to contribute.</p>
 
   getConnectMetamask = () =>
     <Button
@@ -112,14 +115,14 @@ class Metamask extends React.Component{
       balance
     } = this.props;
 
-    if(enabled && isLoggedIn && userName && network === 'ropsten'){
+    if(enabled && isLoggedIn && userName && network === correctNetwork){
       metamaskToRender = this.getSuccess(userName, balance);
-    } else if(enabled && !isLoggedIn && network === 'ropsten'){
+    } else if(enabled && !isLoggedIn && network === correctNetwork){
       metamaskToRender = this.getLogin();
     } else if(!isMetamaskInstalled){
       metamaskToRender = this.getMetamaskRequired(extensionUrl, isBraveBrowser);
-    } else if(network && network != 'ropsten') {
-      metamaskToRender = this.getRopsten();
+    } else if(network && network != correctNetwork) {
+      metamaskToRender = this.getCorrectNetwork();
     } else if(!enabled){
       metamaskToRender = this.getConnectMetamask();
     }

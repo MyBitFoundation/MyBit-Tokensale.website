@@ -11,7 +11,8 @@ import {
   tokenSaleEvents,
   tokensPerDay,
   debug,
-  MyBitTokenSaleAPIEndpoint
+  MyBitTokenSaleAPIEndpoint,
+  BLOCK_NUMBER_CONTRACT_CREATION,
 } from '../components/constants';
 import { events } from '../utils/EventEmitter';
 
@@ -275,6 +276,16 @@ function getDateForPeriod(day, timestampStartTokenSale){
   return(dayjs(timestampStartTokenSale).add(day + 1, 'day').format('MMM, DD YYYY'))
 }
 
+function cleanNumbersOfContributions(contributions){
+  return contributions.map(contribution => {
+    return {
+      ...contribution,
+      your_contribution: Number(window.web3js.utils.fromWei(contribution.your_contribution.toString(), 'ether')),
+      total_eth: Number(window.web3js.utils.fromWei(contribution.total_eth.toString(), 'ether')),
+    };
+  });
+}
+
 export const getAllContributionsPerDay = async (userAddress, currentDay, timestampStartTokenSale) =>
   new Promise(async (resolve, reject) => {
     try {
@@ -286,17 +297,18 @@ export const getAllContributionsPerDay = async (userAddress, currentDay, timesta
 
       let logContributions = await tokenSaleContract.getPastEvents(
         'LogTokensPurchased',
-        { fromBlock: 0, toBlock: 'latest' },
+        { fromBlock: BLOCK_NUMBER_CONTRACT_CREATION, toBlock: 'latest' },
       );
 
       let logWithdrawals = await tokenSaleContract.getPastEvents(
         'LogTokensCollected',
-        { fromBlock: 0, toBlock: 'latest' },
+        { fromBlock: BLOCK_NUMBER_CONTRACT_CREATION, toBlock: 'latest' },
       );
 
       const withdrawalsByDay = processWithdrawals(logWithdrawals);
       let contributions = processContributions(logContributions, withdrawalsByDay, userAddress, currentDay, timestampStartTokenSale);
       contributions = createDataForInactiveDays(contributions, currentDay, timestampStartTokenSale);
+      contributions = cleanNumbersOfContributions(contributions);
       const result = calculateOwedAmounts(contributions, currentDay);
       debug("pulled from web3...")
       subscribeToEvents();
@@ -382,7 +394,7 @@ const processContributions = (log, withdrawalsByDay, userAddress, currentDay, ti
   const contributions = Array(365).fill();
   for (const contribution of log) {
     const contributor = contribution.returnValues._contributor;
-    const contributed = Number(window.web3js.utils.fromWei(contribution.returnValues._amount, 'ether'))
+    const contributed = Number(contribution.returnValues._amount);
     const day = Number(contribution.returnValues._day);
     const isUserContribution = contributor === userAddress;
     let withdrawal = 0;
@@ -487,14 +499,16 @@ const resetSocket = async () => {
 let errorCounter = 0;
 
 const subscribeToEvents = async () => {
-  const provider = new Web3.providers.WebsocketProvider('wss://possibly-possible-lark.quiknode.io/49102400-d67e-456d-bd4d-05b51fef855c/kula72q-V9q6lO5DDhTahw==/');
+  const provider = new Web3.providers.WebsocketProvider(process.env.WEBSOCKET_PROVIDER_MAINNET);
   provider.on('error', e => {
     debug("socket connection error ")
     debug(e)
+    provider.connection.close()
     subscribeToEvents();
   });
   provider.on('end', e => {
     debug("socket connection closed")
+    provider.connection.close()
     subscribeToEvents();
   });
 

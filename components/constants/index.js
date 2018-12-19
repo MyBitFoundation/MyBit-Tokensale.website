@@ -19,9 +19,9 @@ export const tokenSaleEvents = {
   claim: '0x33a4ae6c0627280fcb7aaf7e07deb59bbce49aa4808ee5457f8622f77ab5d28c',
 };
 
-export const correctNetwork = 'ropsten';
-//represents mainnet in metamask
-export const tmp = 'main';
+export const correctNetwork = 'main';
+
+export const BLOCK_NUMBER_CONTRACT_CREATION = 6910971;
 
 export const getSecondsUntilNextPeriod = (timestampStartTokenSale) => {
   const currentDay = ((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / dayInSeconds) + 1;
