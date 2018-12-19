@@ -2,6 +2,8 @@
   "name": "mybit.io",
   "version": 1,
   "env": {
-    "WEBSOCKET_PROVIDER_ROPSTEN": "@websocket_provider_ropsten"
+    "WEBSOCKET_PROVIDER_ROPSTEN": "@websocket_provider_ropsten",
+    "WEBSOCKET_PROVIDER_MAINNET": "@websocket_provider_mainnet",
+    "INFURA_API_KEY": "@infura-api-key"
   }
 }

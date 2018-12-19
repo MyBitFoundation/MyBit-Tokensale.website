@@ -122,7 +122,7 @@ const HowTo = () => (
         <p className="HowTo__address-text">Token Distribution contract address:</p>
         <a
           className="HowTo__address"
-          href={`https://ropsten.etherscan.io/address/${MyBitToken.ADDRESS}#code`}
+          href={`https://etherscan.io/address/${MyBitToken.ADDRESS}#code`}
           target="_blank"
           rel="noopener noreferrer"
         >

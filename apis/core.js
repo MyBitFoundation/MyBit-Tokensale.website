@@ -11,7 +11,8 @@ import {
   tokenSaleEvents,
   tokensPerDay,
   debug,
-  MyBitTokenSaleAPIEndpoint
+  MyBitTokenSaleAPIEndpoint,
+  BLOCK_NUMBER_CONTRACT_CREATION,
 } from '../components/constants';
 import { events } from '../utils/EventEmitter';
 
@@ -298,12 +299,12 @@ export const getAllContributionsPerDay = async (userAddress, currentDay, timesta
 
       let logContributions = await tokenSaleContract.getPastEvents(
         'LogTokensPurchased',
-        { fromBlock: 0, toBlock: 'latest' },
+        { fromBlock: BLOCK_NUMBER_CONTRACT_CREATION, toBlock: 'latest' },
       );
 
       let logWithdrawals = await tokenSaleContract.getPastEvents(
         'LogTokensCollected',
-        { fromBlock: 0, toBlock: 'latest' },
+        { fromBlock: BLOCK_NUMBER_CONTRACT_CREATION, toBlock: 'latest' },
       );
 
       const withdrawalsByDay = processWithdrawals(logWithdrawals);
@@ -500,7 +501,7 @@ const resetSocket = async () => {
 let errorCounter = 0;
 
 const subscribeToEvents = async () => {
-  const provider = new Web3.providers.WebsocketProvider(process.env.WEBSOCKET_PROVIDER_ROPSTEN);
+  const provider = new Web3.providers.WebsocketProvider(process.env.WEBSOCKET_PROVIDER_MAINNET);
   provider.on('error', e => {
     debug("socket connection error ")
     debug(e)
