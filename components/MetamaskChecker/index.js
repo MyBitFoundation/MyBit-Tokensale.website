@@ -9,7 +9,7 @@ import {
   METAMASK_FIREFOX,
   METAMASK_CHROME,
   METAMASK_OPERA,
-  PROVIDER,
+  PROVIDER_MAINNET,
 } from './constants';
 
 class MetamaskChecker extends Component {
@@ -45,7 +45,7 @@ class MetamaskChecker extends Component {
         window.web3js = new Web3(window.web3.currentProvider);
         await this.userHasMetamask(false);
       } else {
-        window.web3js = new Web3(new Web3.providers.HttpProvider(PROVIDER));
+        window.web3js = new Web3(new Web3.providers.HttpProvider(PROVIDER_MAINNET));
         this.isBrowserSupported();
       }
     } catch(err){
@@ -57,7 +57,10 @@ class MetamaskChecker extends Component {
     try{
       const accounts = await window.web3js.eth.getAccounts();
       if(accounts && accounts.length > 0){
-        let balance = await window.web3js.eth.getBalance(accounts[0]);
+        let balance;
+        while(!balance){
+          balance = await window.web3js.eth.getBalance(accounts[0]);
+        }
         balance = window.web3js.utils.fromWei(balance, 'ether');
         if((this.state.user && this.state.user.userName !== accounts[0]) || (this.state.user.balance !== balance) || !this.state.user || !this.state.enabled){
           this.setState({

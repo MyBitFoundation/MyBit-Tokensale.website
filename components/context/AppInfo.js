@@ -55,13 +55,15 @@ class AppInfo extends React.Component {
   componentWillReceiveProps(nextProps){
 
     // case where account changes
-    if(nextProps.user.userName && (this.state.user.userName !== nextProps.user.userName)){
+    if(nextProps.user.userName && (this.state.user.userName !== nextProps.user.userName) && (this.props.network === correctNetwork)){
       this.setState({
         user: nextProps.user,
       }, () => this.getAllContributionsPerDay(this.state.currentDay));
     }
-    //case where user logs in/out
-    else if(this.state.isLoggedIn !== nextProps.isLoggedIn){
+    // case where user logs in/out
+    // breaks when mainnet is not selected so the second condition is a temp fix
+    // until we figure out why
+    else if(this.state.isLoggedIn !== nextProps.isLoggedIn && (this.props.network === correctNetwork)){
       this.setState({
         isLoggedIn: nextProps.isLoggedIn,
       }, () => this.getAllContributionsPerDay(this.state.currentDay));
@@ -90,7 +92,7 @@ class AppInfo extends React.Component {
       //case where user has metamask but is connected to the wrong network, we
       //still need to load the data properly from the correct network
       else if(this.props.isMetamaskInstalled && (this.props.network !== correctNetwork)){
-        window.web3js = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/0e98ea17ef2947a6916df1c4e78fecd1'))
+        window.web3js = new Web3(new Web3.providers.HttpProvider(`https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`))
         this.loadInfo();
       }
       this.subscribeToEvents();
@@ -210,7 +212,7 @@ class AppInfo extends React.Component {
           console.log("got contributions, setting timer")
           this.getCurrentDayAndSetupTimer();
         }, (timestampStartTokenSale * 1000 - Date.now()));
-        console.log("timer for: ", (new Date(Date.now() + (timestampStartTokenSale * 1000 - Date.now()) + 5000)));
+        console.log("timer for: ", (new Date(Date.now() + (timestampStartTokenSale * 1000 - Date.now()) + 1000)));
       }
     }catch(err){
       debug(err);

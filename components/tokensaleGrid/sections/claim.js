@@ -1,6 +1,9 @@
 import { Fragment } from 'react'
 import { Button } from 'antd'
 import AnimatedNumber from 'react-animated-number';
+import {
+  correctNetwork
+} from '../../constants';
 
 class Claim extends React.Component{
 
@@ -25,6 +28,7 @@ class Claim extends React.Component{
       batchWithdrawing,
       allowed,
       isLoggedIn,
+      network,
     } = this.props;
 
     return (
@@ -51,7 +55,7 @@ class Claim extends React.Component{
         <Button
           className="TokenSaleGrid__button"
           onClick={() => batchWithdrawal(daysOwed)}
-          disabled={daysOwed.length === 0 || !isLoggedIn || batchWithdrawing || allowed === false}
+          disabled={daysOwed.length === 0 || !isLoggedIn || batchWithdrawing || allowed === false || correctNetwork !== network}
           type="primary"
         >
           Claim

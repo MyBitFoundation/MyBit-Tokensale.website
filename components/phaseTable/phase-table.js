@@ -1,7 +1,12 @@
 import React, { Fragment } from 'react'
 import stylesheet from './phase-table.scss'
 import { Table, Button } from 'antd'
-import { tokensPerDay, dayInSeconds } from '../constants';
+import {
+  tokensPerDay,
+  dayInSeconds,
+  correctNetwork
+} from '../constants';
+
 import Dayjs from 'dayjs';
 import CountdownHours from '../countdownHours';
 
@@ -25,6 +30,7 @@ class PhaseTable extends React.Component{
       withdraw,
       ethPrice,
       allowed,
+      network,
     } = this.props;
 
     const currentDay = ((Math.floor(Date.now() / 1000) - timestampStartTokenSale) / dayInSeconds) + 1;
@@ -76,7 +82,7 @@ class PhaseTable extends React.Component{
         )
       }
     }, {
-      title: 'Period ends',
+      title: 'Period Ends',
       dataIndex: 'deadline',
       key: 'deadline',
       render: (value, record) => {
@@ -89,7 +95,7 @@ class PhaseTable extends React.Component{
             : (<div className="phaseTable__active-row">{record.date}</div>)
       }
     }, {
-      title: 'Your contribution',
+      title: 'Your Contribution',
       dataIndex: 'your_contribution',
       key: 'your_contribution',
       className: "phaseTable__xs-hide",
@@ -99,7 +105,7 @@ class PhaseTable extends React.Component{
           (<div className="phaseTable__active-row">{`${value.toLocaleString('en-US', {maximumFractionDigits: 18})} ETH`}</div>)
       }
     }, {
-      title: 'MYB received',
+      title: 'MYB Received',
       dataIndex: 'myb_received',
       key: 'myb_received',
       className: "phaseTable__xs-hide",
@@ -136,7 +142,7 @@ class PhaseTable extends React.Component{
             <Button
               onClick={() => withdraw(record.period)}
               className="phaseTable__closed-row-button"
-              disabled={allowed === false}
+              disabled={allowed === false || correctNetwork !== network}
             >
               Claim
             </Button>

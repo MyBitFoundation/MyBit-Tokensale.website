@@ -1,6 +1,9 @@
 import { Fragment } from 'react';
 import { Button } from 'antd';
-import { shortenAddress } from '../../constants';
+import {
+  shortenAddress,
+  correctNetwork,
+} from '../../constants';
 
 class Metamask extends React.Component{
 
@@ -27,6 +30,7 @@ class Metamask extends React.Component{
   </Fragment>
 
   getLogin = () =>
+
     <p className="Section--is-metamask-login">Login to Metamask to contribute and to claim your tokens.</p>
 
   getMetamaskRequired = (extensionUrl, isBraveBrowser) => {
@@ -69,7 +73,7 @@ class Metamask extends React.Component{
     } else {
       return (
         <Fragment>
-          <div className="Section__title Section--is-metamask-required">Metamask required to contribute.</div>
+          <div className="Section__title Section--is-metamask-required">Metamask Required to Contribute.</div>
           <a
             href={isBraveBrowser ? undefined : extensionUrl}
             target="_blank"
@@ -87,16 +91,19 @@ class Metamask extends React.Component{
     }
   }
 
-  getRopsten = () =>
-    <p className="Section--is-metamask-ropsten">Switch to the Ropsten test network to contribute.</p>
+  getCorrectNetwork = () =>
+    <p className="Section--is-metamask-correctNetwork">Switch to the Ethereum network to Contribute.</p>
 
   getConnectMetamask = () =>
-    <Button
-      className="ant-btn TokenSaleGrid__button TokenSaleGrid__button--is-metamask phaseTable__closed-row-button"
-      onClick={() => window.ethereum.enable()}
-    >
-      Connect Metamask
-    </Button>
+    <Fragment>
+      <div className="Section__title Section--is-metamask-required">Connect your MetaMask Account to get Started.</div>
+      <Button
+        className="ant-btn TokenSaleGrid__button TokenSaleGrid__button--is-metamask phaseTable__closed-row-button"
+        onClick={() => window.ethereum.enable()}
+      >
+        Connect Metamask
+      </Button>
+    </Fragment>
 
   render(){
     let metamaskToRender = null;
@@ -112,14 +119,14 @@ class Metamask extends React.Component{
       balance
     } = this.props;
 
-    if(enabled && isLoggedIn && userName && network === 'ropsten'){
+    if(enabled && isLoggedIn && userName && network === correctNetwork){
       metamaskToRender = this.getSuccess(userName, balance);
-    } else if(enabled && !isLoggedIn && network === 'ropsten'){
+    } else if(enabled && !isLoggedIn && network === correctNetwork){
       metamaskToRender = this.getLogin();
     } else if(!isMetamaskInstalled){
       metamaskToRender = this.getMetamaskRequired(extensionUrl, isBraveBrowser);
-    } else if(network && network != 'ropsten') {
-      metamaskToRender = this.getRopsten();
+    } else if(network && network != correctNetwork) {
+      metamaskToRender = this.getCorrectNetwork();
     } else if(!enabled){
       metamaskToRender = this.getConnectMetamask();
     }

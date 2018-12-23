@@ -27,7 +27,7 @@ const Notifications = ({ data, removeNotification }) => {
 
     const toReturn = transactionHash ? (
         <a
-          href={`https://ropsten.etherscan.io/tx/${transactionHash}`}
+          href={`https://etherscan.io/tx/${transactionHash}`}
           target="_blank"
           rel="noopener noreferrer"
           key={transactionHash}

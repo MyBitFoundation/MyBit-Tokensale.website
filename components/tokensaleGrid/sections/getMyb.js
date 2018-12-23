@@ -23,7 +23,7 @@ class GetMyb extends React.Component{
 
     return currentPeriod ? (
       <Fragment>
-        <div className="Section__title">Phase <span className="Section__blue">#{currentPeriod}</span> ends in:</div>
+        <div className="Section__title">Period <span className="Section__blue">#{currentPeriod}</span> ends in:</div>
         <div className="Section__bold">
           <CountdownHours
             time={secondsToGo}
@@ -39,7 +39,7 @@ class GetMyb extends React.Component{
       </Fragment>
     ) : (
       <Fragment>
-        <div className="Section__title">Token distribution starts</div>
+        <div className="Section__title">Token Distribution Starts</div>
         <div className="Section__bold Section__bold--not-started">Jan 1st 2019 <br /> at 12:00 UTC </div>
         <Button
           className="TokenSaleGrid__button green"

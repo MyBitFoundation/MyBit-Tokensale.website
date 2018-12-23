@@ -14,7 +14,7 @@ const DashboardPageHeader = (props) => (
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button className="dashboardHeader__guide">How-to guide</Button>
+              <Button className="dashboardHeader__guide">View guide</Button>
             </a>
         </div>
     </Fragment>
