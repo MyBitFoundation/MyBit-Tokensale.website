@@ -9,7 +9,7 @@ export const BADGES_DATA = [{
 }, {
   title: 'Brand Lottery badge',
   description: (
-    <p>We are hilding a lottery where 10 unique contributers will be selected at random to become co-owners of the MyBit brand.</p>
+    <p>We are holding a lottery where 10 unique contributers will be selected at random to become co-owners of the MyBit brand.</p>
   ),
   img: () => <BrandBadge className="Badge__img"/>,
 }];

@@ -20,7 +20,8 @@ class TermsOfService extends React.Component {
   }
 
   handleScroll(e){
-    const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+    const bottom = Math.round(e.target.scrollHeight - e.target.scrollTop) === e.target.clientHeight;
+
     if (bottom && !this.state.bottom){
       this.setState({
         hitBottom: true,
