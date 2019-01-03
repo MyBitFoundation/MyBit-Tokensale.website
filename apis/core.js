@@ -19,7 +19,8 @@ import { events } from '../utils/EventEmitter';
 let web3Socket = new Web3();
 let subscriptionClaim = undefined;
 let subscriptionFund = undefined;
-let gasPrice = 1;
+let gasPrice = 5000000000;
+
 const transactionHashClaim = new Set();
 
 const fetchGasPriceFromServer = async () => {
@@ -576,6 +577,10 @@ const subscribeToEvents = async () => {
   })
 }
 
+
+/*
+this service is giving us a recaptcha, hardcoding the gas price
+until we find a different alternative
 if(typeof window !== 'undefined'){
   fetchGasPriceFromServer();
-}
+}*/
