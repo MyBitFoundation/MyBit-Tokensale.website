@@ -69,13 +69,7 @@ class ContributeModal extends React.Component{
               <div className="contributeModal__label">
                 How much do you want to contribute?
               </div>
-              <div
-               onKeyPress={(e) => {
-                  if(e.key === 'Enter' && contribution && !isNaN(contribution) && contribution > 0){
-                    handleConfirm()
-                  }
-                }}
-              >
+              <div>
                 <Input
                   autoFocus
                   onChange={onContributeChange}
@@ -83,7 +77,7 @@ class ContributeModal extends React.Component{
                 />
               </div>
               <Button
-                disabled={!contribution || isNaN(contribution) || Number(contribution) < Number(0.000000000000000001) || !isLoggedIn || enabled === false || allowed === false}
+                disabled={!contribution || isNaN(contribution) || Number(contribution) < Number(0.000000000000000001) || !isLoggedIn || enabled === false || allowed === false || network !== correctNetwork}
                 block
                 className="contributeModal__confirm"
                 onClick={handleConfirm}

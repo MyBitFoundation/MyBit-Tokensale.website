@@ -113,7 +113,7 @@ class CalculateModal extends React.Component{
             </div>
             <Input disabled value={effectivePrice} placeholder="1 MYB = $0.22" suffix={(<img src={mybIcon} alt="MYB Token Icon" className="mybIcon"></img>)} />
             <Button
-              disabled={!contribution || contribution === 0 || !isLoggedIn || Number(contribution) < Number(0.000000000000000001)  || enabled === false  || allowed === false}
+              disabled={!contribution || contribution === 0 || !isLoggedIn || Number(contribution) < Number(0.000000000000000001)  || enabled === false  || allowed === false || network !== correctNetwork}
               block
               className="calculateModal__confirm"
               onClick={handleConfirm}

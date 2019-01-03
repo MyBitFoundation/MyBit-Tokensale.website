@@ -98,7 +98,6 @@ class Dashboard extends Component {
   }
 
   handleContributeConfirm = e => {
-    e.preventDefault()
     if (this.clicked) {
       return
     }
