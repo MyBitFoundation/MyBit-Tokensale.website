@@ -19,7 +19,7 @@ import { events } from '../utils/EventEmitter';
 let web3Socket = new Web3();
 let subscriptionClaim = undefined;
 let subscriptionFund = undefined;
-let gasPrice = 5000000000;
+const gasPrice = 5000000000;
 
 const transactionHashClaim = new Set();
 
