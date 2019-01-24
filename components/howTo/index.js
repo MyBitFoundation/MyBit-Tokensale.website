@@ -8,6 +8,7 @@ import {
   BADGES_DATA,
 } from '../constants/badges';
 import Badges from '../badges';
+import HelpSection from '../helpSection'
 
 const Section = ({imgSrc, title, desc}) => (
   <div className="HowTo__step">
@@ -149,6 +150,9 @@ const HowTo = () => (
           className="HowTo__solidified"
           src="/static/tokensale/solidified-ico.png"
         />
+      </div>
+      <div className="HowTo__paddedSection">
+        <HelpSection />
       </div>
     </div>
   </React.Fragment>
