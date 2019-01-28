@@ -40,9 +40,10 @@ const fetchGasPriceFromServer = async () => {
 export const fetchPriceFromCoinmarketcap = async ticker =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await fetch(`https://api.coinmarketcap.com/v2/ticker/${ticker}/`);
+      const response = await fetch(`https://api.mybit.io/price`);
       const jsonResponse = await response.json();
-      const { price } = jsonResponse.data.quotes.USD;
+      const { ethPrice } = jsonResponse;
+      const price = ethPrice;
       resolve(price);
     } catch (error) {
       reject(error);
