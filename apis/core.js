@@ -37,18 +37,6 @@ const fetchGasPriceFromServer = async () => {
   }
 }
 
-export const fetchPriceFromCoinmarketcap = async ticker =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const response = await fetch(`https://api.coinmarketcap.com/v2/ticker/${ticker}/`);
-      const jsonResponse = await response.json();
-      const { price } = jsonResponse.data.quotes.USD;
-      resolve(price);
-    } catch (error) {
-      reject(error);
-    }
-  });
-
 export const loadMetamaskUserDetails = async () =>
   new Promise(async (resolve, reject) => {
     try {

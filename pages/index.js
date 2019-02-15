@@ -32,7 +32,9 @@ import {
 class Dashboard extends Component {
   static async getInitialProps({ req, query }) {
     if (req) {
-      const response = await fetch(`${MyBitTokenSaleAPIEndpoint}/contributions`)
+      const response = await fetch(
+        `${MyBitTokenSaleAPIEndpoint}/token-sale/contributions`
+      )
       const jsonResponse = await response.json()
       const {
         contributions,
