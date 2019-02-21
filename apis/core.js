@@ -37,6 +37,19 @@ const fetchGasPriceFromServer = async () => {
   }
 }
 
+export const fetchPriceFromCoinmarketcap = async ticker =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await fetch(`https://api.mybit.io/price`);
+      const jsonResponse = await response.json();
+      const { ethPrice } = jsonResponse;
+      const price = ethPrice;
+      resolve(price);
+    } catch (error) {
+      reject(error);
+    }
+  });
+
 export const loadMetamaskUserDetails = async () =>
   new Promise(async (resolve, reject) => {
     try {
