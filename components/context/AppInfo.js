@@ -4,7 +4,8 @@ import {
   debug,
   dayInSeconds,
   tokensPerDay,
-  correctNetwork
+  correctNetwork,
+  MyBitTokenSaleAPIEndpoint,
  } from '../constants/';
 import * as Core from '../../apis/core';
 import * as TokenSale from '../constants/contracts/TokenSale';
@@ -170,13 +171,17 @@ class AppInfo extends React.Component {
   }
 
   async loadPrices() {
-    await Core.fetchPriceFromCoinmarketcap(ETHEREUM_TICKER_COINMARKETCAP)
-      .then((price) => {
-        this.setState({ethPrice: price});
-      })
-      .catch((err) => {
-        debug(err);
-      });
+    try{
+      const response = await fetch(`${MyBitTokenSaleAPIEndpoint}/prices`)
+      const jsonResponse = await response.json();
+      const {
+        ethereum
+      } = jsonResponse;
+      this.setState({ethPrice: ethereum.price});
+    }catch(err){
+      debug(err);
+      setTimeout(this.loadPrices, 5000);
+    }
   }
 
   async getCurrentDayAndSetupTimer(timestamp){

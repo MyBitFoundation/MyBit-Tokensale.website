@@ -121,7 +121,7 @@ class CalculateModal extends React.Component{
               {!isMetamaskInstalled
                 ? 'Install Metamask'
                 : network !== correctNetwork
-                  ? 'Switch to the Ethereum network'
+                  ? 'Switch to the main Ethereum network'
                   : !isLoggedIn
                     ? 'Login to Metamask'
                     : enabled === false
