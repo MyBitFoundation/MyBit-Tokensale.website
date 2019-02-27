@@ -19,7 +19,7 @@ import { events } from '../utils/EventEmitter';
 let web3Socket = new Web3();
 let subscriptionClaim = undefined;
 let subscriptionFund = undefined;
-const gasPrice = 5000000000;
+const gasPrice = 15000000000;
 
 const transactionHashClaim = new Set();
 
@@ -36,19 +36,6 @@ const fetchGasPriceFromServer = async () => {
     debug(error);
   }
 }
-
-export const fetchPriceFromCoinmarketcap = async ticker =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const response = await fetch(`https://api.mybit.io/price`);
-      const jsonResponse = await response.json();
-      const { ethPrice } = jsonResponse;
-      const price = ethPrice;
-      resolve(price);
-    } catch (error) {
-      reject(error);
-    }
-  });
 
 export const loadMetamaskUserDetails = async () =>
   new Promise(async (resolve, reject) => {
