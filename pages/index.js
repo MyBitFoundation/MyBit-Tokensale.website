@@ -4,7 +4,7 @@ import stylesheet from '../styles/main.scss'
 import stylesheetTerms from '../components/termsOfService/style.scss'
 import { default as Layout } from '../components/layout/layout'
 import { Header } from '../components/header/header'
-import { MyBitFooter } from '../components/footer/footer'
+import FooterSimplified from '../components/footerSimplified'
 import PhaseTable from '../components/phaseTable/phase-table'
 import DashboardPageHeader from '../components/dashboardPageHeader/dashboardPageHeader'
 import TokensaleGrid from '../components/tokensaleGrid/tokensaleGrid'
@@ -258,7 +258,6 @@ class Dashboard extends Component {
             {warningMessageCountry}
             <div className="headerWrapper">
               <div className="mainContainer">
-                <Header isDark={false} />
                 <DashboardPageHeader />
                 <TokensaleGrid
                   onShowContributeModal={() =>
@@ -313,7 +312,7 @@ class Dashboard extends Component {
               data={notifications}
               removeNotification={removeNotification}
             />
-            <MyBitFooter />
+            <FooterSimplified />
           </div>
         </Layout>
       </Fragment>

@@ -1,5 +1,11 @@
 .dashboardHeader {
     text-align: center;
+
+    &__logo{
+        max-width: 150px;
+        margin-top: 35px;
+        margin-bottom: 30px;
+    }
 }
 
 .dashboardHeader__main-title {

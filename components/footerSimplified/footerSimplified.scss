@@ -1,0 +1,16 @@
+@import 'include-media/dist/_include-media.scss';
+
+.FooterSimplified{
+  margin-top: 100px;
+  &__text{
+    padding: 0% 10%;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #383838;
+
+    @include media(">tablet") {
+      padding: 0px 0px;
+    }
+  }
+}

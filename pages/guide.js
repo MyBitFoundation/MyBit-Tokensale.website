@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import stylesheet from '../styles/main.scss'
 import stylesheetGuide from '../styles/guide.scss'
 import { default as Layout } from '../components/layout/layout'
-import { Header } from '../components/header/header'
-import { MyBitFooter } from '../components/footer/footer'
+import FooterSimplified from '../components/footerSimplified'
 import HowTo from '../components/howTo'
+import Logo from '../static/svgs/icons/mybit-full-white.svg'
 
 class Guide extends Component {
   render() {
@@ -15,11 +15,11 @@ class Guide extends Component {
           <style dangerouslySetInnerHTML={{ __html: stylesheetGuide }} />
           <div className="headerWrapper">
             <div className="mainContainer">
-              <Header isDark={false} />
+              <Logo className="headerWrapper__logo" />
             </div>
           </div>
           <HowTo />
-          <MyBitFooter />
+          <FooterSimplified />
         </div>
       </Layout>
     )
