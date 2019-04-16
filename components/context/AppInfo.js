@@ -93,7 +93,7 @@ class AppInfo extends React.Component {
       //case where user has metamask but is connected to the wrong network, we
       //still need to load the data properly from the correct network
       else if(this.props.isMetamaskInstalled && (this.props.network !== correctNetwork)){
-        window.web3js = new Web3(new Web3.providers.HttpProvider(`https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`))
+        window.web3js = new Web3(new Web3.providers.WebsocketProvider(process.env.WEBSOCKET_PROVIDER_MAINNET))
         this.loadInfo();
       }
       this.subscribeToEvents();

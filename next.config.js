@@ -13,7 +13,6 @@ module.exports = {
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
         'process.env.WEBSOCKET_PROVIDER_ROPSTEN': JSON.stringify(process.env.WEBSOCKET_PROVIDER_ROPSTEN),
         'process.env.WEBSOCKET_PROVIDER_MAINNET': JSON.stringify(process.env.WEBSOCKET_PROVIDER_MAINNET),
-        'process.env.INFURA_API_KEY': JSON.stringify(process.env.INFURA_API_KEY)
       }),
       new CompressionPlugin({
           asset: "[path].gz[query]",
