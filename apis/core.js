@@ -279,7 +279,10 @@ export const getAllContributionsPerDay = async (userAddress, currentDay, timesta
   new Promise(async (resolve, reject) => {
     try {
       debug("fetching all contributions with web3")
-      const tokenSaleContract = new window.web3js.eth.Contract(
+      // If we try to fetch the logs using Infura (MetaMask's default) it won't work.
+      // See https://community.infura.io/t/getlogs-error-query-returned-more-than-1000-results/358
+      const web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.WEBSOCKET_PROVIDER_MAINNET));
+      const tokenSaleContract = new web3.eth.Contract(
         TokenSale.ABI,
         TokenSale.ADDRESS,
       );
