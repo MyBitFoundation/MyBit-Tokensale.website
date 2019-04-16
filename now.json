@@ -3,6 +3,6 @@
   "version": 1,
   "env": {
     "WEBSOCKET_PROVIDER_ROPSTEN": "@websocket_provider_ropsten",
-    "WEBSOCKET_PROVIDER_MAINNET": "@websocket_provider_mainnet",
+    "WEBSOCKET_PROVIDER_MAINNET": "@websocket_provider_mainnet"
   }
 }
