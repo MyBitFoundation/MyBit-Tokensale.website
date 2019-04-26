@@ -110,9 +110,6 @@ const HowTo = () => (
       <video controls muted>
         <source src="/static/tokensale/claiming.mp4" type="video/mp4" />
       </video>
-        <Badges
-          data={BADGES_DATA}
-        />
       <div className="HowTo__paddedSection">
         <p className="HowTo__subtitle HowTo__subtitle--is-contribute">Contribute Now</p>
           <a
