@@ -4,10 +4,6 @@ import * as TokenSale from '../constants/contracts/TokenSale';
 import {
   MYBIT_DISTRIBUTION_CODE_AUDIT
 } from '../constants';
-import {
-  BADGES_DATA,
-} from '../constants/badges';
-import Badges from '../badges';
 import HelpSection from '../helpSection'
 
 const Section = ({imgSrc, title, desc}) => (
@@ -110,9 +106,6 @@ const HowTo = () => (
       <video controls muted>
         <source src="/static/tokensale/claiming.mp4" type="video/mp4" />
       </video>
-        <Badges
-          data={BADGES_DATA}
-        />
       <div className="HowTo__paddedSection">
         <p className="HowTo__subtitle HowTo__subtitle--is-contribute">Contribute Now</p>
           <a
