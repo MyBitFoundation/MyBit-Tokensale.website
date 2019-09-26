@@ -12,7 +12,7 @@ export const dayInSeconds = 86400;
 
 export const periodsPerPage = 25;
 
-export const MyBitTokenSaleAPIEndpoint = 'https://api.mybit.io';
+export const MyBitTokenSaleAPIEndpoint = 'http://localhost:8082';
 
 export const tokenSaleEvents = {
   fund: '0xd498819977fb9763f29bab6e4eee516c4cf59053922eb6a9fe59370a7bc28b3d',
@@ -20,6 +20,8 @@ export const tokenSaleEvents = {
 };
 
 export const correctNetwork = 'main';
+
+export const NODESMITH_WEBSOCKET_PROVIDER = `wss://ethereum.api.nodesmith.io/v1/mainnet/jsonrpc/ws?apiKey=${process.env.NODESMITH_API_KEY}`;
 
 export const BLOCK_NUMBER_CONTRACT_CREATION = 6910971;
 

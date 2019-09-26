@@ -6,6 +6,7 @@ import {
   tokensPerDay,
   correctNetwork,
   MyBitTokenSaleAPIEndpoint,
+  NODESMITH_WEBSOCKET_PROVIDER,
  } from '../constants/';
 import * as Core from '../../apis/core';
 import * as TokenSale from '../constants/contracts/TokenSale';
@@ -93,7 +94,7 @@ class AppInfo extends React.Component {
       //case where user has metamask but is connected to the wrong network, we
       //still need to load the data properly from the correct network
       else if(this.props.isMetamaskInstalled && (this.props.network !== correctNetwork)){
-        window.web3js = new Web3(new Web3.providers.WebsocketProvider(process.env.WEBSOCKET_PROVIDER_MAINNET))
+        window.web3js = new Web3(new Web3.providers.WebsocketProvider(NODESMITH_WEBSOCKET_PROVIDER))
         this.loadInfo();
       }
       this.subscribeToEvents();

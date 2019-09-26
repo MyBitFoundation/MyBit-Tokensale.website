@@ -2,7 +2,6 @@
   "name": "mybit.io",
   "version": 1,
   "env": {
-    "WEBSOCKET_PROVIDER_ROPSTEN": "@websocket_provider_ropsten",
-    "WEBSOCKET_PROVIDER_MAINNET": "@websocket_provider_mainnet"
+    "NODESMITH_API_KEY": "@nodesmith_api_key"
   }
 }

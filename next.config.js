@@ -11,8 +11,7 @@ module.exports = {
     config.plugins.push(
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-        'process.env.WEBSOCKET_PROVIDER_ROPSTEN': JSON.stringify(process.env.WEBSOCKET_PROVIDER_ROPSTEN),
-        'process.env.WEBSOCKET_PROVIDER_MAINNET': JSON.stringify(process.env.WEBSOCKET_PROVIDER_MAINNET),
+        'process.env.NODESMITH_API_KEY': JSON.stringify(process.env.NODESMITH_API_KEY),
       }),
       new CompressionPlugin({
           asset: "[path].gz[query]",
