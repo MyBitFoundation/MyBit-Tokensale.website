@@ -21,6 +21,8 @@ export const tokenSaleEvents = {
 
 export const correctNetwork = 'main';
 
+export const NODESMITH_WEBSOCKET_PROVIDER = `wss://ethereum.api.nodesmith.io/v1/mainnet/jsonrpc/ws?apiKey=${process.env.NODESMITH_API_KEY}`;
+
 export const BLOCK_NUMBER_CONTRACT_CREATION = 6910971;
 
 export const getSecondsUntilNextPeriod = (timestampStartTokenSale) => {

@@ -4,6 +4,7 @@
 
 import * as TokenSale from '../components/constants/contracts/TokenSale';
 import * as MyBitToken from '../components/constants/contracts/MyBitToken';
+import { NODESMITH_WEBSOCKET_PROVIDER } from '../components/constants';
 import dayjs from 'dayjs';
 import Web3 from 'web3';
 const abiDecoder = require('abi-decoder');
@@ -279,9 +280,7 @@ export const getAllContributionsPerDay = async (userAddress, currentDay, timesta
   new Promise(async (resolve, reject) => {
     try {
       debug("fetching all contributions with web3")
-      // If we try to fetch the logs using Infura (MetaMask's default) it won't work.
-      // See https://community.infura.io/t/getlogs-error-query-returned-more-than-1000-results/358
-      const web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.WEBSOCKET_PROVIDER_MAINNET));
+      const web3 = new Web3(new Web3.providers.WebsocketProvider(NODESMITH_WEBSOCKET_PROVIDER));
       const tokenSaleContract = new web3.eth.Contract(
         TokenSale.ABI,
         TokenSale.ADDRESS,
@@ -491,7 +490,7 @@ const resetSocket = async () => {
 let errorCounter = 0;
 
 const subscribeToEvents = async () => {
-  const provider = new Web3.providers.WebsocketProvider(process.env.WEBSOCKET_PROVIDER_MAINNET);
+  const provider = new Web3.providers.WebsocketProvider(NODESMITH_WEBSOCKET_PROVIDER);
   provider.on('error', e => {
     debug("socket connection error ")
     debug(e)
