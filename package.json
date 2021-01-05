@@ -11,7 +11,7 @@
     "animated-scroll-to": "^1.2.2",
     "antd": "^3.9.2",
     "autoprefixer": "^7.1.6",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-plugin-import": "^1.10.0",
     "babel-plugin-inline-react-svg": "^0.4",
     "babel-plugin-module-resolver": "^3.1.1",
