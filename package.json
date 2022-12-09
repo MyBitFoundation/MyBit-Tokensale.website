@@ -27,7 +27,7 @@
     "eslint-config-prettier": "^2.6.0",
     "eslint-config-xo-react": "^0.13.0",
     "eslint-plugin-react": "^7.8.2",
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "file-loader": "^1.1.5",
     "flexboxgrid-sass": "^8.0.5",
     "geoip-lite": "^1.3.4",
